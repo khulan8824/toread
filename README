@@ -1,0 +1,20 @@
+Follow the steps below: 
+1.Copy Toread to nodes
+vxargs -a /home/tsinghua_wgd/wangguodong/experiment/1111/nodelist.txt scp /home/tsinghua_wgd/wangguodong/experiment/Toread.tar.gz {}:/home/tsinghua_wgd/Toread.tar.gz 
+
+2.Uncompress
+vxargs -a /home/tsinghua_wgd/wangguodong/experiment/1111/nodelist.txt ssh {} tar -zxvf /home/tsinghua_wgd/Toread.tar.gz
+
+3.Startup
+vxargs -a /home/tsinghua_wgd/wangguodong/experiment/1111/nodelist.txt ssh {} /home/tsinghua_wgd/1111/startup.sh
+
+4.Get NCs
+cd Toread
+python gethostnc.py
+
+5.Terminate
+vxargs -a /home/tsinghua_wgd/wangguodong/experiment/1111/nodelist.txt ssh {} /home/tsinghua_wgd/1111/terminate.sh
+
+NOTICE:
+1.All the above should be done when you're in the same directory as this README
+2.Make sure that all your nodes have twisted installed. Otherwise run "vxargs -a nodelist.txt ssh {} sudo yum -y install twisted" to install it.

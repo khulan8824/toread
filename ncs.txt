@@ -1,0 +1,348 @@
+planetlab1.cs.umass.edu
+hostname:  planetlab1.cs.umass.edu
+host ip: 128.119.41.210
+host nc: [7.4981535381874922, -35.512875945999802, 34.267652970339014, -21.031860477948424]   height: 1
+host error: 1.00427961159
+planetlab2.ece.ucdavis.edu
+Error when connecting to  planetlab2.ece.ucdavis.edu
+planetlab2.cs.ucla.edu
+hostname:  planetlab2.cs.ucla.edu
+host ip: 131.179.50.72
+host nc: [-64.352931585640903, 13.942319887998783, 29.936262054381078, -15.976055288926682]   height: 1
+host error: 0.210704457855
+planetlab3.ucsd.edu
+hostname:  planetlab3.ucsd.edu
+host ip: 132.239.17.226
+host nc: [-62.014547070592151, 14.422306936659709, 21.428398839056868, -23.260382999482534]   height: 1.08517258481
+host error: 0.25459413358
+kupl2.ittc.ku.edu
+hostname:  kupl2.ittc.ku.edu
+host ip: 129.237.161.194
+host nc: [-6.065007624966948, -1.3211016209230217, 41.56286246873622, -11.847777460531441]   height: 1.14784538112
+host error: 0.356432029525
+pl2.eecs.utk.edu
+hostname:  pl2.eecs.utk.edu
+host ip: 160.36.57.173
+host nc: [-16.382673410564934, -39.731991135553884, 36.814685653048208, -11.411224389224291]   height: 12.7670500171
+host error: 0.266451115623
+pli1-pa-5.hpl.hp.com
+hostname:  pli1-pa-5.hpl.hp.com
+host ip: 204.123.28.56
+host nc: [-55.007155987219164, 8.2224412074171109, 14.143841574044854, -13.687566762017028]   height: 1.06982093643
+host error: 0.223178395168
+planetlab2.koganei.wide.ad.jp
+Error when connecting to  planetlab2.koganei.wide.ad.jp
+planetlab2.cse.msu.edu
+hostname:  planetlab2.cse.msu.edu
+host ip: 35.9.27.27
+host nc: [5.2860080524155375, -38.587694005685165, 33.219915815160633, -13.322270851651034]   height: 1
+host error: 0.136546982478
+node-1.mcgillplanetlab.org
+hostname:  node-1.mcgillplanetlab.org
+host ip: 192.197.121.2
+host nc: [9.426406583582132, -33.774419693647339, 30.644458400231152, -17.239455770342431]   height: 1
+host error: 0.479274433459
+pli2-pa-3.hpl.hp.com
+hostname:  pli2-pa-3.hpl.hp.com
+host ip: 192.6.26.33
+host nc: [-47.316364569268273, 20.752311385835625, 9.3422623665471427, -19.992320478614893]   height: 1.43580977892
+host error: 0.369288655166
+csplanetlab3.kaist.ac.kr
+Error when connecting to  csplanetlab3.kaist.ac.kr
+planetlab2.mnlab.cti.depaul.edu
+hostname:  planetlab2.mnlab.cti.depaul.edu
+host ip: 140.192.249.204
+host nc: [-5.4905324827609352, -28.23617382753196, 38.349989678440267, -16.124615794533167]   height: 1
+host error: 0.148233723363
+planetlab2.cs.columbia.edu
+hostname:  planetlab2.cs.columbia.edu
+host ip: 128.59.20.227
+host nc: [19.181552433867239, 3.9610408542823357, -16.516152996473213, -12.60092335081616]   height: 1
+host error: 0.602208181227
+planetlab1.georgetown.edu
+hostname:  planetlab1.georgetown.edu
+host ip: 141.161.20.32
+host nc: [-0.29904829760861507, -53.220035761605075, 51.317065400990572, -21.892535575256122]   height: 1
+host error: 0.323808027378
+planetlab1.informatik.uni-kl.de
+hostname:  planetlab1.informatik.uni-kl.de
+host ip: 131.246.19.201
+host nc: [11.377581137828635, -109.93712448836068, 118.94895712821787, -48.014578719911484]   height: 2.41084942743
+host error: 0.627908050736
+planetlab-03.naist.jp
+hostname:  planetlab-03.naist.jp
+host ip: 163.221.11.73
+host nc: [-92.182863993847064, 97.769692114331789, 68.764035668997764, 13.197044786612972]   height: 47.4515622045
+host error: 0.08717970636
+planetlab1.ics.forth.gr
+hostname:  planetlab1.ics.forth.gr
+host ip: 139.91.90.238
+host nc: [12.941898160915276, -104.58256904411543, 117.41020425292642, -50.944086075719596]   height: 51.5270596137
+host error: 0.0560347153617
+planet2.l3s.uni-hannover.de
+hostname:  planet2.l3s.uni-hannover.de
+host ip: 130.75.87.84
+host nc: [27.958562744456959, -112.65438373038566, 122.87434055469978, -41.517017313352845]   height: 3.57374226457
+host error: 0.0872378706283
+nodeb.howard.edu
+hostname:  nodeb.howard.edu
+host ip: 138.238.250.157
+host nc: [4.8955627783058233, -44.575517081871418, 28.173563179739755, -26.506280094806851]   height: 1
+host error: 0.426228864584
+planetlab2.itwm.fhg.de
+hostname:  planetlab2.itwm.fhg.de
+host ip: 131.246.191.42
+host nc: [5.8716507428421751, -103.16336417890044, 122.02776376298752, -46.647456345801544]   height: 1.88409680176
+host error: 0.154651223586
+planet2.att.nodes.planet-lab.org
+hostname:  planet2.att.nodes.planet-lab.org
+host ip: 204.178.4.164
+host nc: [12.393158726927885, -43.826274728477458, 43.601000986436311, -21.507045506689629]   height: 1.04075079379
+host error: 0.182833660177
+planetlab1.cs.uit.no
+hostname:  planetlab1.cs.uit.no
+host ip: 129.242.19.196
+host nc: [1.6392075555420802, -112.66897407927287, 135.28654290259061, -85.512363193366951]   height: 1
+host error: 0.204623169858
+planetlab-5.EECS.CWRU.Edu
+hostname:  planetlab-5.EECS.CWRU.Edu
+host ip: 129.22.150.78
+host nc: [-13.60749349298937, -41.354665196422715, 42.470843156465783, -5.4357267190203347]   height: 1.23543208712
+host error: 0.127830170242
+planetlab-1.imperial.ac.uk
+hostname:  planetlab-1.imperial.ac.uk
+host ip: 193.63.75.18
+host nc: [11.981573170791355, -105.20164947655671, 98.07497581841713, -63.274904859394532]   height: 1.72938896233
+host error: 0.177069369094
+planetlab02.mpi-sws.mpg.de
+hostname:  planetlab02.mpi-sws.mpg.de
+host ip: 139.19.142.2
+host nc: [6.327240950170343, -110.35871793434477, 117.39396951327396, -51.051109719187146]   height: 2.09325096577
+host error: 0.123334275916
+planetlab1.engr.uconn.edu
+hostname:  planetlab1.engr.uconn.edu
+host ip: 137.99.11.86
+host nc: [-5.2742247503252733, -33.900186366806679, 50.490605298095744, -10.275822566563082]   height: 1
+host error: 0.137701699173
+planetlab-1.cs.colostate.edu
+Error when connecting to  planetlab-1.cs.colostate.edu
+planetlab1.informatik.uni-goettingen.de
+hostname:  planetlab1.informatik.uni-goettingen.de
+host ip: 134.76.81.91
+host nc: [36.513645200775208, -105.01957119338292, 116.46238157110149, -60.694514981116519]   height: 1.4911587437
+host error: 0.157575522224
+planetlab1.win.trlabs.ca
+hostname:  planetlab1.win.trlabs.ca
+host ip: 198.163.152.229
+host nc: [-20.365777472666906, -23.362563180569513, 34.086994705045988, -5.9734772316936384]   height: 13.5247620224
+host error: 0.246060192244
+planetlab1.postel.org
+hostname:  planetlab1.postel.org
+host ip: 206.117.37.4
+host nc: [-38.653357838519213, 17.451129612891311, 13.08654370440895, 2.6815422891260541]   height: 9.84223095556
+host error: 0.31819385822
+pl1.ucs.indiana.edu
+hostname:  pl1.ucs.indiana.edu
+host ip: 156.56.250.226
+host nc: [-7.2165510749939044, -30.973088028479218, 19.64047059058095, -6.8229925325915435]   height: 2.07197809927
+host error: 0.15812326156
+planetlab02.cnds.unibe.ch
+hostname:  planetlab02.cnds.unibe.ch
+host ip: 130.92.70.252
+host nc: [5.2346950258224645, -104.49611011253228, 121.59204381617977, -46.321779953768754]   height: 1.10450719747
+host error: 0.11344314733
+planetlab2.elet.polimi.it
+hostname:  planetlab2.elet.polimi.it
+host ip: 131.175.17.10
+host nc: [0.28266030129746644, -120.80819811695505, 114.58267338332868, -45.387887893067003]   height: 1.29076008793
+host error: 0.0899231387721
+planetlab4.hiit.fi
+hostname:  planetlab4.hiit.fi
+host ip: 193.167.187.186
+host nc: [15.055755530570115, -98.538940570786565, 121.83541869319278, -60.84081260403741]   height: 17.0181334024
+host error: 0.0682262063493
+planetlab-1.ssvl.kth.se
+hostname:  planetlab-1.ssvl.kth.se
+host ip: 192.16.125.11
+host nc: [7.6859655375377969, -103.51801675928284, 118.04978077876127, -56.89345512559499]   height: 14.8311682972
+host error: 0.0973617051133
+planetlab-01.ece.uprm.edu
+hostname:  planetlab-01.ece.uprm.edu
+host ip: 136.145.115.194
+host nc: [12.05575832145985, -24.1531082017712, 30.238441701383778, 23.155125525994077]   height: 24.0669614066
+host error: 0.111851346091
+planetlab1.pop-mg.rnp.br
+hostname:  planetlab1.pop-mg.rnp.br
+host ip: 200.19.159.34
+host nc: [-37.87956299582558, -75.224879560132464, -66.234971177743461, 149.23594021196342]   height: 8.81515041284
+host error: 0.312985914232
+planetlab1.cesnet.cz
+hostname:  planetlab1.cesnet.cz
+host ip: 195.113.161.82
+host nc: [14.852967398247937, -117.80247085046808, 125.60284610620168, -57.182147386163948]   height: 1.56689458429
+host error: 0.150296114432
+chronos.disy.inf.uni-konstanz.de
+hostname:  chronos.disy.inf.uni-konstanz.de
+host ip: 134.34.246.5
+host nc: [11.548993573435107, -108.4671958834695, 118.96301406778713, -49.00948332869023]   height: 5.18192800293
+host error: 0.0949999082037
+planetlab-1.cs.uh.edu
+hostname:  planetlab-1.cs.uh.edu
+host ip: 208.117.131.115
+host nc: [-37.714431339170943, -3.8986090974766152, 49.998073925842881, -10.934915606653933]   height: 1
+host error: 0.173900928569
+planetlab-1.cs.ucy.ac.cy
+hostname:  planetlab-1.cs.ucy.ac.cy
+host ip: 194.42.17.123
+host nc: [35.831661065786811, -214.14850888349889, 132.86889417769228, -22.201166593490658]   height: 3.75192344198
+host error: 0.0824031243305
+planet02.hhi.fraunhofer.de
+hostname:  planet02.hhi.fraunhofer.de
+host ip: 193.174.67.187
+host nc: [103.13991156108114, -97.059639574955057, 155.97463289447768, -68.130277911031357]   height: 1.16950893051
+host error: 0.308744927185
+plab-2.sinp.msu.ru
+hostname:  plab-2.sinp.msu.ru
+host ip: 213.131.1.102
+host nc: [2.118850084235552, -88.99666870577137, 180.90451451527301, -97.550371209496518]   height: 1
+host error: 0.128616722111
+planetlab1.fri.uni-lj.si
+hostname:  planetlab1.fri.uni-lj.si
+host ip: 212.235.189.114
+host nc: [17.289378584436079, -117.45141885263524, 123.30126692135786, -66.85901099662793]   height: 3.0545765622
+host error: 0.157505869348
+planetlab2.utdallas.edu
+hostname:  planetlab2.utdallas.edu
+host ip: 129.110.125.52
+host nc: [-22.968384223841973, 1.0730975164277998, 51.541448580462692, -13.238760699835392]   height: 1
+host error: 0.125780516177
+orbpl2.rutgers.edu
+hostname:  orbpl2.rutgers.edu
+host ip: 128.6.192.156
+host nc: [1.993779259727354, -42.763250251546481, 39.062664174697439, -22.879467059128096]   height: 1.28903832702
+host error: 0.272570032363
+nis-planet1.doshisha.ac.jp
+hostname:  nis-planet1.doshisha.ac.jp
+host ip: 202.23.184.247
+host nc: [5, 5, 5, 5]   height: 2
+host error: 1.5
+pl-node-0.csl.sri.com
+hostname:  pl-node-0.csl.sri.com
+host ip: 192.12.33.100
+host nc: [-34.052672821456461, -6.0351044436505754, 19.133147747334448, -15.521933159005689]   height: 21.831429075
+host error: 0.116725234457
+vicky.planetlab.ntua.gr
+hostname:  vicky.planetlab.ntua.gr
+host ip: 147.102.224.227
+host nc: [32.829927359729091, -159.8638377959405, 128.16012507573291, -47.162605867853912]   height: 1
+host error: 0.106467570321
+planetlab2.fct.ualg.pt
+hostname:  planetlab2.fct.ualg.pt
+host ip: 193.136.227.164
+host nc: [15.03722493305667, -149.3453415389493, 112.51303490874135, -46.362097085726724]   height: 9.54424873766
+host error: 0.0848163364833
+plab2.larc.usp.br
+hostname:  plab2.larc.usp.br
+host ip: 143.107.111.235
+host nc: [-64.34448258452224, -61.537523804577468, -16.75640098318253, 128.54835706322959]   height: 1.15949811392
+host error: 0.0776951573166
+pl1.bit.uoit.ca
+hostname:  pl1.bit.uoit.ca
+host ip: 205.211.183.2
+host nc: [6.7664051488348846, -9.0335203388001712, 55.028217516557476, -2.2604790156975478]   height: 1
+host error: 0.118312919404
+mtuplanetlab1.cs.mtu.edu
+hostname:  mtuplanetlab1.cs.mtu.edu
+host ip: 141.219.252.132
+host nc: [0.51593950621707418, -43.672247135645655, 13.150465449847475, -17.919598606776592]   height: 9.76989473761
+host error: 0.20670763903
+plink.cs.uwaterloo.ca
+hostname:  plink.cs.uwaterloo.ca
+host ip: 129.97.74.12
+host nc: [-1.5067016830971638, -29.538807016758703, 27.344495726539531, -8.4534916011173564]   height: 1.31184829283
+host error: 0.500678761981
+planetlab-2.usask.ca
+hostname:  planetlab-2.usask.ca
+host ip: 128.233.252.12
+host nc: [-31.52227528817588, -34.511963216883004, 4.9552081356273305, -38.86916574457041]   height: 11.9259338502
+host error: 0.203151170408
+server4.planetlab.iit-tech.net
+hostname:  server4.planetlab.iit-tech.net
+host ip: 192.42.83.253
+host nc: [-1.8611070740945725, -22.815361356641599, 18.50871167611178, -33.751301396953927]   height: 1.89625384394
+host error: 0.118647056737
+planetlab-1.iscte.pt
+hostname:  planetlab-1.iscte.pt
+host ip: 193.136.191.25
+host nc: [19.498707801890145, -145.5373647042093, 110.01685712389614, -83.226974746389843]   height: 1.60917261288
+host error: 0.491393051741
+planetlab1.williams.edu
+hostname:  planetlab1.williams.edu
+host ip: 137.165.1.111
+host nc: [61.651166506829249, -17.474965052576017, 7.5867641281047744, -13.183925601824589]   height: 5.51249283764
+host error: 1.38185517956
+planetlabone.ccs.neu.edu
+hostname:  planetlabone.ccs.neu.edu
+host ip: 129.10.120.193
+host nc: [1.4646533192676865, -41.975142194964704, 37.071596919361866, -22.875898145766563]   height: 1.74042790886
+host error: 1.0650546511
+merkur.planetlab.haw-hamburg.de
+hostname:  merkur.planetlab.haw-hamburg.de
+host ip: 141.22.213.34
+host nc: [36.94571627460828, -103.74804089460122, 117.75265313117123, -43.299957207679441]   height: 1.16785635871
+host error: 0.427415193193
+planet-lab1.itba.edu.ar
+hostname:  planet-lab1.itba.edu.ar
+host ip: 190.227.163.142
+host nc: [79.555352546703261, 18.476656972655093, -144.73452683591898, -11.366927187148677]   height: 1.87108857637
+host error: 0.149794174179
+planetlab-1.calpoly-netlab.net
+hostname:  planetlab-1.calpoly-netlab.net
+host ip: 208.94.63.193
+host nc: [-48.755476968257575, 32.480549636683094, 27.847619218167289, -20.040670292259097]   height: 1.0027723326
+host error: 0.0535375190502
+plab2-itec.uni-klu.ac.at
+hostname:  plab2-itec.uni-klu.ac.at
+host ip: 143.205.172.12
+host nc: [17.699438355758101, -122.63186698931361, 114.09422522404202, -48.708584685824619]   height: 9.33900880616
+host error: 0.154474717287
+planet-lab1.uba.ar
+hostname:  planet-lab1.uba.ar
+host ip: 157.92.44.101
+host nc: [72.638692676222874, -22.617276650228952, -147.03717919339078, -17.453826271694794]   height: 1.65402232668
+host error: 0.444242018887
+planetlab-2a.ics.uci.edu
+hostname:  planetlab-2a.ics.uci.edu
+host ip: 128.195.54.163
+host nc: [-43.696727717796087, 19.699932398087576, 20.358310171125463, -30.562190118863768]   height: 1.10939460579
+host error: 0.126461953069
+planetlab2.cis.upenn.edu
+hostname:  planetlab2.cis.upenn.edu
+host ip: 158.130.6.253
+host nc: [1.0846650017707471, -47.239153399397331, 35.059769034451271, -19.895797297101002]   height: 11.0633393918
+host error: 0.566082646964
+kc-sce-plab1.umkc.edu
+hostname:  kc-sce-plab1.umkc.edu
+host ip: 204.56.0.137
+host nc: [-40.976519520314525, -31.31717434660537, 54.719814866611394, 0.85586430795618618]   height: 19.598055221
+host error: 0.19060609085
+planetlab2.lkn.ei.tum.de
+hostname:  planetlab2.lkn.ei.tum.de
+host ip: 138.246.99.250
+host nc: [19.610200101894506, -109.46353715486123, 113.44273709851805, -53.145237869265472]   height: 5.03251877
+host error: 0.135517310077
+planetlab1.tlm.unavarra.es
+hostname:  planetlab1.tlm.unavarra.es
+host ip: 130.206.158.138
+host nc: [34.430615412111585, -156.25271145896477, 104.15097011411711, -98.751392473369748]   height: 1
+host error: 0.144087322398
+planet1.ku.edu.tr
+hostname:  planet1.ku.edu.tr
+host ip: 88.255.65.219
+host nc: [-30.130218610636174, -100.17933301777961, 131.78917098114351, -36.784442209799508]   height: 47.9957893708
+host error: 0.087080394769
+planetlab1.citadel.edu
+hostname:  planetlab1.citadel.edu
+host ip: 155.225.2.71
+host nc: [-151.69620511868771, 65.517796100137843, 178.88012788049551, 1.7642547520753542]   height: 348.705871124
+host error: 0.336643209366
