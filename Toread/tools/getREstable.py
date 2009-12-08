@@ -11,7 +11,7 @@ from Vivaldi import Vivaldi
 
 
 
-PORT=11234
+PORT=51234
 BUFLEN = 2048
 
 def getNodeNCObj( hostname, token ):
@@ -105,7 +105,8 @@ if (__name__=="__main__"):
 	msg="Vivaldi"
 	myselfname = socket.gethostname()
 
-	inputfile = "../../nodelist.txt"
+	#inputfile = "../../nodelist.txt"
+	inputfile = "../../debugNodes.txt"
 	out_re_file = "../evaluationResult/RE.txt"
 	out_err_file = "../evaluationResult/localErr.txt"
 	usingHeight = True

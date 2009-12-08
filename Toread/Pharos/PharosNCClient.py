@@ -1,6 +1,49 @@
 from config import *
 from coor.HeightCoordinate import *
+from Vivaldi.VivaldiNCClient import *
 
+class PharosNCClient:
+    def __init__(self, ID = "0" ):
+        self.globalNC = VivaldiNCClient(PHAROS_USING_HEIGHT_GLOBAL)  # attention: pharosUsingHeight should be the same as VivaldiUsingHeight, that is pharosUsingHeight=VivaldiUsingHeight
+        self.clusterNC = VivaldiNCClient(PHAROS_USING_HEIGHT_LOCAL)
+        self.clusterID =  ID
+        
+    def updateGolbalNC(self, client, rtt):
+        self.globalNC.update(client, rtt)
+        return
+    
+    def updateClusterNC(self, client, rtt):
+        self.clusterNC.update( client, rtt )
+        return
+    
+    def getGlobalNCClient(self):
+        return self.globalNC
+    
+    def getClusterNCClient(self):
+        return self.clusterNC
+    
+    def getClusterID(self):
+        return self.ClusterID
+    
+    def setGlobal(self, ip, err, coor):
+        self.globalNC.set(ip, coor, err)
+        return
+    
+    def setCluster(self, ip, err, coor):
+        self.clusterNC.set(ip, coor, err)
+        return
+    
+    def getIP(self):
+        return self.globalNC.getIP()
+    
+    def setIP(self, _ip):
+        self.globalNC.ip = _ip
+        self.clusterNC.ip = _ip
+        return
+    
+    
+
+'''
 class PharosNCClient:
     def __init__(self):
         if(PHAROS_USING_HEIGHT_GLOBAL):
@@ -62,6 +105,6 @@ class PharosNCClient:
         str_error_global = 'error_global = ' + str(self.getGlobalError())
         str_error_local = 'error_local = ' + str(self.getLocalError())
         print str_ip + ', ' + str_coor + ', ' + str_error_global + ', ' + str_error_local
-
+'''
         
         

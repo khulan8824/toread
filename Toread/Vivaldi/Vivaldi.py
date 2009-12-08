@@ -28,8 +28,10 @@ class Vivaldi():
         
     def PingFinish(self,pingData):
         self.rtt = pingData.time
+        print "ping neighbor ", self.neighborIP, " rtt: ",self.rtt
         if self.rtt<PINGTIMEOUT/PINGNUM and self.rtt>0:
             NCDefer = NCClient.request("Vivaldi",self.neighborIP,NCPORT,NCTIMEOUT)
+            print "send a NC request to ",self.neighborIP
             NCDefer.addCallback(self.NCRecieved)  
         return
 

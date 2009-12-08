@@ -1,6 +1,38 @@
 from neighbor.NeighborManagerIF import *
-from VivaldiNeighbor import *
+from Vivaldi.VivaldiNeighborManager import *
 
+
+class PharosNeighborManager(NeighborManagerIF):
+    def __init__(self):
+        self.globalNeighborMgr = VivaldiNeighborManager(PHAROS_USING_HEIGHT_GLOBAL, PHAROS_UPDATE_STRATEGY_GLOBAL)
+        self.clusterNeighborMgr = VivaldiNeighborManager(PHAROS_USING_HEIGHT_LOCAL, PHAROS_UPDATE_STRATEGY_LOCAL) 
+        return 
+    
+    def addGlobalClient(self, client):
+        self.globalNeighborMgr.addClient(client)
+        return
+    
+    def addClusterClient(self, client):
+        self.clusterNeighborMgr.addClient(client)
+        return
+    
+    def updateGlobalNeighbor(self, neighbor):
+        self.globalNeighborMgr.update( neighbor )
+        return
+    
+    def updateClusterNeighbor(self, neighbor ):
+        self.clusterNeighborMgr.update( neighbor )
+        return
+    
+    def getClusterNeighbor( self, ip ):
+        return self.clusterNeighborMgr.getNieghbor(ip)
+    
+    def getGlobalNeighbor(self, ip ):
+        return self.globalNeighborMgr.getNeighbor(ip)
+    
+    
+
+'''
 class VivaldiNeighborManager(NeighborManagerIF):
     def __init__(self):
         self.neighborList = []
@@ -128,3 +160,6 @@ class VivaldiNeighborManager(NeighborManagerIF):
             return range(self.getLength())
         tmp = random.sample(range(self.getLength()), VIVALDI_UPLOAD_NUM)
         return tmp
+    
+
+'''

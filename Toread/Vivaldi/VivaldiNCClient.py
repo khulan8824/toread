@@ -2,8 +2,9 @@ from config import *
 from coor.HeightCoordinate import *
 
 class VivaldiNCClient:
-    def __init__(self):
-        if(VIVALDI_USING_HEIGHT):
+    def __init__(self, _using_h = VIVALDI_USING_HEIGHT):
+        self.using_height = _using_h
+        if(self.using_height):
             self.coor = HeightCoordinate()
         else:
             self.coor = EuclideanCoordinate()
@@ -35,7 +36,7 @@ class VivaldiNCClient:
         return self.coor.getCoor()
     
     def getPrintCoor(self):
-        if(VIVALDI_USING_HEIGHT):
+        if(self.using_height):
             return [self.coor.vec, self.coor.height]
         else:
             return self.coor.vec

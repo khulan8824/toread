@@ -2,7 +2,9 @@ from neighbor.NeighborManagerIF import *
 from VivaldiNeighbor import *
 
 class VivaldiNeighborManager(NeighborManagerIF):
-    def __init__(self):
+    def __init__(self, _using_h = VIVALDI_USING_HEIGHT, _strategy = VIVALDI_UPDATE_STRATEGY):
+        self.update_strategy = _strategy
+        self.using_height = _using_h
         self.neighborList = []
         self.updateCount = -1
         self.updateList = []
@@ -11,7 +13,7 @@ class VivaldiNeighborManager(NeighborManagerIF):
         return len(self.neighborList)
     
     def addIP(self, ip):
-        tmp = VivaldiNeighbor()
+        tmp = VivaldiNeighbor(self.using_height)
         tmp.setIP(ip)
         tmp.setError(VIVALDI_ERROR_UNCONNECTED)
         if(self.getLength() == 0):
@@ -24,7 +26,7 @@ class VivaldiNeighborManager(NeighborManagerIF):
         self.updateCount=-1
 
     def addClient(self, client):
-        tmp = VivaldiNeighbor()
+        tmp = VivaldiNeighbor(self.using_height)
         tmp.setClient(client)
         if(self.getLength() == 0):
             self.neighborList.append(tmp)
@@ -36,6 +38,16 @@ class VivaldiNeighborManager(NeighborManagerIF):
                 return
         self.neighborList.append(tmp)
         self.updateCount=-1
+    
+    '''
+    this method is add by wgd, get the neighbor according to the ip, if fails, return None
+    @Dec 5, 2009
+    '''
+    def getNeighbor(self, ip):
+        for nb in self.neighborList:
+            if( nb.getIP() == ip ):
+                return nb
+        return None
     
     def update(self, neighbor):
         for i in xrange(self.getLength()):
@@ -134,11 +146,11 @@ class VivaldiNeighborManager(NeighborManagerIF):
             self.updateCount = self.updateCount + 1
         
     def selectIP(self):
-        if (VIVALDI_UPDATE_STRATEGY == 0):
+        if (self.update_strategy == 0):
             self.randomNC()
-        elif (VIVALDI_UPDATE_STRATEGY == 1):
+        elif (self.update_strategy == 1):
             self.closestNC()
-        elif (VIVALDI_UPDATE_STRATEGY == 2):
+        elif (self.update_strategy == 2):
             self.hybridNC()
         tmp = self.updateList[self.updateCount]
         return self.neighborList[tmp].getIP()

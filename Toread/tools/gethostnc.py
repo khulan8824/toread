@@ -8,9 +8,9 @@ import pickle
 import sys
 from Vivaldi import Vivaldi
 
-nodelist = open("../..//nodelist.txt")
+nodelist = open("../..//debugNodes.txt")
 
-PORT=11234
+PORT=51234
 BUFLEN = 2048
 
 def getNodeNCObj( hostname, token ):

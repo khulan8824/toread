@@ -2,8 +2,8 @@ from neighbor.NeighborIF import *
 from VivaldiNCClient import *
 
 class VivaldiNeighbor(NeighborIF):
-    def __init__(self):
-        self.client = VivaldiNCClient()
+    def __init__(self, _using_h = VIVALDI_USING_HEIGHT):
+        self.client = VivaldiNCClient( _using_h )
         self.rtt = []
     
     def updateRTT(self, rtt):
@@ -16,7 +16,8 @@ class VivaldiNeighbor(NeighborIF):
     def update(self, coor, err, rtt):
         self.client.coor = coor.getCoor()
         self.client.error_local = err
-        self.updateRTT(rtt)
+        self.rtt = rtt  # modified by wgd, @Dec 5, 2009
+        #self.updateRTT(rtt)
        
     def setIP(self, ip):
         self.client.ip = ip
@@ -31,7 +32,8 @@ class VivaldiNeighbor(NeighborIF):
         self.setIP(ip)
         self.setCoor(coor)
         self.setError(err)
-        self.updateRTT(rtt)
+        self.rtt = rtt # modified by wgd, @Dec 5, 2009
+        #self.updateRTT(rtt)
     
     def setClient(self, client):
         self.setIP(client.ip)
@@ -44,10 +46,13 @@ class VivaldiNeighbor(NeighborIF):
         self.set(neighbor.getIP(), tmpCoor, neighbor.getError(), neighbor.getRTT())
         
     def getRTT(self):
+        return self.rtt  # modified by wgd, @Dec 5, 2009
+        
+        '''
         if(len(self.rtt) == 0):
             return []
         return min(self.rtt)
-
+        '''
     def getRTT_last(self):
         return self.rtt[len(self.rtt)-1]
 

@@ -1,6 +1,14 @@
 from neighbor.NeighborIF import *
 from VivaldiNCClient import *
+from VivaldiNeighbor import *
 
+
+'''
+this file seems useless, since pharos almost the same as vivaldi, we can use vivaldi neighbor 
+'''
+
+
+'''
 class VivaldiNeighbor(NeighborIF):
     def __init__(self):
         self.client = VivaldiNCClient()
@@ -58,7 +66,7 @@ class VivaldiNeighbor(NeighborIF):
         str_rtt = 'rtt = ' + str(self.getRTT())
         print str_ip + ', ' + str_coor + ', ' + str_error + ', ' + str_rtt
         
-
+'''
 
 
 

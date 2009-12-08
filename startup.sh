@@ -1,1 +1,1 @@
-python /home/tsinghua_wgd/1111/Toread/NetEngine.py >/home/tsinghua_wgd/1111/Toread/log/log &
+python /home/tsinghua_wgd/sandbox/Toread/NetEngine.py >/home/tsinghua_wgd/sandbox/Toread/log/log &
