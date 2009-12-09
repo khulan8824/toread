@@ -24,7 +24,7 @@ VIVALDI_CE = 0.25
 VIVALDI_CC = 0.25
 
 '''UESD IN VivaldiNeighbor'''
-VIVALDI_RTT_NUM = 10
+VIVALDI_RTT_NUM = 8
 
 
 '''USED IN VivaldiNeighborManager'''
@@ -45,15 +45,43 @@ PHAROS_UPDATE_STRATEGY_LOCAL = 2
 #PHAROS_GLOBAL_ERROR = 1.5
 
 '''USED IN PHAROS BOOTSTRAP'''
-PHAROS_LM = {"America":[], "Asia":[], "Europe":[] }  # lm and bootlist should have the same cluster ids
-CLUSTER_BOOTLIST = {"America":[], "Asia":[], "Europe":[] }
-GLOBAL_BOOTLIST = []
+PHAROS_LM = {"America":["righthand.eecs.harvard.edu","planetlab3.csail.mit.edu","planetlab2.cs.ucla.edu","planetlab2.cs.uiuc.edu","planetlab2.cs.duke.edu"], "Asia":["pl1.pku.edu.cn","csplanetlab2.kaist.ac.kr","planetlab-1.sjtu.edu.cn","planetlab3.ie.cuhk.edu.hk"], "Europe":["mars.planetlab.haw-hamburg.de","planetlab-3.imperial.ac.uk","planetlab1.tlm.unavarra.es","planetlab1.ceid.upatras.gr"] }  # lm and bootlist should have the same cluster ids
+CLUSTER_BOOTLIST = {"America":["planetlab3.csail.mit.edu","planetlab2.cs.ucla.edu","planetlab2.cs.uiuc.edu"], "Asia":["pl1.pku.edu.cn","csplanetlab2.kaist.ac.kr","planetlab-1.sjtu.edu.cn"], "Europe":["planetlab-3.imperial.ac.uk","planetlab1.tlm.unavarra.es","planetlab1.ceid.upatras.gr"] }
+GLOBAL_BOOTLIST = ["pl1.pku.edu.cn","righthand.eecs.harvard.edu","pl2.planetlab.ics.tut.ac.jp","planetlab2.cs.ucla.edu","planetlab1.tlm.unavarra.es","planetlab-3.imperial.ac.uk"]
+
+"""     pharos debug list nodes
+planetlab2.cesnet.cz
+planetlab1.aston.ac.uk
+mars.planetlab.haw-hamburg.de
+planetlab-3.imperial.ac.uk
+planetlab1.tlm.unavarra.es
+planetlab1.ceid.upatras.gr
+planetlab1.elet.polimi.it
+planet03.csc.ncsu.edu
+planetlab2.csres.utexas.edu
+planetlab1.williams.edu
+planetlab2.ucsd.edu
+righthand.eecs.harvard.edu
+planetlab3.csail.mit.edu
+planetlab2.cs.ucla.edu
+planetlab2.cs.uiuc.edu
+planetlab2.cs.duke.edu
+planetlab1.koganei.wide.ad.jp
+pl2.planetlab.ics.tut.ac.jp
+csplanetlab2.kaist.ac.kr
+plab2.cs.ust.hk
+planetlab3.ie.cuhk.edu.hk
+pl1.pku.edu.cn
+planetlab-1.sjtu.edu.cn
+"""
+
+
 
 '''USED IN PHAROS UPDATE LOOPTIME'''
 PHAROS_LOOP_TIME = 10  # make sure that PHAROS_LOOP_TIME>2*max(GOSSIPTIMEOUT,NCTIMEOUT,PINGTIMEOUT)
 
 '''USED IN TWISTED'''
-ALGORITHM = "Vivaldi"
+ALGORITHM = "PHAROS"
 LOOPTIME = 3
 PINGMETHOD = "TCP"
 PINGPORT = 51232

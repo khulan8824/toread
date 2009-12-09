@@ -5,6 +5,7 @@ def getResponseData(host,data):
     
     if data == "Vivaldi":
         print "Get a Vivaldi NC request from ",host
+        Vivaldi.main.myMananger.addIP(host)
         return Vivaldi.main.messegeManager.encodeOne(-1)
     if data == "PharosBase":
         globalnc = True

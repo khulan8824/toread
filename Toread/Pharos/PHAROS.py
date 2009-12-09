@@ -56,7 +56,7 @@ class PHAROS():
                 if len(temp)==0:
                     print "Error when locating the cluster ID:",id,"!\n Pharos will exit..."
                     sys.exit(1)
-                pingResult[id] = sum(temp)/len(temp)
+                pingResult[id] = float(sum(temp))/len(temp)
             minrtt = min(pingResult.values())
             clusterID=""
             for id in clusternames:

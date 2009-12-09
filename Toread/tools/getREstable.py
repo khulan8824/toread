@@ -65,7 +65,7 @@ def saveLocalErr( outfile = "" , errDict = {}, ncDict={}):
 
 def tcpPing(hostname):
 	pround = 5 # ping 5 times and use the average rtt
-	port = 11232
+	port = 51232
 	ip = socket.gethostbyname( hostname )
 	rtt = 0
 	for i in range(pround):

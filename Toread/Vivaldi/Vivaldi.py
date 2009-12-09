@@ -47,8 +47,11 @@ class Vivaldi():
     def NCRecieved(self,ncData):
         #translate from messege
         targetClient=self.messegeManager.decodeOne(ncData.recv)
-        print "Update:",targetClient.ip,",RTT=",self.rtt*1000
-        targetNeighbor=VivaldiNeighbor()
+        #print "Update:",targetClient.ip,",RTT=",self.rtt*1000
+        # this part needs to be modified to use filter
+        targetNeighbor=self.myMananger.getNeighbor(targetClient.ip)
+        if targetNeighbor==None:
+            targetNeighbor = VivaldiNeighbor()
         targetNeighbor.setClient(targetClient)
         targetNeighbor.updateRTT(self.rtt)
         self.myMananger.addClient(targetClient)
@@ -57,6 +60,11 @@ class Vivaldi():
         gossipDefer = GossipClient.request("Vivaldi",self.neighborIP,GOSSIPPORT,GOSSIPTIMEOUT)
         gossipDefer.addCallback(self.GossipRecieved)
         #update
+        #print "Update:",targetClient.ip,",RTT=",targetNeighbor.minFilter()*1000
+        #self.myClient.update(targetClient,targetNeighbor.minFilter()*1000)
+        
+        #the following is the old code, which do not use any filter
+        print "Update:",targetClient.ip,",RTT=",self.rtt*1000
         self.myClient.update(targetClient,self.rtt*1000) #Attention!self.rtt must be multiplied by 1000
         return
 

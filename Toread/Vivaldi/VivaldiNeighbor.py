@@ -10,9 +10,14 @@ class VivaldiNeighbor(NeighborIF):
         if (len(self.rtt) < VIVALDI_RTT_NUM):
             self.rtt.append(rtt)
         else:
+            # modified by wgd
+            # @ Dec 8, 2009
+            self.rtt.remove(self.rtt[0])
+            self.rtt.append(rtt)
+            '''
             self.rtt.remove(max(self.rtt))
             self.rtt.append(rtt)
-    
+    '''
     def update(self, coor, err, rtt):
         self.client.coor = coor.getCoor()
         self.client.error_local = err
@@ -47,12 +52,22 @@ class VivaldiNeighbor(NeighborIF):
         
     def getRTT(self):
         return self.rtt  # modified by wgd, @Dec 5, 2009
-        
+    
+    def minFilter(self):
+        if len(self.rtt)==0:
+            return None
+        return min(self.rtt)
         '''
         if(len(self.rtt) == 0):
             return []
         return min(self.rtt)
         '''
+    
+    def medianFilter(self):
+        tmp = list(self.rtt)
+        tmp.sort()
+        return tmp[int(len(tmp)/2)]
+        
     def getRTT_last(self):
         return self.rtt[len(self.rtt)-1]
 

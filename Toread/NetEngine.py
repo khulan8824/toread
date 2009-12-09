@@ -7,6 +7,7 @@ from gossip import GossipServer
 from nc import NCServer
 from config import *
 from Vivaldi import Vivaldi #import Vivaldi module
+from Pharos import PHAROS
 
 if LOG_IN_DETAIL>0:
     log.startLogging(sys.stdout)
@@ -20,6 +21,8 @@ reactor.listenTCP(NCPORT,NCServer.NCServerFactory())
 #set algorithm
 if ALGORITHM == "Vivaldi":
     reactor.callWhenRunning(Vivaldi.start)
+if ALGORITHM == "PHAROS":
+    reactor.callWhenRunning(PHAROS.start)
 
 reactor.run()
 
