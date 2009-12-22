@@ -1,4 +1,5 @@
 from twisted.internet import protocol,defer,reactor
+from config import *
 
 class NCData():
     def __init__(self,send="",host="127.0.0.1",port=11233,timeout=10):
@@ -18,6 +19,8 @@ class NCClientProtocol(protocol.Protocol):
         self.transport.write(self.factory.recvbuff.send)
     
     def connectionMade(self):
+        if DEBUG:
+            print "NCClientProtocol.connectionMade is called...."
         self.sendData()
         
     def dataReceived(self, data):
@@ -51,6 +54,9 @@ class NCClientFactory(protocol.ClientFactory):
 def request(send="",host="127.0.0.1",port=11232,timeout=10):
     recvbuff = NCData(send,host,port,timeout)
     factory = NCClientFactory(recvbuff)
+    if DEBUG:
+        print "nc request to", host
+        print "Begin to connect to",host
     reactor.connectTCP(recvbuff.host,recvbuff.port,factory,recvbuff.timeout)
     d = factory.defer
     reactor.callLater(recvbuff.timeout, factory.stopFactory)         

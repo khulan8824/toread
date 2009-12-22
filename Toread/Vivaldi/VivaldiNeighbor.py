@@ -62,6 +62,20 @@ class VivaldiNeighbor(NeighborIF):
             return []
         return min(self.rtt)
         '''
+    '''
+    added by wgd @Dec 14
+    Moving Percentile filter is like median filter, but it is more complicated
+    
+    '''
+    def mpFilter(self):
+        if len(self.rtt)==0:
+            return None
+        tmp = list(self.rtt)
+        tmp.sort()
+        percent = int(len(tmp)*MP_PENCENTILE)
+        if percent<0:
+            percent=0
+        return tmp[percent]
     
     def medianFilter(self):
         tmp = list(self.rtt)

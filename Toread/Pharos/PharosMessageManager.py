@@ -35,8 +35,8 @@ class PharosMessageManager():
             temp = PharosNCMessage()
             temp.ip = MYIP
             temp.vec = PHAROS.main.myClient.clusterNC.coor.vec
-            if PHAROS_USING_HEIGHT>0:
-                temp.height = PHAROS.main.myClient.clusterNC.height
+            if PHAROS_USING_HEIGHT_LOCAL>0:
+                temp.height = PHAROS.main.myClient.clusterNC.coor.height
             temp.error = PHAROS.main.myClient.clusterNC.error
             temp.clusterID = PHAROS.main.myClient.clusterID
             temp.nctype = "cluster"
@@ -46,7 +46,7 @@ class PharosMessageManager():
             temp = PharosNCMessage()
             temp.ip = MYIP
             temp.vec = PHAROS.main.myClient.globalNC.coor.vec
-            if PHAROS_USING_HEIGHT>0:
+            if PHAROS_USING_HEIGHT_GLOBAL>0:
                 temp.height = PHAROS.main.myClient.globalNC.coor.height
             temp.error = PHAROS.main.myClient.globalNC.error
             temp.clusterID = PHAROS.main.myClient.clusterID
@@ -58,7 +58,7 @@ class PharosMessageManager():
             mymgr = PHAROS.main.myNbManager.clusterNeighborMgr
             temp.ip = mymgr.neighborList[index].getIP()
             temp.vec = mymgr.neighborList[index].client.coor.vec
-            if PHAROS_USING_HEIGHT>0:
+            if PHAROS_USING_HEIGHT_LOCAL>0:
                 temp.height = mymgr.neighborList[index].client.coor.height
             temp.error = mymgr.neighborList[index].getError()
             temp.clusterID = PHAROS.main.myClient.clusterID
@@ -69,18 +69,18 @@ class PharosMessageManager():
             mymgr = PHAROS.main.myNbManager.globalNeighborMgr
             temp.ip = mymgr.neighborList[index].getIP()
             temp.vec = mymgr.neighborList[index].client.coor.vec
-            if PHAROS_USING_HEIGHT>0:
+            if PHAROS_USING_HEIGHT_GLOBAL>0:
                 temp.height = mymgr.neighborList[index].client.coor.height
             temp.error = mymgr.neighborList[index].getError()
             temp.nctype = "global"
                     
-        print "Message Encode: IP=",temp.ip,",vec=",temp.vec,",height=",temp.height,",nctype=",temp.nctype
+        print "[PharosMessageManager] Message Encode: IP=",temp.ip,",vec=",temp.vec,",height=",temp.height,",nctype=",temp.nctype
         str = pickle.dumps(temp)
         return str
     
     def decodeOne(self,str):
         data = pickle.loads(str)
-        print "Message Decode: IP=",data.ip,",vec=",data.vec,",height=",data.height,",nctype=",data.nctype
+        print "[PharosMessageManager] Message Decode: IP=",data.ip,",vec=",data.vec,",height=",data.height,",nctype=",data.nctype
         if data.nctype=="global":
             use_h = PHAROS_USING_HEIGHT_GLOBAL
         if data.nctype=="cluster":
@@ -116,15 +116,17 @@ class PharosMessageManager():
         temp = PharosInfo()
         temp.ip = myclient.getIP()
         temp.clustervec = myclient.clusterNC.coor.vec
-        if PHAROS_USING_HEIGHT>0:
-            temp.clusterheight = myclient.clusterNC.height
-            temp.globalheight = myclient.globalNC.height
+        if PHAROS_USING_HEIGHT_GLOBAL>0:
+            temp.globalheight = myclient.globalNC.coor.height
+        if PHAROS_USING_HEIGHT_LOCAL>0:
+            temp.clusterheight = myclient.clusterNC.coor.height
+
         temp.clustererror = myclient.clusterNC.error
         temp.clusterID = myclient.clusterID
         temp.globalerror = myclient.globalNC.error
         temp.globalvec = myclient.globalNC.coor.vec
         str = pickle.dumps(temp)
-        print "Encode the PharosInfo class. IP:",temp.ip,",global vec:",temp.globalvec,",global height:",temp.globalheight,",global error:",temp.globalerror,", cluster vec:",temp.clustervec,", cluster height:",temp.clusterheight,", cluster error:",temp.clustererror,", cluster ID:",temp.clusterID
+        print "[PharosMessageManager] Encode the PharosInfo class. IP:",temp.ip,",global vec:",temp.globalvec,",global height:",temp.globalheight,",global error:",temp.globalerror,", cluster vec:",temp.clustervec,", cluster height:",temp.clusterheight,", cluster error:",temp.clustererror,", cluster ID:",temp.clusterID
         return str
         
 

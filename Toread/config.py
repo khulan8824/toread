@@ -1,6 +1,7 @@
 '''UESD FOR INIT'''
-'''bootstramp hosts:planetlab2.cis.upenn.edu,planetlab2.cs.columbia.edu,planetlab1.georgetown.edu,planetlab2.cs.ucla.edu'''
-SERVER_IP = ['158.130.6.253','128.59.20.227','141.161.20.32','131.179.50.72']
+'''bootstramp hosts, we can use ip or hostname in the following list'''
+#SERVERS = ['132.239.17.225','202.112.8.2','195.113.161.83','131.179.50.72']
+SERVERS = ["planetlab2.ucsd.edu","pl1.pku.edu.cn","planetlab2.cesnet.cz","planetlab2.cs.ucla.edu"]
 
 import re, urllib2
 MYIP = re.search("td>(\d+\.\d+\.\d+\.\d+)</td", urllib2.urlopen("http://whois.ipcn.org").read())
@@ -25,7 +26,7 @@ VIVALDI_CC = 0.25
 
 '''UESD IN VivaldiNeighbor'''
 VIVALDI_RTT_NUM = 8
-
+MP_PENCENTILE = 0.5  # Moving percentile filter parameter, set 0.5 means median filter
 
 '''USED IN VivaldiNeighborManager'''
 VIVALDI_MAX_NEIGHBOR_NUM = 200
@@ -45,8 +46,8 @@ PHAROS_UPDATE_STRATEGY_LOCAL = 2
 #PHAROS_GLOBAL_ERROR = 1.5
 
 '''USED IN PHAROS BOOTSTRAP'''
-PHAROS_LM = {"America":["righthand.eecs.harvard.edu","planetlab3.csail.mit.edu","planetlab2.cs.ucla.edu","planetlab2.cs.uiuc.edu","planetlab2.cs.duke.edu"], "Asia":["pl1.pku.edu.cn","csplanetlab2.kaist.ac.kr","planetlab-1.sjtu.edu.cn","planetlab3.ie.cuhk.edu.hk"], "Europe":["mars.planetlab.haw-hamburg.de","planetlab-3.imperial.ac.uk","planetlab1.tlm.unavarra.es","planetlab1.ceid.upatras.gr"] }  # lm and bootlist should have the same cluster ids
-CLUSTER_BOOTLIST = {"America":["planetlab3.csail.mit.edu","planetlab2.cs.ucla.edu","planetlab2.cs.uiuc.edu"], "Asia":["pl1.pku.edu.cn","csplanetlab2.kaist.ac.kr","planetlab-1.sjtu.edu.cn"], "Europe":["planetlab-3.imperial.ac.uk","planetlab1.tlm.unavarra.es","planetlab1.ceid.upatras.gr"] }
+PHAROS_LM = {"America":["righthand.eecs.harvard.edu","planetlab3.csail.mit.edu","planetlab2.cs.ucla.edu","planetlab2.ucsd.edu","planetlab2.cs.duke.edu"], "Asia":["pl1.pku.edu.cn","csplanetlab2.kaist.ac.kr","planetlab-1.sjtu.edu.cn","planetlab3.ie.cuhk.edu.hk"], "Europe":["mars.planetlab.haw-hamburg.de","planetlab-3.imperial.ac.uk","planetlab1.tlm.unavarra.es","planetlab1.ceid.upatras.gr"] }  # lm and bootlist should have the same cluster ids
+CLUSTER_BOOTLIST = {"America":["righthand.eecs.harvard.edu","planetlab2.cs.ucla.edu","planetlab2.ucsd.edu"], "Asia":["pl1.pku.edu.cn","csplanetlab2.kaist.ac.kr","planetlab-1.sjtu.edu.cn"], "Europe":["planetlab-3.imperial.ac.uk","planetlab1.tlm.unavarra.es","planetlab1.ceid.upatras.gr"] }
 GLOBAL_BOOTLIST = ["pl1.pku.edu.cn","righthand.eecs.harvard.edu","pl2.planetlab.ics.tut.ac.jp","planetlab2.cs.ucla.edu","planetlab1.tlm.unavarra.es","planetlab-3.imperial.ac.uk"]
 
 """     pharos debug list nodes
@@ -82,13 +83,18 @@ PHAROS_LOOP_TIME = 10  # make sure that PHAROS_LOOP_TIME>2*max(GOSSIPTIMEOUT,NCT
 
 '''USED IN TWISTED'''
 ALGORITHM = "PHAROS"
+#ALGORITHM = "Vivaldi"
 LOOPTIME = 3
 PINGMETHOD = "TCP"
-PINGPORT = 51232
+PINGPORT = 11232
 PINGTIMEOUT = 3.0 #please ensure that PINGTIMEOUT<LOOPTIME and that it's a float
 PINGNUM = 3
 PINGBYTES = 56
-GOSSIPPORT = 51233
-NCPORT = 51234
+GOSSIPPORT = 11233
+NCPORT = 11234
 GOSSIPTIMEOUT = 1 #please ensure that GOSSIPTIMEOUT<LOOPTIME
 NCTIMEOUT = 1 #please ensure that NCTIMEOUT<LOOPTIME
+
+
+'''INITIATE DEBUG MODE'''
+DEBUG = True

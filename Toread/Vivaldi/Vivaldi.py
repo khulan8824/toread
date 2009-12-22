@@ -6,6 +6,7 @@ from nc import NCClient
 from VivaldiNeighborManager import *
 from coor.HeightCoordinate import *
 from VivaldiMessegeManager import *
+import socket
 
 class Vivaldi():
     
@@ -20,9 +21,10 @@ class Vivaldi():
         tmpCoor = HeightCoordinate()
         tmpCoor.setCoor(tmpVec,tmpHeight)
         self.myClient.set(MYIP, tmpCoor, 1.5)
-        for boot in SERVER_IP:
-            if boot!=MYIP:
-                self.myMananger.addIP(boot)
+        for boot in SERVERS:
+            bootip = socket.gethostbyname(boot)
+            if bootip!=MYIP:
+                self.myMananger.addIP(bootip)
         self.round = 0
         self.mainloop();
         
@@ -60,12 +62,12 @@ class Vivaldi():
         gossipDefer = GossipClient.request("Vivaldi",self.neighborIP,GOSSIPPORT,GOSSIPTIMEOUT)
         gossipDefer.addCallback(self.GossipRecieved)
         #update
-        #print "Update:",targetClient.ip,",RTT=",targetNeighbor.minFilter()*1000
-        #self.myClient.update(targetClient,targetNeighbor.minFilter()*1000)
+        print "Update:",targetClient.ip,",RTT=",targetNeighbor.mpFilter()*1000
+        self.myClient.update(targetClient,targetNeighbor.mpFilter()*1000)
         
         #the following is the old code, which do not use any filter
-        print "Update:",targetClient.ip,",RTT=",self.rtt*1000
-        self.myClient.update(targetClient,self.rtt*1000) #Attention!self.rtt must be multiplied by 1000
+        #print "Update:",targetClient.ip,",RTT=",self.rtt*1000
+        #self.myClient.update(targetClient,self.rtt*1000) #Attention!self.rtt must be multiplied by 1000
         return
 
     def mainloop(self):
