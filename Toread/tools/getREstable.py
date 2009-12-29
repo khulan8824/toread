@@ -15,10 +15,14 @@ PORT=51234
 BUFLEN = 2048
 
 def getNodeNCObj( hostname, token ):
-	sockfd = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-	ip = socket.gethostbyname(hostname)
-	sockfd.settimeout(10)
 	try:
+		try:
+			ip = socket.gethostbyname(hostname)
+		except:
+			print "Get host ip error:",hostname		
+			return None
+		sockfd = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+		sockfd.settimeout(10)
 		sockfd.connect((ip,PORT))
 		sockfd.send(token)
 		ncbuf = sockfd.recv(BUFLEN)

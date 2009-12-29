@@ -7,6 +7,7 @@ sys.path.append('..')
 import pickle
 import math
 import time
+import random
 from Pharos import PHAROS
 from config import *
 
@@ -16,10 +17,14 @@ PORT=NCPORT
 BUFLEN = 2048
 
 def getNodeNCObj( hostname, token ):
-	sockfd = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-	ip = socket.gethostbyname(hostname)
-	sockfd.settimeout(10)
 	try:
+		try:
+			ip = socket.gethostbyname(hostname)
+		except:
+			print "Get host name error:", hostname
+			return None
+		sockfd = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+		sockfd.settimeout(10)
 		sockfd.connect((ip,PORT))
 		sockfd.send(token)
 		ncbuf = sockfd.recv(BUFLEN)
@@ -108,10 +113,14 @@ if (__name__=="__main__"):
 	msg="PharosInfo"
 	myselfname = socket.gethostname()
 
+#
+#This tool can caculate the CNAE, RE of the Pharos system
+#
 	#inputfile = "../../nodelist.txt"
 	inputfile = "../../pharosDebuglist.txt"
 	out_re_file = "../evaluationResult/pharosRE.txt"
 	out_err_file = "../evaluationResult/pharosErr.txt"
+	out_cnae_file = "../evaluationResult/pharosCNAE.txt"
 	usingHeight = True
 
 	# get the nc of myself
@@ -129,12 +138,15 @@ if (__name__=="__main__"):
 	
 
 	hosts = loadHost( inputfile )
+	# shuffle the host, make sure the traffic is not converge to one node at the same time
+	random.shuffle(hosts)
 
 	hostGlobalNC = {}
 	hostClusterNC = {}
 	hostGlobalErr = {}
 	hostClusterErr = {}
 	hostID = {}
+	hostRTT = {}
 
 	hostGlobalNC[myselfname] = myglobalvec
 	hostGlobalErr[myselfname] = myglobalerr
@@ -145,6 +157,13 @@ if (__name__=="__main__"):
 	
 	refreshMe = 5
 	count = 0
+
+# the vars is used to caculate the CNAE
+	smallestRTT = 100000
+	nearestHost = "" # the real nearest host
+	ncOptRtt = 100000
+	ncOptHost = ""   # the nearest host using NC predicted rtt
+	ncSmallestRTT = 10000
 
 	for host in hosts:
 		if count==refreshMe:
@@ -187,6 +206,8 @@ if (__name__=="__main__"):
 		if (rtt == -100):
 			print "ping ",host," Error!"
 			continue
+		#add rtt to dictionary
+		hostRTT[host] = rtt
 		if hostID[host] == hostID[myselfname]:
 			predicted_rtt = calDistance( hostClusterNC[myselfname], hostClusterNC[host] , PHAROS_USING_HEIGHT_LOCAL)
 		else:
@@ -194,6 +215,15 @@ if (__name__=="__main__"):
 		re = abs(rtt-predicted_rtt)/min(rtt,predicted_rtt)
 		REdict[k] = re
 		print "RE result:",k,"=",re
+		
+		# the following is about the CNAE
+		if(predicted_rtt<ncSmallestRTT):
+			ncSmallestRTT = predicted_rtt
+			ncOptHost = host
+			ncOptRtt = rtt
+		if(rtt<smallestRTT):
+			smallestRTT = rtt
+			nearestHost = host
 
 #		print "hostname: ", host
 #		print "host ip:", ncobj.ip
@@ -206,5 +236,9 @@ if (__name__=="__main__"):
 	r = saveLocalErr( out_err_file, hostGlobalErr, hostGlobalNC , hostClusterErr, hostClusterNC, hostID)
 	if(not r):
 		print "save node NC result fails!"
-	
+	# record the CNAE information
+	cnaeout = open(out_cnae_file,'w')
+	cnaeout.write("localhost	nearestPredictedHost	predictedRTT	ncOptRtt	realNearestHost	smallestRTT	CNAE\n")
+	cnaeout.write(str(myselfname)+"	"+str(ncOptHost)+"	"+str(ncSmallestRTT)+"	"+str(ncOptRtt)+"	"+str(nearestHost)+"	"+str(smallestRTT)+"	"+str(ncOptRtt-smallestRTT)+"\n")
+	cnaeout.close()
 	

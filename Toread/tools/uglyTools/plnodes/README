@@ -1,0 +1,8 @@
+7个文件分别是myLnodes.txt的7个部分.将7个文件分布到七台机器上面,主要是为了传输pyxida所需要的jre.防止流量过大的情况.
+part1 : planetlab3.ucsd.edu ( done )
+part2: osiris.planetlab.cs.umd.edu ( done )
+part3: planetlab6.cs.duke.edu ( done )
+part4: planetlab2.cs.purdue.edu ( done )
+part5: planetlab-02.vt.nodes.planet-lab.org ( done )
+part6: pli1-br-3.hpl.hp.com (done)
+part7: pl2.ucs.indiana.edu ( done )
