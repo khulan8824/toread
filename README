@@ -12,6 +12,9 @@ vxargs -a /home/tsinghua_wgd/wangguodong/experiment/1111/nodelist.txt ssh {} /ho
 cd Toread
 python gethostnc.py
 
+if you want to get the information of pharos, use the following command
+vxargs -a /home/tsinghua_wgd/wangguodong/sandbox/nodelist.txt  -t 30 -o vxargxResult/ ssh {} 'nohup sh /home/tsinghua_wgd/sandbox/evaluatePHAROS.sh'
+
 5.Terminate
 vxargs -a /home/tsinghua_wgd/wangguodong/experiment/1111/nodelist.txt ssh {} /home/tsinghua_wgd/1111/terminate.sh
 

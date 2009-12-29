@@ -46,12 +46,12 @@ PHAROS_UPDATE_STRATEGY_LOCAL = 2
 #PHAROS_GLOBAL_ERROR = 1.5
 
 '''USED IN PHAROS BOOTSTRAP'''
-PHAROS_LM = {"America":["righthand.eecs.harvard.edu","planetlab3.csail.mit.edu","planetlab2.cs.ucla.edu","planetlab2.ucsd.edu","planetlab2.cs.duke.edu"], "Asia":["pl1.pku.edu.cn","csplanetlab2.kaist.ac.kr","planetlab-1.sjtu.edu.cn","planetlab3.ie.cuhk.edu.hk"], "Europe":["mars.planetlab.haw-hamburg.de","planetlab-3.imperial.ac.uk","planetlab1.tlm.unavarra.es","planetlab1.ceid.upatras.gr"] }  # lm and bootlist should have the same cluster ids
-CLUSTER_BOOTLIST = {"America":["righthand.eecs.harvard.edu","planetlab2.cs.ucla.edu","planetlab2.ucsd.edu"], "Asia":["pl1.pku.edu.cn","csplanetlab2.kaist.ac.kr","planetlab-1.sjtu.edu.cn"], "Europe":["planetlab-3.imperial.ac.uk","planetlab1.tlm.unavarra.es","planetlab1.ceid.upatras.gr"] }
-GLOBAL_BOOTLIST = ["pl1.pku.edu.cn","righthand.eecs.harvard.edu","pl2.planetlab.ics.tut.ac.jp","planetlab2.cs.ucla.edu","planetlab1.tlm.unavarra.es","planetlab-3.imperial.ac.uk"]
+PHAROS_LM = {"America":["planetlab-04.cs.princeton.edu","righthand.eecs.harvard.edu","planetlab04.cs.washington.edu","planetlab2.cs.ucla.edu","planetlab2.ucsd.edu","planetlab2.cs.duke.edu"], "Asia":["pl1.pku.edu.cn","csplanetlab2.kaist.ac.kr","planetlab-1.sjtu.edu.cn","planetlab3.ie.cuhk.edu.hk","planetlab2.netmedia.gist.ac.kr"], "Europe":["mars.planetlab.haw-hamburg.de","planetlab-3.imperial.ac.uk","planetlab1.tlm.unavarra.es","planetlab1.ceid.upatras.gr"] }  # lm and bootlist should have the same cluster ids
+CLUSTER_BOOTLIST = {"America":["planetlab-04.cs.princeton.edu","righthand.eecs.harvard.edu","planetlab2.cs.ucla.edu","planetlab2.ucsd.edu","planetlab04.cs.washington.edu"], "Asia":["pl1.pku.edu.cn","csplanetlab2.kaist.ac.kr","planetlab-1.sjtu.edu.cn","node3.planet-lab.titech.ac.jp","planetlab2.netmedia.gist.ac.kr"], "Europe":["planetlab-3.imperial.ac.uk","planetlab1.tlm.unavarra.es","planetlab1.ceid.upatras.gr","planetlab2.informatik.uni-goettingen.de"] }
+GLOBAL_BOOTLIST = ["planetlab2.netmedia.gist.ac.kr","pl1.pku.edu.cn","righthand.eecs.harvard.edu","pl2.planetlab.ics.tut.ac.jp","planetlab2.cs.ucla.edu","planetlab1.tlm.unavarra.es","planetlab-3.imperial.ac.uk","planetlab2.informatik.uni-goettingen.de","node3.planet-lab.titech.ac.jp"]
 
 """     pharos debug list nodes
-planetlab2.cesnet.cz
+planetlab2.informatik.uni-goettingen.de
 planetlab1.aston.ac.uk
 mars.planetlab.haw-hamburg.de
 planetlab-3.imperial.ac.uk
@@ -63,7 +63,7 @@ planetlab2.csres.utexas.edu
 planetlab1.williams.edu
 planetlab2.ucsd.edu
 righthand.eecs.harvard.edu
-planetlab3.csail.mit.edu
+planetlab04.cs.washington.edu
 planetlab2.cs.ucla.edu
 planetlab2.cs.uiuc.edu
 planetlab2.cs.duke.edu
@@ -79,12 +79,12 @@ planetlab-1.sjtu.edu.cn
 
 
 '''USED IN PHAROS UPDATE LOOPTIME'''
-PHAROS_LOOP_TIME = 10  # make sure that PHAROS_LOOP_TIME>2*max(GOSSIPTIMEOUT,NCTIMEOUT,PINGTIMEOUT)
+PHAROS_LOOP_TIME = 20  # make sure that PHAROS_LOOP_TIME>2*max(GOSSIPTIMEOUT,NCTIMEOUT,PINGTIMEOUT)
 
 '''USED IN TWISTED'''
 ALGORITHM = "PHAROS"
 #ALGORITHM = "Vivaldi"
-LOOPTIME = 3
+LOOPTIME = 10
 PINGMETHOD = "TCP"
 PINGPORT = 11232
 PINGTIMEOUT = 3.0 #please ensure that PINGTIMEOUT<LOOPTIME and that it's a float
@@ -92,9 +92,9 @@ PINGNUM = 3
 PINGBYTES = 56
 GOSSIPPORT = 11233
 NCPORT = 11234
-GOSSIPTIMEOUT = 1 #please ensure that GOSSIPTIMEOUT<LOOPTIME
-NCTIMEOUT = 1 #please ensure that NCTIMEOUT<LOOPTIME
+GOSSIPTIMEOUT = 3 #please ensure that GOSSIPTIMEOUT<LOOPTIME
+NCTIMEOUT = 3 #please ensure that NCTIMEOUT<LOOPTIME
 
 
 '''INITIATE DEBUG MODE'''
-DEBUG = True
+DEBUG = False
