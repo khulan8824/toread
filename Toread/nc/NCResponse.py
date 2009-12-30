@@ -23,5 +23,8 @@ def getResponseData(host,data):
         if DEBUG:
             print "[NCResponse] Get a pharos info request from", host
         return PHAROS.main.myMsgManager.encodePharosInfo()
-    
+    if data == "getPharosString":
+        if DEBUG:
+            print "[NCResponse] Get a pharos get string info request from", host
+        return PHAROS.main.myMsgManager.encodePharosInfoAsString()    
     return ""

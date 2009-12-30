@@ -103,8 +103,8 @@ if (__name__=="__main__"):
     #
     #This tool can caculate the CNAE, RE of the Pharos system
     #
-    #inputfile = "../../myPLNodes.txt"
-    inputfile = "../../pharosDebuglist.txt"
+    inputfile = "../../myPLNodes.txt"
+    #inputfile = "../../pharosDebuglist.txt"
     out_re_file = "../evaluationResult/pyxidaRE.txt"
     out_err_file = "../evaluationResult/pyxidaNC.txt"
     out_cnae_file = "../evaluationResult/pyxidaCNAE.txt"   

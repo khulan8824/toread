@@ -128,6 +128,23 @@ class PharosMessageManager():
         str = pickle.dumps(temp)
         print "[PharosMessageManager] Encode the PharosInfo class. IP:",temp.ip,",global vec:",temp.globalvec,",global height:",temp.globalheight,",global error:",temp.globalerror,", cluster vec:",temp.clustervec,", cluster height:",temp.clusterheight,", cluster error:",temp.clustererror,", cluster ID:",temp.clusterID
         return str
+    
+    def encodePharosInfoAsString(self):
+        myclient = PHAROS.main.myClient
+        temp = "ClusterID:" + str(myclient.clusterID) + "@SEP@"
+        temp = temp + "ip:" + str(myclient.getIP())+"@SEP@"
+        temp = temp +"globalvec:" + str(myclient.globalNC.coor.vec) +"@SEP@"
+        if PHAROS_USING_HEIGHT_GLOBAL>0:
+            temp = temp + "globalheight:" + str(myclient.globalNC.coor.height) +"@SEP@"
+        temp = temp + "clustervec:" + str(myclient.clusterNC.coor.vec)+"@SEP@"
+        if PHAROS_USING_HEIGHT_LOCAL>0:
+            temp = temp + "clusterheight:" + str(myclient.clusterNC.coor.height) + "@SEP@"
+
+        print "[PharosMessageManager] Encode the Pharos Info String:",temp
+        return temp
+
+    
+    
         
 
 
