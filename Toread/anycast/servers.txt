@@ -1,0 +1,28 @@
+#American Servers
+planetlab2.cs.ucla.edu
+planetlab3.ucsd.edu
+planetlab1.williams.edu
+planetlab1.eecs.umich.edu
+righthand.eecs.harvard.edu
+planetlab2.cs.duke.edu
+pl1.ucs.indiana.edu
+#Asian Servers
+pl1.pku.edu.cn
+planetlab-1.sjtu.edu.cn
+plab1.cs.ust.hk
+planet1.jaist.ac.jp
+node3.planet-lab.titech.ac.jp
+planetlab2.netmedia.gist.ac.kr
+planetlab5.kaist.ac.kr
+planetlab1.csie.nuk.edu.tw
+# European Servers
+planetlab-3.imperial.ac.uk
+planetlab1.tlm.unavarra.es
+planetlab1.ceid.upatras.gr
+planetlab2.informatik.uni-goettingen.de
+mars.planetlab.haw-hamburg.de
+planetlab-3.imperial.ac.uk
+planetlab1.tlm.unavarra.es
+planetlab1.ceid.upatras.gr
+planetlab1.ifi.uio.no
+pl1.grid.kiae.ru
