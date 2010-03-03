@@ -1,0 +1,5 @@
+planetlab2.cis.upenn.edu
+planetlab2.cs.columbia.edu
+planetlab1.georgetown.edu
+planetlab2.cs.ucla.edu
+planetlab2.ece.ucdavis.edu

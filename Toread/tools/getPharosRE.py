@@ -15,6 +15,7 @@ from config import *
 
 PORT=NCPORT
 BUFLEN = 2048
+TCP = False
 
 def getNodeNCObj( hostname, token ):
 	try:
@@ -71,6 +72,26 @@ def saveLocalErr( outfile = "" , globalerrDict = {}, globalncDict={}, clustererr
 	return True
 	
 
+def udpPing(hostname):
+	pround = 5  # ping 5 times and use the average rtt
+	port = PINGPORT
+	ip = socket.gethostbyname( hostname )
+	rtt = 0
+	for i in range(pround):
+		try:
+			sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+			sock.settimeout(10)
+			rtt = rtt - time.time()
+			sock.sendto("this is a tcp ping test!\n",(ip,port))
+			buf = sock.recv(1024)
+			rtt = rtt + time.time()
+			sock.close()
+		except:
+			print "Error when ping host: ", hostname
+			return -100
+	rtt = rtt / pround
+	return rtt * 1000  # time.time() returns the seconds, here we need micro-seconds	
+
 def tcpPing(hostname):
 	pround = 5 # ping 5 times and use the average rtt
 	port = PINGPORT
@@ -117,7 +138,8 @@ if (__name__=="__main__"):
 #This tool can caculate the CNAE, RE of the Pharos system
 #
 	#inputfile = "../../nodelist.txt"
-	inputfile = "../../pharosDebuglist.txt"
+	#inputfile = "../../pharosDebuglist.txt"
+	inputfile = "../../myPLnodes.txt"
 	out_re_file = "../evaluationResult/pharosRE.txt"
 	out_err_file = "../evaluationResult/pharosErr.txt"
 	out_cnae_file = "../evaluationResult/pharosCNAE.txt"
@@ -202,7 +224,11 @@ if (__name__=="__main__"):
 		
 		# calculate the RE
 		k = myselfname + "--->" + host
-		rtt = tcpPing(host)
+		rtt = -100
+		if TCP == True:
+			rtt = tcpPing(host)
+		else:
+			rtt = udpPing(host)
 		if (rtt == -100):
 			print "ping ",host," Error!"
 			continue

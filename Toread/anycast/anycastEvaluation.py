@@ -10,7 +10,8 @@ sys.path.append("..")
 from config import *
 from tools import getPharosRE
 
-
+# This option control the ping method, if it is True, it is TCP ping, else it is udp ping
+TCP = False
 
 if __name__=="__main__":
     #hostfile = "../../servers.txt"
@@ -57,7 +58,10 @@ if __name__=="__main__":
                 prtt = getPharosRE.calDistance(myglobalvec, hnc.globalvec.append(hnc.globalheight), PHAROS_USING_HEIGHT_GLOBAL)
             pharosRTTs[h] = prtt
 
-        rtt = getPharosRE.tcpPing(h)
+        if TCP = True:
+            rtt = getPharosRE.tcpPing(h)
+        else:
+            rtt = getPharosRE.udpPing(h)
         if rtt==-100:
             print "ping ",host," Error!"
         else:

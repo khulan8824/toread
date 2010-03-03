@@ -1,6 +1,9 @@
 from neighbor.NeighborManagerIF import *
 from VivaldiNeighbor import *
 
+
+
+
 class VivaldiNeighborManager(NeighborManagerIF):
     def __init__(self, _using_h = VIVALDI_USING_HEIGHT, _strategy = VIVALDI_UPDATE_STRATEGY):
         self.update_strategy = _strategy

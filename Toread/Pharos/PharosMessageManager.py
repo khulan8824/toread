@@ -142,9 +142,6 @@ class PharosMessageManager():
 
         print "[PharosMessageManager] Encode the Pharos Info String:",temp
         return temp
-
-    
-    
         
 
 

@@ -72,3 +72,12 @@ class VivaldiMessegeManager():
         for eachStr in list:
             result.append(self.decodeOne(eachStr))
         return result
+
+    def encodeVivaldiString(self):
+        temp = ""
+        temp = temp + "ip:" + str(MYIP) + "@SEP@"
+        temp = temp + "vec:" + str(Vivaldi.main.myClient.coor.vec) + "@SEP@"
+        if VIVALDI_USING_HEIGHT>0:
+            temp = temp + "height:" + str(Vivaldi.main.myClient.coor.height) + "@SEP@"
+        temp = temp + "err:" + str(Vivaldi.main.myClient.error)
+        return temp

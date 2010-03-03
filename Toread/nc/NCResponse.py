@@ -9,6 +9,10 @@ def getResponseData(host,data):
             print "[NCResponse] Get a Vivaldi NC request from ",host
         Vivaldi.main.myMananger.addIP(host)
         return Vivaldi.main.messegeManager.encodeOne(-1)
+    if data == "getVivaldiString":
+        if DEBUG:
+            print "[NCResponse] Get a Vivaldi get string request from ",host
+        return Vivaldi.main.messegeManager.encodeVivaldiString()    
     if data == "PharosBase":
         if DEBUG:
             print "[NCResponse] Get a Pharos base NC request from", host

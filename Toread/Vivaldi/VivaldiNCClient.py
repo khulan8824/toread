@@ -1,6 +1,7 @@
 from config import *
 from coor.HeightCoordinate import *
 
+
 class VivaldiNCClient:
     def __init__(self, _using_h = VIVALDI_USING_HEIGHT):
         self.using_height = _using_h

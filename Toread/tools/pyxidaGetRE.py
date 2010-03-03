@@ -6,10 +6,14 @@ import socket
 import random
 import time
 import math
+import getPharosRE
 
 RPCPORT = 5599
 
 socket.setdefaulttimeout(10)
+
+# This option control the ping method, if it is True, it is TCP ping, else it is udp ping
+TCP = False
 
 def getNC(hostname = ""):
     surl = "http://" + hostname + ":" + str(RPCPORT) +"/xmlrpc"
@@ -103,7 +107,7 @@ if (__name__=="__main__"):
     #
     #This tool can caculate the CNAE, RE of the Pharos system
     #
-    inputfile = "../../myPLNodes.txt"
+    inputfile = "../../myPLnodes.txt"
     #inputfile = "../../pharosDebuglist.txt"
     out_re_file = "../evaluationResult/pyxidaRE.txt"
     out_err_file = "../evaluationResult/pyxidaNC.txt"
@@ -156,7 +160,11 @@ if (__name__=="__main__"):
         
         # calculate the RE
         k = myselfname + "--->" + host
-        rtt = tcpPing(host)
+        rtt = -100
+        if TCP == True:
+            rtt = tcpPing(host)
+        else:
+            rtt = getPharosRE.udpPing(host)
         if (rtt == -100):
             print "ping ",host," Error!"
             continue
