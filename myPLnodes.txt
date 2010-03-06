@@ -521,3 +521,5 @@ planetlab1.win.trlabs.ca
 pl1.grid.kiae.ru
 pl2.grid.kiae.ru
 plnode02.cs.mu.oz.au
+planetlab-3.imperial.ac.uk
+planetlab1.ceid.upatras.gr

@@ -21,8 +21,6 @@ planetlab1.tlm.unavarra.es
 planetlab1.ceid.upatras.gr
 planetlab2.informatik.uni-goettingen.de
 mars.planetlab.haw-hamburg.de
-planetlab-3.imperial.ac.uk
 planetlab1.tlm.unavarra.es
-planetlab1.ceid.upatras.gr
 planetlab1.ifi.uio.no
 pl1.grid.kiae.ru

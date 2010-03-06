@@ -25,6 +25,11 @@ if __name__=="__main__":
     BWs = {}
 # get the nc of myself
     myselfname = socket.gethostname()
+    if myselfname in hosts:
+        print "This is a candidate server....  exit the anycast process..."
+        sys.exit(0)
+    
+    
     msg="PharosInfo"
     if myselfname in hosts:
         sys.exit(1)
@@ -58,7 +63,7 @@ if __name__=="__main__":
                 prtt = getPharosRE.calDistance(myglobalvec, hnc.globalvec.append(hnc.globalheight), PHAROS_USING_HEIGHT_GLOBAL)
             pharosRTTs[h] = prtt
 
-        if TCP = True:
+        if TCP == True:
             rtt = getPharosRE.tcpPing(h)
         else:
             rtt = getPharosRE.udpPing(h)

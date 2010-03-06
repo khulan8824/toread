@@ -86,7 +86,6 @@ ALGORITHM = "PHAROS"
 #ALGORITHM = "Vivaldi"
 LOOPTIME = 10
 PINGMETHOD = "UDP"
-#pharosping = "UDP"
 PINGPORT = 11232
 PINGTIMEOUT = 3.0 #please ensure that PINGTIMEOUT<LOOPTIME and that it's a float
 PINGNUM = 3

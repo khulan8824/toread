@@ -8,9 +8,11 @@ def getResponseData(host,data):
         return Vivaldi.main.messegeManager.encodeGossip(host)
     if data == "PharosBase":
         globalnc = True
+        PHAROS.main.myNbManager.globalNeighborMgr.addIP(host)
         return PHAROS.main.myMsgManager.encodeGossip( globalnc )
     if data == "PharosCluster":
         globalnc = False
+        PHAROS.main.myNbManager.clusterNeighborMgr.addIP(host)
         return PHAROS.main.myMsgManager.encodeGossip( globalnc )        
     
     return ""

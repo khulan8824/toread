@@ -7,7 +7,11 @@ BUFLEN = 2048
 
 def getNC( hostname, token ):
 	sockfd = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-	ip = socket.gethostbyname(hostname)
+	try:
+		ip = socket.gethostbyname(hostname)
+	except:
+		print "DNS query error about ", hostname
+		return None
 	sockfd.settimeout(10)
 	try:
 		sockfd.connect((ip,PORT))

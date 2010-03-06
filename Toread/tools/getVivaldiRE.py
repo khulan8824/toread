@@ -1,6 +1,5 @@
 #! /usr/bin/env python
 #coding=utf-8
-import xmlrpclib
 import re
 import socket
 import random
@@ -8,22 +7,41 @@ import time
 import math
 import getPharosRE
 
-RPCPORT = 5599
+import sys
+sys.path.append('..')
+import pickle
+import random
+from Vivaldi import Vivaldi
+from config import *
 
-socket.setdefaulttimeout(10)
+
+PORT=NCPORT
+BUFLEN = 2048
+
+#socket.setdefaulttimeout(10)
 
 # This option control the ping method, if it is True, it is TCP ping, else it is udp ping
 TCP = False
 
-def getNC(hostname = ""):
-    surl = "http://" + hostname + ":" + str(RPCPORT) +"/xmlrpc"
-    server = xmlrpclib.ServerProxy(surl)
-    try:
-    	nc = server.pyxida.getLocalCoord()
-        return nc
-    except:
-    	print 'get coordinates error@',hostname
-        return None
+def getNodeNCObj( hostname, token ):
+	try:
+		try:
+			ip = socket.gethostbyname(hostname)
+		except:
+			print "Get host name error:", hostname
+			return None
+		sockfd = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+		sockfd.settimeout(10)
+		sockfd.connect((ip,PORT))
+		sockfd.send(token)
+		ncbuf = sockfd.recv(BUFLEN)
+		sockfd.close()
+		ncobj = pickle.loads(ncbuf)
+		return ncobj
+	except:
+		print "Error when connecting to ", hostname
+		sockfd.close()
+		return None
 
 def loadHost(hostfile=""):
 	if (len(hostfile)==0):
@@ -105,25 +123,30 @@ def saveNC( outfile = "" , ncDict = {}):
 
 if (__name__=="__main__"):
     #
-    #This tool can caculate the CNAE, RE of the Pharos system
+    #This tool can caculate the CNAE, RE of the Vivaldi system
     #
     inputfile = "../../myPLnodes.txt"
     #inputfile = "../../pharosDebuglist.txt"
-    out_re_file = "../evaluationResult/pyxidaRE.txt"
-    out_err_file = "../evaluationResult/pyxidaNC.txt"
-    out_cnae_file = "../evaluationResult/pyxidaCNAE.txt"   
+    out_re_file = "../evaluationResult/vivaldiRE.txt"
+    out_err_file = "../evaluationResult/vivaldiNC.txt"
+    out_cnae_file = "../evaluationResult/vivaldiCNAE.txt"   
     
     ncDict = {}
     reDict = {}
     hostRTT = {}
     
     myselfname = socket.gethostname()
+    
+    msg = "Vivaldi"
+    
     # get the nc of myself
-    mync = getNC( myselfname )
+    mync = getNodeNCObj( myselfname, msg )
     if(mync==None):
         print "can not get NC of myself!"
         sys.exit(1)
-    ncDict[myselfname] = mync
+    tl = list(mync.vec)
+    tl.append(mync.height)
+    ncDict[myselfname] = tl
 
     hosts = loadHost( inputfile )
     # shuffle the host, make sure the traffic is not converge to one node at the same time
@@ -143,20 +166,24 @@ if (__name__=="__main__"):
         if count==refreshMe:
             count = 0
             # get the nc of myself
-            mync = getNC( myselfname )
+            mync = getNodeNCObj( myselfname, msg )
             if(mync==None):
                 print "can not get NC of myself!"
                 sys.exit(1)
             print "Refreshing the information of myself..."
-            ncDict[myselfname] = mync						
+            tl = list(mync.vec)
+            tl.append(mync.height)
+            ncDict[myselfname] = tl	
         if(host==myselfname):
             continue
-        ncobj = getNC( host )
+        ncobj = getNodeNCObj( host, msg )
         count = count + 1
         if ncobj==None:
             continue
-        ncDict[host] = ncobj
-	print host," NC:",ncobj
+        tl = list(ncobj.vec)
+        tl.append(ncobj.height)
+        ncDict[host] = tl	
+        print host," NC:",ncDict[host]
         
         # calculate the RE
         k = myselfname + "--->" + host
@@ -171,11 +198,6 @@ if (__name__=="__main__"):
         #add rtt to dictionary
         hostRTT[host] = rtt
         predicted_rtt = calDistance( ncDict[myselfname], ncDict[host] )
-        #added by wgd, @Mar 4 2010
-        #we double the pyxida predicted time, then we consider this time to be the predicted rtt
-        #predicted_rtt = predicted_rtt * 2
-        predicted_rtt = predicted_rtt / 2
-        #
         re = abs(rtt-predicted_rtt)/min(rtt,predicted_rtt)
         reDict[k] = re
         print "RE result:",k,"=",re

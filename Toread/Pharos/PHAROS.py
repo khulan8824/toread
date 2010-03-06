@@ -4,6 +4,7 @@ from PharosNeighborManager import PharosNeighborManager
 from PharosNCClient import PharosNCClient
 from ping import whereis_newping
 from ping import IcmpPinger
+from Vivaldi.VivaldiNeighbor import *
 
 from twisted.internet import reactor
 from ping import PingClientIF
@@ -124,10 +125,18 @@ class PHAROS():
             if tmpclient.getIP()!=MYIP:
                 if eachClient["nctype"]=="global":
                     self.myNbManager.globalNeighborMgr.addClient(tmpclient)
+                    #print "========================================================"
+                    print "global neighborlist length: ",self.myNbManager.globalNeighborMgr.getLength()
+                    #self.myNbManager.globalNeighborMgr.printNeighborList()
+                    #print "========================================================"
                 if eachClient["nctype"]=="cluster":
                     if eachClient["clusterID"]!=self.myClient.clusterID:
                         print "Error when updating cluster overlay neighbors, the clusterID is different. Neighbor ip:",tmpclient.getIP()
                     self.myNbManager.clusterNeighborMgr.addClient(tmpclient)
+                    #print "========================================================"
+                    print "cluster neighborlist length: ",self.myNbManager.clusterNeighborMgr.getLength()
+                    #self.myNbManager.clusterNeighborMgr.printNeighborList()
+                    #print "========================================================"                    
         '''update neighbors'''
         return
     

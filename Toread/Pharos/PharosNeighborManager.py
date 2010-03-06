@@ -25,7 +25,7 @@ class PharosNeighborManager(NeighborManagerIF):
         return
     
     def getClusterNeighbor( self, ip ):
-        return self.clusterNeighborMgr.getNieghbor(ip)
+        return self.clusterNeighborMgr.getNeighbor(ip)
     
     def getGlobalNeighbor(self, ip ):
         return self.globalNeighborMgr.getNeighbor(ip)

@@ -17,11 +17,13 @@ def getResponseData(host,data):
         if DEBUG:
             print "[NCResponse] Get a Pharos base NC request from", host
         globalnc = True
+        PHAROS.main.myNbManager.globalNeighborMgr.addIP(host)
         return PHAROS.main.myMsgManager.encodeOne( globalnc, -1 )
     if data == "PharosCluster":
         if DEBUG:
             print "[NCResponse] Get a pharos cluster NC request from", host
         globalnc = False
+        PHAROS.main.myNbManager.clusterNeighborMgr.addIP(host)
         return PHAROS.main.myMsgManager.encodeOne( globalnc, -1 )
     if data == "PharosInfo":
         if DEBUG:
