@@ -31,14 +31,16 @@ if __name__=="__main__":
     
     
     msg="PharosInfo"
-    if myselfname in hosts:
-        sys.exit(1)
+    #if myselfname in hosts:
+        #sys.exit(1)
     mync = getPharosRE.getNodeNCObj( myselfname, msg )
     if(mync==None):
         print "can not get NC of myself!"
         sys.exit(1)
-    myglobalvec = mync.globalvec.append(mync.globalheight)
-    myclustervec = mync.clustervec.append(mync.clusterheight)
+    myglobalvec = mync.globalvec
+    myglobalvec.append(mync.globalheight)
+    myclustervec = mync.clustervec
+    myclustervec.append(mync.clusterheight)
     myclusterid = mync.clusterID
     
     refresh = 8
@@ -49,19 +51,28 @@ if __name__=="__main__":
             print "[anycast evaluation] refreshing myself information!"
             mync = getPharosRE.getNodeNCObj( myselfname, msg )
             if(mync==None):
+                print "can not get NC of myself!"
                 sys.exit(1)
-            myglobalvec = mync.globalvec.append(mync.globalheight)
-            myclustervec = mync.clustervec.append(mync.clusterheight)
+            myglobalvec = mync.globalvec
+            myglobalvec.append(mync.globalheight)
+            myclustervec = mync.clustervec
+            myclustervec.append(mync.clusterheight)
             myclusterid = mync.clusterID
             count = 0
 
         hnc = getPharosRE.getNodeNCObj( h, msg )
+        if hnc==None:
+            print "Fail to get the Coor of ",h
+            continue
         if not hnc==None:
             if myclusterid == hnc.clusterID:
-                prtt = getPharosRE.calDistance(myclustervec, hnc.clustervec.append(hnc.clusterheight), PHAROS_USING_HEIGHT_LOCAL)
+                hnc.clustervec.append(hnc.clusterheight)
+                prtt = getPharosRE.calDistance(myclustervec, hnc.clustervec, PHAROS_USING_HEIGHT_LOCAL)
             else:
-                prtt = getPharosRE.calDistance(myglobalvec, hnc.globalvec.append(hnc.globalheight), PHAROS_USING_HEIGHT_GLOBAL)
+                hnc.globalvec.append(hnc.globalheight)
+                prtt = getPharosRE.calDistance(myglobalvec, hnc.globalvec, PHAROS_USING_HEIGHT_GLOBAL)
             pharosRTTs[h] = prtt
+            count = count + 1
 
         if TCP == True:
             rtt = getPharosRE.tcpPing(h)
@@ -69,6 +80,7 @@ if __name__=="__main__":
             rtt = getPharosRE.udpPing(h)
         if rtt==-100:
             print "ping ",host," Error!"
+            continue
         else:
             rtts[h] = rtt
 
@@ -76,7 +88,9 @@ if __name__=="__main__":
         if not band==None:
             BWs[h] = band
 
-    #    time.sleep(random.randint(2,20))
+        st = random.randint(2,20)
+        time.sleep(st)  # comment this when debugging
+        print "sleep time:",st,"(s)"
 
     minrtt = 90000
     fullpinghost = None
@@ -109,7 +123,7 @@ if __name__=="__main__":
     print "pharoshost:",pharoshost
     print "robinhost:",robinhost
     print "fullpinghost:",fullpinghost
-    print "big bandwidth host:",bigBWhost
+    print "biggest bandwidth host:",bigBWhost
 
     fout = open("../evaluationResult/AnycastDATA.txt",'w')
     fout.write("pharos-anycast-bandwidth(KB/sec)    "+ str(BWs[pharoshost]) + "\n")

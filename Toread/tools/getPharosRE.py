@@ -46,6 +46,8 @@ def loadHost(hostfile=""):
 	lines = fd.readlines()
 	fd.close()
 	for line in lines:
+		if line[0]=='#':
+			continue
 		h = line.split()[0]
 		if(len(h)):
 			hostlist.append(h)
