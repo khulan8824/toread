@@ -1,3 +1,7 @@
+#! /usr/bin/env python
+#coding=utf-8
+
+
 import iperf
 import time
 import socket
@@ -8,23 +12,22 @@ sys.path.append("..")
 #import math
 #from Pharos import PHAROS
 from config import *
-from tools import getPharosRE
 from tools import pyxidaGetRE
+from tools import getPharosRE
 
 # This option control the ping method, if it is True, it is TCP ping, else it is udp ping
-TCP = (PINGMETHOD=="TCP")
+TCP = False
 
 if __name__=="__main__":
     #hostfile = "../../servers.txt"
     hostfile = "servers.txt"
-    pausetime = random.randint(0,3600)
-    time.sleep(pausetime)
+    #pausetime = random.randint(0,500)
+    #time.sleep(pausetime)
     hosts = getPharosRE.loadHost(hostfile)
     random.shuffle(hosts)
     rtts={}
-    pharosRTTs = {}
-    BWs = {}
     pyxidaRTTs = {}
+    BWs = {}
 # get the nc of myself
     myselfname = socket.gethostname()
     if myselfname in hosts:
@@ -35,17 +38,11 @@ if __name__=="__main__":
     msg="PharosInfo"
     #if myselfname in hosts:
         #sys.exit(1)
-    mync = getPharosRE.getNodeNCObj( myselfname, msg )
+    mync = pyxidaGetRE.getNC( myselfname )
     if(mync==None):
         print "can not get NC of myself!"
         sys.exit(1)
-    myglobalvec = mync.globalvec
-    myglobalvec.append(mync.globalheight)
-    myclustervec = mync.clustervec
-    myclustervec.append(mync.clusterheight)
-    myclusterid = mync.clusterID
     
-    mypyxidanc = pyxidaGetRE.getNC( myselfname )
     
     refresh = 8
     count = 0
@@ -53,30 +50,19 @@ if __name__=="__main__":
     for h in hosts:
         if count == refresh:
             print "[anycast evaluation] refreshing myself information!"
-            mync = getPharosRE.getNodeNCObj( myselfname, msg )
+            mync = pyxidaGetRE.getNC( myselfname )
             if(mync==None):
                 print "can not get NC of myself!"
                 sys.exit(1)
-            myglobalvec = mync.globalvec
-            myglobalvec.append(mync.globalheight)
-            myclustervec = mync.clustervec
-            myclustervec.append(mync.clusterheight)
-            myclusterid = mync.clusterID
-            mypyxidanc = pyxidaGetRE.getNC( myselfname )
             count = 0
 
-        hnc = getPharosRE.getNodeNCObj( h, msg )
+        hnc = pyxidaGetRE.getNC( h )
         if hnc==None:
-            print "Fail to get the Pharos Coor of ",h
+            print "Fail to get the Coor of ",h
             continue
         if not hnc==None:
-            if myclusterid == hnc.clusterID:
-                hnc.clustervec.append(hnc.clusterheight)
-                prtt = getPharosRE.calDistance(myclustervec, hnc.clustervec, PHAROS_USING_HEIGHT_LOCAL)
-            else:
-                hnc.globalvec.append(hnc.globalheight)
-                prtt = getPharosRE.calDistance(myglobalvec, hnc.globalvec, PHAROS_USING_HEIGHT_GLOBAL)
-            pharosRTTs[h] = prtt
+            prtt = pyxidaGetRE.calDistance(mync, hnc)
+            pyxidaRTTs[h] = prtt
             count = count + 1
 
         if TCP == True:
@@ -92,18 +78,8 @@ if __name__=="__main__":
         band = iperf.measureBWnum(h)
         if not band==None:
             BWs[h] = band
-            
-        hnc = pyxidaGetRE.getNC( h )
-        if mypyxidanc==None:
-            print "My Pyxida NC is None..."
-            continue
-        if hnc==None:
-            print "Fail to get the Pyxida Coor of ",h
-        if not hnc==None:
-            prtt1 = pyxidaGetRE.calDistance(mypyxidanc, hnc)
-            pyxidaRTTs[h] = prtt1        
 
-        st = random.randint(2,50)
+        st = random.randint(2,20)
         time.sleep(st)  # comment this when debugging
         print "sleep time:",st,"(s)"
 
@@ -116,23 +92,14 @@ if __name__=="__main__":
             minrtt = rtts[k]
             fullpinghost = k
     minrtt = 900000
-    pharoshost = None
-    for k in pharosRTTs.keys():
-        if k not in BWs.keys():
-            continue
-        if pharosRTTs[k]<minrtt:
-            minrtt = pharosRTTs[k]
-            pharoshost = k
-
     pyxidahost = None
-    minrtt = 900000
     for k in pyxidaRTTs.keys():
         if k not in BWs.keys():
             continue
         if pyxidaRTTs[k]<minrtt:
             minrtt = pyxidaRTTs[k]
             pyxidahost = k
-                    
+
     robinhost = BWs.keys()[random.randint(0,len(BWs.keys())-1)]
     bigBWhost = None
     tmpband = 0
@@ -141,50 +108,32 @@ if __name__=="__main__":
             tmpband = BWs[k]
             bigBWhost = k
     #print for debug
-    print "pharosRTTs",pharosRTTs
-    print "pyxidahost",pyxidahost
     print "pyxidaRTTs",pyxidaRTTs
     print "rtts",rtts
     print "BWs",BWs
-    print "pharoshost:",pharoshost
+    print "pyxidahost:",pyxidahost
     print "robinhost:",robinhost
     print "fullpinghost:",fullpinghost
     print "biggest bandwidth host:",bigBWhost
 
     fout = open("../evaluationResult/AnycastDATA.txt",'w')
-    fout.write("pharos-anycast-bandwidth(KB/sec)    "+ str(BWs[pharoshost]) + "\n")
-    if not pyxidahost==None:
-        fout.write("pyxida-anycast-bandwidth(KB/sec)    "+ str(BWs[pyxidahost]) + "\n")
+    fout.write("pyxida-anycast-bandwidth(KB/sec)    "+ str(BWs[pyxidahost]) + "\n")
     fout.write("round-robin-anycast-bandwidth(KB/sec)    "+ str(BWs[robinhost]) + "\n")
     fout.write("full-ping-anycast-bandwidth(KB/sec)   "+ str(BWs[fullpinghost]) + "\n")
     fout.write("biggest-bandwidth(KB/sec)   "+ str(BWs[bigBWhost]) + "\n")
-    fout.write("pharos-anycast-rtt(ms)  "+ str(rtts[pharoshost]) +"\n")
-    if not pyxidahost==None:
-        fout.write("pyxida-anycast-rtt(ms)  "+ str(rtts[pyxidahost]) +"\n")
+    fout.write("pyxida-anycast-rtt(ms)  "+ str(rtts[pyxidahost]) +"\n")
     fout.write("rrobin-anycast-rtt(ms)  "+ str(rtts[robinhost]) +"\n")
     fout.write("full-ping-anycast-rtt(ms)  "+ str(rtts[fullpinghost]) +"\n")
-    if(fullpinghost==pharoshost):
-        r = 1
-    else:
-        r = 0
-    fout.write("pharos-hit-smallestRTT   "+ str(r) + "\n")
-    if(bigBWhost==pharoshost):
-        r = 1
-    else:
-        r = 0
-    fout.write("pharos-hit-biggestBW   "+ str(r) + "\n")
     if(fullpinghost==pyxidahost):
         r = 1
     else:
         r = 0
-    if not pyxidahost==None:
-        fout.write("pyxida-hit-smallestRTT   "+ str(r) + "\n")
+    fout.write("pyxida-hit-smallestRTT   "+ str(r) + "\n")
     if(bigBWhost==pyxidahost):
         r = 1
     else:
         r = 0
-    if not pyxidahost==None:
-        fout.write("pyxida-hit-biggestBW   "+ str(r) + "\n")
+    fout.write("pyxida-hit-biggestBW   "+ str(r) + "\n")
     if(fullpinghost==robinhost):
         r = 1
     else:

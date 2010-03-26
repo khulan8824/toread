@@ -7,13 +7,17 @@ import random
 import time
 import math
 import getPharosRE
+import sys
+sys.path.append('..')
+from config import *
+
 
 RPCPORT = 5599
 
 socket.setdefaulttimeout(10)
 
 # This option control the ping method, if it is True, it is TCP ping, else it is udp ping
-TCP = False
+TCP = (PINGMETHOD=="TCP")
 
 def getNC(hostname = ""):
     surl = "http://" + hostname + ":" + str(RPCPORT) +"/xmlrpc"
@@ -162,7 +166,7 @@ if (__name__=="__main__"):
         k = myselfname + "--->" + host
         rtt = -100
         if TCP == True:
-            rtt = tcpPing(host)
+            rtt = getPharosRE.tcpPing(host)
         else:
             rtt = getPharosRE.udpPing(host)
         if (rtt == -100):
@@ -176,7 +180,11 @@ if (__name__=="__main__"):
         #predicted_rtt = predicted_rtt * 2
         predicted_rtt = predicted_rtt / 2
         #
+        # method 1 for re
         re = abs(rtt-predicted_rtt)/min(rtt,predicted_rtt)
+        
+        #method 2 for re
+        #re = abs(rtt-predicted_rtt)/abs(rtt)
         reDict[k] = re
         print "RE result:",k,"=",re
         

@@ -21,7 +21,7 @@ BUFLEN = 2048
 #socket.setdefaulttimeout(10)
 
 # This option control the ping method, if it is True, it is TCP ping, else it is udp ping
-TCP = False
+TCP = (PINGMETHOD=="TCP")
 
 def getNodeNCObj( hostname, token ):
 	try:
@@ -198,7 +198,12 @@ if (__name__=="__main__"):
         #add rtt to dictionary
         hostRTT[host] = rtt
         predicted_rtt = calDistance( ncDict[myselfname], ncDict[host] )
+		
+		# method 1 for re
         re = abs(rtt-predicted_rtt)/min(rtt,predicted_rtt)
+		
+		# method 2 for re
+		#re = abs(rtt-predicted_rtt)/abs(rtt)
         reDict[k] = re
         print "RE result:",k,"=",re
         

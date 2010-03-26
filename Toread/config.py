@@ -14,7 +14,7 @@ else:
 LOG_IN_DETAIL=0
 
 '''USED IN HeightCoordinate'''
-DIMENTION = 4
+DIMENTION = 2
 THRESHOLD_HEIGHT = 0.01
 
 '''USED IN VivaldiNCClient'''
@@ -26,7 +26,8 @@ VIVALDI_CC = 0.25
 
 '''UESD IN VivaldiNeighbor'''
 VIVALDI_RTT_NUM = 8
-MP_PENCENTILE = 0.5  # Moving percentile filter parameter, set 0.5 means median filter
+#VIVALDI_RTT_NUM = 4
+MP_PENCENTILE = 0.25  # Moving percentile filter parameter, set 0.5 means median filter
 
 '''USED IN VivaldiNeighborManager'''
 VIVALDI_MAX_NEIGHBOR_NUM = 200
@@ -86,12 +87,12 @@ ALGORITHM = "PHAROS"
 #ALGORITHM = "Vivaldi"
 LOOPTIME = 10
 PINGMETHOD = "UDP"
-PINGPORT = 11232
+PINGPORT = 11230
 PINGTIMEOUT = 3.0 #please ensure that PINGTIMEOUT<LOOPTIME and that it's a float
 PINGNUM = 3
 PINGBYTES = 56
-GOSSIPPORT = 11233
-NCPORT = 11234
+GOSSIPPORT = 11238
+NCPORT = 11239
 GOSSIPTIMEOUT = 3 #please ensure that GOSSIPTIMEOUT<LOOPTIME
 NCTIMEOUT = 3 #please ensure that NCTIMEOUT<LOOPTIME
 

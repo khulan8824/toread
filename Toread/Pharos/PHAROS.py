@@ -15,7 +15,6 @@ import socket
 import sys
 
 
-
 class PHAROS():
     def __init__(self):
         self.round = 0
@@ -95,6 +94,9 @@ class PHAROS():
             if ip==MYIP:
                 continue
             self.myNbManager.globalNeighborMgr.addIP(ip)
+            
+        print "Initial global neighborlist length: ",self.myNbManager.globalNeighborMgr.getLength()
+        print "Initial cluster neighborlist length: ",self.myNbManager.clusterNeighborMgr.getLength()
         
         self.mainloop()
         
@@ -127,14 +129,17 @@ class PHAROS():
                     self.myNbManager.globalNeighborMgr.addClient(tmpclient)
                     #print "========================================================"
                     print "global neighborlist length: ",self.myNbManager.globalNeighborMgr.getLength()
+                    #print "global neighborlist details:",self.myNbManager.globalNeighborMgr.printNeighborList()
                     #self.myNbManager.globalNeighborMgr.printNeighborList()
                     #print "========================================================"
                 if eachClient["nctype"]=="cluster":
                     if eachClient["clusterID"]!=self.myClient.clusterID:
                         print "Error when updating cluster overlay neighbors, the clusterID is different. Neighbor ip:",tmpclient.getIP()
-                    self.myNbManager.clusterNeighborMgr.addClient(tmpclient)
+                    else:
+                        self.myNbManager.clusterNeighborMgr.addClient(tmpclient)
                     #print "========================================================"
                     print "cluster neighborlist length: ",self.myNbManager.clusterNeighborMgr.getLength()
+                    #print "cluster neighborlist details:",self.myNbManager.clusterNeighborMgr.printNeighborList()
                     #self.myNbManager.clusterNeighborMgr.printNeighborList()
                     #print "========================================================"                    
         '''update neighbors'''
@@ -158,26 +163,31 @@ class PHAROS():
             targetNeighbor.updateRTT(self.globalrtt)
             self.myNbManager.globalNeighborMgr.addClient(targetClient)
             self.myNbManager.globalNeighborMgr.update(targetNeighbor)
+            print "[PHAROS] Add global NB ",targetClient.ip
             #gossip
             gossipDefer = GossipClient.request("PharosBase",self.globalNBIP,GOSSIPPORT,GOSSIPTIMEOUT)
             gossipDefer.addCallback(self.GossipRecieved)
             #update
             self.myClient.globalNC.update(targetClient,self.globalrtt*1000) #Attention!self.rtt must be multiplied by 1000
         if targetInfo["nctype"]=="cluster":
-            print "Update local:",targetClient.ip,",RTT=",self.localrtt*1000
-            targetNeighbor=self.myNbManager.clusterNeighborMgr.getNeighbor(targetClient.ip)
-            if targetNeighbor==None:
-                targetNeighbor=VivaldiNeighbor(PHAROS_USING_HEIGHT_LOCAL)
-            targetNeighbor.setClient(targetClient)
-            targetNeighbor.updateRTT(self.localrtt)
-            self.myNbManager.clusterNeighborMgr.addClient(targetClient)
-            self.myNbManager.clusterNeighborMgr.update(targetNeighbor)
-            #gossip
-            gossipDefer = GossipClient.request("PharosCluster",self.localNBIP,GOSSIPPORT,GOSSIPTIMEOUT)
-            gossipDefer.addCallback(self.GossipRecieved)
-            #update
-            self.myClient.clusterNC.update(targetClient,self.localrtt*1000) #Attention!self.rtt must be multiplied by 1000            
-            
+            if targetInfo["clusterID"] != self.myClient.clusterID:
+                print "Error in cluster NC update, remote host:",targetInfo
+            else:
+                print "Update local:",targetClient.ip,",RTT=",self.localrtt*1000
+                targetNeighbor=self.myNbManager.clusterNeighborMgr.getNeighbor(targetClient.ip)
+                if targetNeighbor==None:
+                    targetNeighbor=VivaldiNeighbor(PHAROS_USING_HEIGHT_LOCAL)
+                targetNeighbor.setClient(targetClient)
+                targetNeighbor.updateRTT(self.localrtt)
+                self.myNbManager.clusterNeighborMgr.addClient(targetClient)
+                self.myNbManager.clusterNeighborMgr.update(targetNeighbor)
+                print "[PHAROS] Add cluster NB ",targetClient.ip
+                #gossip
+                gossipDefer = GossipClient.request("PharosCluster",self.localNBIP,GOSSIPPORT,GOSSIPTIMEOUT)
+                gossipDefer.addCallback(self.GossipRecieved)
+                #update
+                self.myClient.clusterNC.update(targetClient,self.localrtt*1000) #Attention!self.rtt must be multiplied by 1000            
+                
         return
     
     

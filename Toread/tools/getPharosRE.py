@@ -15,7 +15,7 @@ from config import *
 
 PORT=NCPORT
 BUFLEN = 2048
-TCP = False
+TCP = (PINGMETHOD=="TCP")
 
 def getNodeNCObj( hostname, token ):
 	try:
@@ -75,14 +75,18 @@ def saveLocalErr( outfile = "" , globalerrDict = {}, globalncDict={}, clustererr
 	
 
 def udpPing(hostname):
-	pround = 5  # ping 5 times and use the average rtt
+	pround = 3  # ping 5 times and use the average rtt
 	port = PINGPORT
-	ip = socket.gethostbyname( hostname )
+	try:
+		ip = socket.gethostbyname( hostname )
+	except:
+		print "DNS query error for ", hostname
+		return -100
 	rtt = 0
 	for i in range(pround):
 		try:
 			sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
-			sock.settimeout(10)
+			sock.settimeout(3)
 			rtt = rtt - time.time()
 			sock.sendto("this is a tcp ping test!\n",(ip,port))
 			buf = sock.recv(1024)
@@ -95,14 +99,18 @@ def udpPing(hostname):
 	return rtt * 1000  # time.time() returns the seconds, here we need micro-seconds	
 
 def tcpPing(hostname):
-	pround = 5 # ping 5 times and use the average rtt
+	pround = 3 # ping 5 times and use the average rtt
 	port = PINGPORT
-	ip = socket.gethostbyname( hostname )
+	try:
+		ip = socket.gethostbyname( hostname )
+	except:
+		print "DNS query error for ", hostname
+		return -100	
 	rtt = 0
 	for i in range(pround):
 		try:
 			sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-			sock.settimeout(10)
+			sock.settimeout(5)
 			sock.connect((ip,port))
 			rtt = rtt - time.time()
 			sock.send("this is a tcp ping test!\n")
@@ -240,7 +248,14 @@ if (__name__=="__main__"):
 			predicted_rtt = calDistance( hostClusterNC[myselfname], hostClusterNC[host] , PHAROS_USING_HEIGHT_LOCAL)
 		else:
 			predicted_rtt = calDistance( hostGlobalNC[myselfname], hostGlobalNC[host] , PHAROS_USING_HEIGHT_GLOBAL)
+		if predicted_rtt==-100:
+			continue
+		
+		# method 1 for caculating re
 		re = abs(rtt-predicted_rtt)/min(rtt,predicted_rtt)
+		
+		#method 2 for caculating re
+		#re = abs(rtt-predicted_rtt)/abs(rtt)		
 		REdict[k] = re
 		print "RE result:",k,"=",re
 		

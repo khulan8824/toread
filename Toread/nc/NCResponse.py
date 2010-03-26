@@ -18,12 +18,14 @@ def getResponseData(host,data):
             print "[NCResponse] Get a Pharos base NC request from", host
         globalnc = True
         PHAROS.main.myNbManager.globalNeighborMgr.addIP(host)
+        print "[NC Response] Add global NB ",host
         return PHAROS.main.myMsgManager.encodeOne( globalnc, -1 )
     if data == "PharosCluster":
         if DEBUG:
             print "[NCResponse] Get a pharos cluster NC request from", host
         globalnc = False
         PHAROS.main.myNbManager.clusterNeighborMgr.addIP(host)
+        print "[NC Response] Add cluster NB ", host
         return PHAROS.main.myMsgManager.encodeOne( globalnc, -1 )
     if data == "PharosInfo":
         if DEBUG:
