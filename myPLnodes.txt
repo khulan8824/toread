@@ -194,8 +194,6 @@ planetlab1.inf.ethz.ch
 planetlab2.inf.ethz.ch
 planetlab-2.fing.edu.uy
 planetlab-1.fing.edu.uy
-nis-planet2.doshisha.ac.jp
-nis-planet1.doshisha.ac.jp
 planetlabone.ccs.neu.edu
 planetlabtwo.ccs.neu.edu
 pl3.planetlab.uvic.ca

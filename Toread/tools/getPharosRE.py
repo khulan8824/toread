@@ -75,7 +75,7 @@ def saveLocalErr( outfile = "" , globalerrDict = {}, globalncDict={}, clustererr
 	
 
 def udpPing(hostname):
-	pround = 3  # ping 5 times and use the average rtt
+	pround = 4  # ping 5 times and use the average rtt
 	port = PINGPORT
 	try:
 		ip = socket.gethostbyname( hostname )
@@ -99,7 +99,7 @@ def udpPing(hostname):
 	return rtt * 1000  # time.time() returns the seconds, here we need micro-seconds	
 
 def tcpPing(hostname):
-	pround = 3 # ping 5 times and use the average rtt
+	pround = 4 # ping 5 times and use the average rtt
 	port = PINGPORT
 	try:
 		ip = socket.gethostbyname( hostname )

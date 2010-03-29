@@ -6,6 +6,7 @@
 import getPharosRE
 import random
 import socket
+import time
 
 inputfile = "../../myPLnodes.txt"
 
@@ -32,6 +33,8 @@ for h  in hosts:
         continue
     k = myselfname + "->" + h
     rtt[k] = r
+    sleeptime = random.randint(3,6)
+    time.sleep(sleeptime)
 
 out_file = "../evaluationResult/RTTinfo"
 # save the result
