@@ -1,20 +1,34 @@
+'''Get the ip of myself'''
+import getSelfIP
+import re, urllib2
+import sys
+
+MYIP = None
+try:
+    MYIP = re.search("td>(\d+\.\d+\.\d+\.\d+)</td", urllib2.urlopen("http://whois.ipcn.org").read())
+    if MYIP:
+        MYIP=MYIP.group(1)    
+except:
+    ip_proxy = getSelfIP.getSelfIP()
+    MYIP = ip_proxy.getip()
+
+if MYIP==None:
+    print "Please check your network!"
+    print "exit..." 
+    sys.exit(1)   
+
+#print "myIP:",MYIP
+
 '''UESD FOR INIT'''
 '''bootstramp hosts, we can use ip or hostname in the following list'''
 #SERVERS = ['132.239.17.225','202.112.8.2','195.113.161.83','131.179.50.72']
 SERVERS = ["planetlab2.ucsd.edu","pl1.pku.edu.cn","planetlab2.cesnet.cz","planetlab2.cs.ucla.edu"]
 
-import re, urllib2
-MYIP = re.search("td>(\d+\.\d+\.\d+\.\d+)</td", urllib2.urlopen("http://whois.ipcn.org").read())
-if MYIP:
-    MYIP=MYIP.group(1)
-else:
-    print "Please check your network!"
-
 '''FOR LOG'''
 LOG_IN_DETAIL=0
 
 '''USED IN HeightCoordinate'''
-DIMENTION = 2
+DIMENTION = 8
 THRESHOLD_HEIGHT = 0.01
 
 '''USED IN VivaldiNCClient'''
@@ -38,6 +52,8 @@ VIVALDI_UPLOAD_NUM = 2
 '''USED IN PharosNCClient'''
 PHAROS_USING_HEIGHT_GLOBAL = 1
 PHAROS_USING_HEIGHT_LOCAL = 1
+PHAROS_DIMENSION_GLOBAL = 4
+PHAROS_DIMENSION_LOCAL = 2
 
 '''USED IN PharosNeighborManager'''
 PHAROS_UPDATE_STRATEGY_GLOBAL = 2

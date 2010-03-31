@@ -27,8 +27,10 @@ class PHAROS():
         tmpCoor = HeightCoordinate()
         self.myClient.clusterNC.set(MYIP, tmpCoor, 1.5)        
         
-        "this part checks whether myself is in the landmark list or the bootstrap list"
+        "this part checks whether myself is in the bootstrap list"
         clusterID = None
+        clusterID = checkClusterBootStrap()
+        "this part checks whether myself is in the landmark list"
         clusterkeys = PHAROS_LM.keys()
         for id in clusterkeys:
             if clusterID!=None:
@@ -83,14 +85,20 @@ class PHAROS():
         " initiate the bootstrap list according to the clusterID"
         clusterboot = CLUSTER_BOOTLIST[clusterID]
         for node in clusterboot:
-            ip = socket.gethostbyname(node)
+            try:
+                ip = socket.gethostbyname(node)
+            except:
+                continue
             if ip==MYIP:
                 continue
             self.myNbManager.clusterNeighborMgr.addIP(ip)
         
         "initiate the boostrap list of the global overlay"
         for node in GLOBAL_BOOTLIST:
-            ip = socket.gethostbyname(node)
+            try:
+                ip = socket.gethostbyname(node)
+            except:
+                continue
             if ip==MYIP:
                 continue
             self.myNbManager.globalNeighborMgr.addIP(ip)
@@ -100,6 +108,17 @@ class PHAROS():
         
         self.mainloop()
         
+    def checkClusterBootStrap():
+        cboots = CLUSTER_BOOTLIST
+        myname = socket.gethostname()
+        for k in cboots.keys():
+            tmpboots = cboots[k]
+            for bh in tmpboots:
+                if bh == myname:
+                    print "local host is in the cluster Bootstrap, local host cluster ID is", k
+                    return k
+        return None
+    
     def globalPingFinish(self,pingData):
         self.globalrtt = pingData.time
         print "ping global neighbor", self.globalNBIP,"The rtt is",self.globalrtt
