@@ -1,14 +1,16 @@
 from config import *
 from coor.HeightCoordinate import *
+from coor.EuclideanCoordinate import *
 
 
 class VivaldiNCClient:
-    def __init__(self, _using_h = VIVALDI_USING_HEIGHT):
+    def __init__(self, _using_h = VIVALDI_USING_HEIGHT, _dim = DIMENTION):
         self.using_height = _using_h
+        self.dim = _dim
         if(self.using_height):
-            self.coor = HeightCoordinate()
+            self.coor = HeightCoordinate(self.dim)
         else:
-            self.coor = EuclideanCoordinate()
+            self.coor = EuclideanCoordinate(self.dim)
         self.ip = "127.0.0.1" 
         self.error = VIVALDI_ERROR
         

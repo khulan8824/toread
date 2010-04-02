@@ -1,30 +1,32 @@
 from CoordinateIF import *
 
-def zeros(dim):
-	vec = []
-	for i in xrange(dim):
-		vec.append(0.0)
-	return vec
+def zeros(d):
+    vec = []
+    for i in xrange(d):
+        vec.append(0.0)
+    return vec
 
 class EuclideanCoordinate(CoordinateIF):
-    dim = DIMENTION
+    dim = -1
 
-    def __init__(self):
+    def __init__(self, arg_dimension = DIMENTION):
+        self.dim = arg_dimension
         self.setCoor(zeros(self.dim))
     
     def setCoor(self, vec):
         if (len(vec) == self.dim):
             self.vec = vec[:]
         else:
-            print 'Invalid input vector in construction function of class EuclideanCoordinate!'
+            print "[ EuclideanCoordinate Fatal Error] Different dimensions error in SetCoor !"
+            print "[ EuclideanCoordinate Fatal Error] Argument vector dimension:",len(vec),"    EuclideanCoordinate.dimension:",self.dim
             self.vec = []
             for i in xrange(self.dim):
                  self.vec.append(0.0)
                  
     def getCoor(self):
-		tmpCoor = EuclideanCoordinate()
-		tmpCoor.setCoor(self.vec)
-		return tmpCoor
+        tmpCoor = EuclideanCoordinate(self.dim)
+        tmpCoor.setCoor(self.vec)
+        return tmpCoor
                  
     def printCoor(self):
         print 'Coordinate:'+str(self.vec)   #maybe write in log file
@@ -34,11 +36,11 @@ class EuclideanCoordinate(CoordinateIF):
             tmpVec = []
             for i in xrange(self.dim):
                 tmpVec.append(self.vec[i] + coor.vec[i])
-            tmpCoor = EuclideanCoordinate()
+            tmpCoor = EuclideanCoordinate(self.dim)
             tmpCoor.setCoor(tmpVec)
             return tmpCoor
         else:
-            print 'Invalid coordinate in add operation!'
+            print "[ EuclideanCoordinate Fatal Error] Invalid input vector dimension in coordinate add operation!"
             return self.getCoor()
         
     def __sub__(self, coor):
@@ -46,12 +48,12 @@ class EuclideanCoordinate(CoordinateIF):
             tmpVec = []
             for i in xrange(self.dim):
                 tmpVec.append(self.vec[i] - coor.vec[i])
-            tmpCoor = EuclideanCoordinate()
+            tmpCoor = EuclideanCoordinate(self.dim)
             tmpCoor.setCoor(tmpVec)
             return tmpCoor
         else:
-            print 'Invalid coordinate in sub operation!'
-            tmpCoor = EuclideanCoordinate()
+            print "[ EuclideanCoordinate Fatal Error] Invalid input vector dimension in coordinate sub operation!"
+            tmpCoor = EuclideanCoordinate(self.dim)
             tmpCoor.setCoor(self.vec)
             return tmpCoor
     
@@ -59,7 +61,7 @@ class EuclideanCoordinate(CoordinateIF):
         tmpVec = []
         for i in xrange(self.dim):
             tmpVec.append(self.vec[i] * n) 
-        tmpCoor = EuclideanCoordinate()
+        tmpCoor = EuclideanCoordinate(self.dim)
         tmpCoor.setCoor(tmpVec)
         return tmpCoor
     
@@ -83,6 +85,6 @@ class EuclideanCoordinate(CoordinateIF):
         else:
             for i in xrange(self.dim):
                 tmpCoor.vec[i] = random.uniform(0.1, 10)
-            dist = tmpCoor.getDistance(EuclideanCoordinate())
+            dist = tmpCoor.getDistance(EuclideanCoordinate(self.dim))
             tmpCoor = tmpCoor * (1 / dist)
             return tmpCoor

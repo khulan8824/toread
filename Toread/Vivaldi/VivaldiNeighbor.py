@@ -3,8 +3,8 @@ from VivaldiNCClient import *
 
 
 class VivaldiNeighbor(NeighborIF):
-    def __init__(self, _using_h = VIVALDI_USING_HEIGHT):
-        self.client = VivaldiNCClient( _using_h )
+    def __init__(self, _using_h = VIVALDI_USING_HEIGHT, _dim = DIMENTION):
+        self.client = VivaldiNCClient( _using_h, _dim )
         self.rtt = []
     
     def updateRTT(self, rtt):

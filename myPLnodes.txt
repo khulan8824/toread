@@ -94,8 +94,8 @@ planetlab3.csres.utexas.edu
 planetlab5.csres.utexas.edu
 planetlab2.csg.uzh.ch
 planetlab1.csg.uzh.ch
-venus.silicon-valley.ru
-mercury.silicon-valley.ru
+#venus.silicon-valley.ru
+#mercury.silicon-valley.ru
 planetlab1.hiit.fi
 planetlab4.hiit.fi
 planetlab2.hiit.fi
@@ -293,7 +293,7 @@ cs-planetlab4.cs.surrey.sfu.ca
 cs-planetlab3.cs.surrey.sfu.ca
 planetlab-2.usask.ca
 planetlab-1.usask.ca
-ent1.cs.nccu.edu.tw
+#ent1.cs.nccu.edu.tw
 ent2.cs.nccu.edu.tw
 planetlab1.nrl.dcs.qmul.ac.uk
 planetlab2.nrl.dcs.qmul.ac.uk

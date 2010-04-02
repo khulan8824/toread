@@ -4,8 +4,8 @@ from Vivaldi.VivaldiNeighborManager import *
 
 class PharosNeighborManager(NeighborManagerIF):
     def __init__(self):
-        self.globalNeighborMgr = VivaldiNeighborManager(PHAROS_USING_HEIGHT_GLOBAL, PHAROS_UPDATE_STRATEGY_GLOBAL)
-        self.clusterNeighborMgr = VivaldiNeighborManager(PHAROS_USING_HEIGHT_LOCAL, PHAROS_UPDATE_STRATEGY_LOCAL) 
+        self.globalNeighborMgr = VivaldiNeighborManager(PHAROS_USING_HEIGHT_GLOBAL, PHAROS_DIMENSION_GLOBAL, PHAROS_UPDATE_STRATEGY_GLOBAL)
+        self.clusterNeighborMgr = VivaldiNeighborManager(PHAROS_USING_HEIGHT_LOCAL, PHAROS_DIMENSION_LOCAL, PHAROS_UPDATE_STRATEGY_LOCAL) 
         return 
     
     def addGlobalClient(self, client):
@@ -29,6 +29,14 @@ class PharosNeighborManager(NeighborManagerIF):
     
     def getGlobalNeighbor(self, ip ):
         return self.globalNeighborMgr.getNeighbor(ip)
+    
+    def removeGlobalNeighbor(self, ip):
+        r = self.globalNeighborMgr.removeIP(ip)
+        return r 
+    
+    def removeClusterNeighbor( self, ip ):
+        r = self.clusterNeighborMgr.removeIP(ip)
+        return r
     
     
 

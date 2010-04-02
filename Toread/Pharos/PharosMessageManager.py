@@ -1,6 +1,7 @@
 import pickle
 import PHAROS
 from coor.HeightCoordinate import *
+from coor.EuclideanCoordinate import *
 from PharosNCClient import *
 from config import *
 
@@ -73,21 +74,29 @@ class PharosMessageManager():
                 temp.height = mymgr.neighborList[index].client.coor.height
             temp.error = mymgr.neighborList[index].getError()
             temp.nctype = "global"
-                    
-        print "[PharosMessageManager] Message Encode: IP=",temp.ip,",vec=",temp.vec,",height=",temp.height,",nctype=",temp.nctype
+        
+        if DEBUG:
+            print "[PharosMessageManager] Message Encode: IP=",temp.ip,",vec=",temp.vec,",height=",temp.height,",nctype=",temp.nctype
         str = pickle.dumps(temp)
         return str
     
     def decodeOne(self,str):
         data = pickle.loads(str)
-        print "[PharosMessageManager] Message Decode: IP=",data.ip,",vec=",data.vec,",height=",data.height,",nctype=",data.nctype
+        if DEBUG:
+            print "[PharosMessageManager] Message Decode: IP=",data.ip,",vec=",data.vec,",height=",data.height,",nctype=",data.nctype
         if data.nctype=="global":
             use_h = PHAROS_USING_HEIGHT_GLOBAL
+            _arg_dim = PHAROS_DIMENSION_GLOBAL
         if data.nctype=="cluster":
             use_h = PHAROS_USING_HEIGHT_LOCAL
-        client = VivaldiNCClient( use_h )
-        coor = HeightCoordinate()
-        coor.setCoor(data.vec,data.height)
+            _arg_dim = PHAROS_DIMENSION_LOCAL
+        client = VivaldiNCClient( use_h, _arg_dim )
+        if use_h:
+            coor = HeightCoordinate( _arg_dim )
+            coor.setCoor(data.vec,data.height)
+        else:
+            coor = EuclideanCoordinate( _arg_dim )
+            coor.setCoor(data.vec)
         client.set(data.ip,coor,data.error)
         return {"client":client, "nctype":data.nctype, "clusterID":data.clusterID}
     
@@ -126,7 +135,8 @@ class PharosMessageManager():
         temp.globalerror = myclient.globalNC.error
         temp.globalvec = myclient.globalNC.coor.vec
         str = pickle.dumps(temp)
-        print "[PharosMessageManager] Encode the PharosInfo class. IP:",temp.ip,",global vec:",temp.globalvec,",global height:",temp.globalheight,",global error:",temp.globalerror,", cluster vec:",temp.clustervec,", cluster height:",temp.clusterheight,", cluster error:",temp.clustererror,", cluster ID:",temp.clusterID
+        if DEBUG:
+            print "[PharosMessageManager] Encode the PharosInfo class. IP:",temp.ip,",global vec:",temp.globalvec,",global height:",temp.globalheight,",global error:",temp.globalerror,", cluster vec:",temp.clustervec,", cluster height:",temp.clusterheight,", cluster error:",temp.clustererror,", cluster ID:",temp.clusterID
         return str
     
     def encodePharosInfoAsString(self):
@@ -140,7 +150,8 @@ class PharosMessageManager():
         if PHAROS_USING_HEIGHT_LOCAL>0:
             temp = temp + "clusterheight:" + str(myclient.clusterNC.coor.height) + "@SEP@"
 
-        print "[PharosMessageManager] Encode the Pharos Info String:",temp
+        if DEBUG:
+            print "[PharosMessageManager] Encode the Pharos Info String:",temp
         return temp
         
 

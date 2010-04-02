@@ -53,8 +53,13 @@ class VivaldiMessegeManager():
         data = pickle.loads(str)
         print "Messege Decode: IP=",data.ip,",vec=",data.vec,",height=",data.height
         client = VivaldiNCClient()
-        coor = HeightCoordinate()
-        coor.setCoor(data.vec,data.height)
+        if VIVALDI_USING_HEIGHT>0:
+            coor = HeightCoordinate(DIMENTION)
+            coor.setCoor(data.vec,data.height)
+        else:
+            coor = EuclideanCoordinate(DIMENTION)
+            coor.setCoor(data.vec)
+                
         client.set(data.ip,coor,data.error)
         return client
     

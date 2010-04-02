@@ -5,9 +5,10 @@ from VivaldiNeighbor import *
 
 
 class VivaldiNeighborManager(NeighborManagerIF):
-    def __init__(self, _using_h = VIVALDI_USING_HEIGHT, _strategy = VIVALDI_UPDATE_STRATEGY):
+    def __init__(self, _using_h = VIVALDI_USING_HEIGHT, _dim = DIMENTION, _strategy = VIVALDI_UPDATE_STRATEGY):
         self.update_strategy = _strategy
         self.using_height = _using_h
+        self.dim = _dim
         self.neighborList = []
         self.updateCount = -1
         self.updateList = []
@@ -16,7 +17,7 @@ class VivaldiNeighborManager(NeighborManagerIF):
         return len(self.neighborList)
     
     def addIP(self, ip):
-        tmp = VivaldiNeighbor(self.using_height)
+        tmp = VivaldiNeighbor(self.using_height, self.dim)
         tmp.setIP(ip)
         tmp.setError(VIVALDI_ERROR_UNCONNECTED)
         if(self.getLength() == 0):
@@ -29,7 +30,7 @@ class VivaldiNeighborManager(NeighborManagerIF):
         self.updateCount=-1
 
     def addClient(self, client):
-        tmp = VivaldiNeighbor(self.using_height)
+        tmp = VivaldiNeighbor(self.using_height, self.dim)
         tmp.setClient(client)
         if(self.getLength() == 0):
             self.neighborList.append(tmp)
@@ -58,10 +59,11 @@ class VivaldiNeighborManager(NeighborManagerIF):
                 self.neighborList[i].update(neighbor.client.coor.getCoor(), neighbor.getError(), neighbor.getRTT())
                 
     def removeIP(self, ip):
-         for i in xrange(self.getLength()):
+        for i in xrange(self.getLength()):
             if(self.neighborList[i].getIP() == ip):
                 self.neighborList.remove(self.neighborList[i])
-                return
+                return True
+        return False
                 
     def printNeighbor(self, i):
         self.neighborList[i].printInfo()

@@ -5,6 +5,7 @@ from gossip import GossipClient
 from nc import NCClient
 from VivaldiNeighborManager import *
 from coor.HeightCoordinate import *
+from coor.EuclideanCoordinate import *
 from VivaldiMessegeManager import *
 import socket
 
@@ -16,10 +17,19 @@ class Vivaldi():
    
     def __init__(self):
         '''init'''
-        tmpVec = [5,5,5,5]
-        tmpHeight = 2
-        tmpCoor = HeightCoordinate()
-        tmpCoor.setCoor(tmpVec,tmpHeight)
+        tmpVec = []
+        for i in range(DIMENTION):
+            tmpVec.append(5)
+        
+        '''if use height'''
+        if VIVALDI_USING_HEIGHT>0:
+            tmpHeight = 2
+            tmpCoor = HeightCoordinate()
+            tmpCoor.setCoor(tmpVec,tmpHeight)
+        else:
+            tmpCoor = EuclideanCoordinate()
+            tmpCoor.setCoor(tmpVec)
+            
         self.myClient.set(MYIP, tmpCoor, 1.5)
         for boot in SERVERS:
             bootip = socket.gethostbyname(boot)

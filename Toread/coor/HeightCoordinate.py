@@ -1,8 +1,10 @@
 from EuclideanCoordinate import *
 
-class HeightCoordinate(EuclideanCoordinate):
-        
-    def __init__(self):
+class HeightCoordinate(CoordinateIF):
+    dim = -1
+    
+    def __init__(self, arg_dim = DIMENTION):
+        self.dim = arg_dim
         self.setCoor(zeros(self.dim), THRESHOLD_HEIGHT)
     
     def setCoor(self, vec, height):
@@ -12,7 +14,8 @@ class HeightCoordinate(EuclideanCoordinate):
             if(self.height < THRESHOLD_HEIGHT):
                 self.height = THRESHOLD_HEIGHT
         else:
-            print 'Invalid input vector in construction function of class HeightCoordinate!'
+            print "[ HeightCoordinate Fatal Error ] Invalid input vector dimension in setCoor!"
+            print "[ HeightCoordinate Fatal Error ] Input vector dimension:", len(vec),"    HeightCoordinate dimension:", self.dim
             self.vec = []
             for i in xrange(self.dim):
                  self.vec.append(0.0)
@@ -21,7 +24,7 @@ class HeightCoordinate(EuclideanCoordinate):
                 self.height = THRESHOLD_HEIGHT
                  
     def getCoor(self):
-        tmpCoor = HeightCoordinate()
+        tmpCoor = HeightCoordinate(self.dim)
         tmpCoor.setCoor(self.vec, self.height)
         return tmpCoor
                  
@@ -36,11 +39,11 @@ class HeightCoordinate(EuclideanCoordinate):
             tmpHeight = self.height + coor.height
             if (tmpHeight < THRESHOLD_HEIGHT):
                 tmpHeight = THRESHOLD_HEIGHT
-            tmpCoor = HeightCoordinate()
+            tmpCoor = HeightCoordinate(self.dim)
             tmpCoor.setCoor(tmpVec, tmpHeight)
             return tmpCoor
         else:
-            print 'Invalid coordinate in add operation!'
+            print "[ HeightCoordinate Fatal Error ] Invalid input vector dimension in coordinate add operation!"
             return self.getCoor()
     
     def __sub__(self, coor):
@@ -49,18 +52,18 @@ class HeightCoordinate(EuclideanCoordinate):
             for i in xrange(self.dim):
                 tmpVec.append(self.vec[i] - coor.vec[i])
             tmpHeight = self.height + coor.height
-            tmpCoor = HeightCoordinate()
+            tmpCoor = HeightCoordinate(self.dim)
             tmpCoor.setCoor(tmpVec, tmpHeight)
             return tmpCoor
         else:
-            print 'Invalid coordinate in add operation!'
+            print "[ HeightCoordinate Fatal Error ] Invalid input vector dimension in coordinate sub operation!"
             return self.getCoor()
     
     def __mul__(self, n):
         tmpVec = []
         for i in xrange(self.dim):
             tmpVec.append(self.vec[i] * n)
-        tmpCoor = HeightCoordinate()
+        tmpCoor = HeightCoordinate(self.dim)
         tmpCoor.setCoor(tmpVec, THRESHOLD_HEIGHT)
         tmpCoor.height = self.height * n
         return tmpCoor
@@ -85,7 +88,7 @@ class HeightCoordinate(EuclideanCoordinate):
         else:
             for i in xrange(self.dim):
                 tmpCoor.vec[i] = random.uniform(0.1, 10)
-            dist = tmpCoor.getDistance(HeightCoordinate())
+            dist = tmpCoor.getDistance(HeightCoordinate(self.dim))
             tmpCoor = tmpCoor * (1 / dist)
             return tmpCoor
 

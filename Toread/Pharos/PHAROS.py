@@ -11,6 +11,7 @@ from ping import PingClientIF
 from gossip import GossipClient
 from nc import NCClient
 from coor.HeightCoordinate import *
+from coor.EuclideanCoordinate import *
 import socket
 import sys
 
@@ -22,14 +23,20 @@ class PHAROS():
         self.myNbManager = PharosNeighborManager()
         self.myMsgManager = PharosMessageManager()
         "initiate the nc of myClient"
-        tmpCoor = HeightCoordinate()
+        if PHAROS_USING_HEIGHT_GLOBAL:
+            tmpCoor = HeightCoordinate( PHAROS_DIMENSION_GLOBAL )
+        else:
+            tmpCoor = EuclideanCoordinate( PHAROS_DIMENSION_GLOBAL )
         self.myClient.globalNC.set(MYIP, tmpCoor, 1.5)
-        tmpCoor = HeightCoordinate()
+        if PHAROS_USING_HEIGHT_LOCAL:
+            tmpCoor = HeightCoordinate( PHAROS_DIMENSION_LOCAL )
+        else:
+            tmpCoor = EuclideanCoordinate( PHAROS_DIMENSION_LOCAL )        
         self.myClient.clusterNC.set(MYIP, tmpCoor, 1.5)        
         
         "this part checks whether myself is in the bootstrap list"
         clusterID = None
-        clusterID = checkClusterBootStrap()
+        clusterID = self.checkClusterBootStrap()
         "this part checks whether myself is in the landmark list"
         clusterkeys = PHAROS_LM.keys()
         for id in clusterkeys:
@@ -108,7 +115,7 @@ class PHAROS():
         
         self.mainloop()
         
-    def checkClusterBootStrap():
+    def checkClusterBootStrap(self):
         cboots = CLUSTER_BOOTLIST
         myname = socket.gethostname()
         for k in cboots.keys():
@@ -125,6 +132,12 @@ class PHAROS():
         if self.globalrtt<PINGTIMEOUT/PINGNUM and self.globalrtt>0:
             NCDefer = NCClient.request("PharosBase",self.globalNBIP,NCPORT,NCTIMEOUT)
             NCDefer.addCallback(self.NCRecieved)  
+        else:
+            ret = self.myNbManager.removeGlobalNeighbor( self.globalNBIP )
+            if ret:
+                print "Delete", self.globalNBIP, "from global neighbor list."
+            else:
+                print "Error when Delete", self.globalNBIP, "from global neighbor list."
         return
     
     def localPingFinish(self,pingData):
@@ -132,7 +145,13 @@ class PHAROS():
         print "ping local neighbor",self.localNBIP,"The rtt is",self.localrtt
         if self.localrtt<PINGTIMEOUT/PINGNUM and self.localrtt>0:
             NCDefer = NCClient.request("PharosCluster",self.localNBIP,NCPORT,NCTIMEOUT)
-            NCDefer.addCallback(self.NCRecieved)  
+            NCDefer.addCallback(self.NCRecieved)
+        else:
+            ret = self.myNbManager.removeClusterNeighbor( self.localNBIP )
+            if ret:
+                print "Delete", self.localNBIP, "from cluster neighbor list."
+            else:
+                print "Error when Delete", self.localNBIP, "from cluster neighbor list."
         return
         
     def GossipRecieved(self,gossipData):
@@ -177,12 +196,13 @@ class PHAROS():
             print "Update global:",targetClient.ip,",RTT=",self.globalrtt*1000
             targetNeighbor=self.myNbManager.globalNeighborMgr.getNeighbor(targetClient.ip)
             if targetNeighbor==None:
-                targetNeighbor=VivaldiNeighbor(PHAROS_USING_HEIGHT_GLOBAL)
+                targetNeighbor=VivaldiNeighbor(PHAROS_USING_HEIGHT_GLOBAL, PHAROS_DIMENSION_GLOBAL)
             targetNeighbor.setClient(targetClient)
             targetNeighbor.updateRTT(self.globalrtt)
             self.myNbManager.globalNeighborMgr.addClient(targetClient)
             self.myNbManager.globalNeighborMgr.update(targetNeighbor)
-            print "[PHAROS] Add global NB ",targetClient.ip
+            if DEBUG:
+                print "[PHAROS] Add global NB ",targetClient.ip
             #gossip
             gossipDefer = GossipClient.request("PharosBase",self.globalNBIP,GOSSIPPORT,GOSSIPTIMEOUT)
             gossipDefer.addCallback(self.GossipRecieved)
@@ -191,16 +211,22 @@ class PHAROS():
         if targetInfo["nctype"]=="cluster":
             if targetInfo["clusterID"] != self.myClient.clusterID:
                 print "Error in cluster NC update, remote host:",targetInfo
+                removeret = self.myNbManager.removeClusterNeighbor( targetClient.getIP() )
+                if removeret:
+                    print "Delete", targetClient.getIP() ," from cluster neighbor list."
+                else:
+                    print "Error when delete", targetClient.getIP() ," from cluster neighbor list."
             else:
                 print "Update local:",targetClient.ip,",RTT=",self.localrtt*1000
                 targetNeighbor=self.myNbManager.clusterNeighborMgr.getNeighbor(targetClient.ip)
                 if targetNeighbor==None:
-                    targetNeighbor=VivaldiNeighbor(PHAROS_USING_HEIGHT_LOCAL)
+                    targetNeighbor=VivaldiNeighbor(PHAROS_USING_HEIGHT_LOCAL, PHAROS_DIMENSION_LOCAL)
                 targetNeighbor.setClient(targetClient)
                 targetNeighbor.updateRTT(self.localrtt)
                 self.myNbManager.clusterNeighborMgr.addClient(targetClient)
                 self.myNbManager.clusterNeighborMgr.update(targetNeighbor)
-                print "[PHAROS] Add cluster NB ",targetClient.ip
+                if DEBUG:
+                    print "[PHAROS] Add cluster NB ",targetClient.ip
                 #gossip
                 gossipDefer = GossipClient.request("PharosCluster",self.localNBIP,GOSSIPPORT,GOSSIPTIMEOUT)
                 gossipDefer.addCallback(self.GossipRecieved)
@@ -232,7 +258,8 @@ class PHAROS():
         
     def updateGlobal(self):
         nbip = self.myNbManager.globalNeighborMgr.selectIP()
-        print "global neighbor ip: "+nbip
+        if DEBUG:
+            print "global neighbor ip: "+nbip
         self.globalNBIP = nbip
         pingDefer = PingClientIF.ping(PINGMETHOD,nbip,PINGPORT,PINGTIMEOUT,PINGNUM,PINGBYTES)
         pingDefer.addCallback(self.globalPingFinish)    
@@ -240,7 +267,8 @@ class PHAROS():
     
     def updateLocal(self):
         nbip = self.myNbManager.clusterNeighborMgr.selectIP()
-        print "cluster neighbor ip: "+nbip
+        if DEBUG:
+            print "cluster neighbor ip: "+nbip
         self.localNBIP = nbip
         pingDefer = PingClientIF.ping(PINGMETHOD,nbip,PINGPORT,PINGTIMEOUT,PINGNUM,PINGBYTES)
         pingDefer.addCallback(self.localPingFinish)           

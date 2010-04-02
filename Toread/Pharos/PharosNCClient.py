@@ -4,8 +4,8 @@ from Vivaldi.VivaldiNCClient import *
 
 class PharosNCClient:
     def __init__(self, ID = "0" ):
-        self.globalNC = VivaldiNCClient(PHAROS_USING_HEIGHT_GLOBAL)  # attention: pharosUsingHeight should be the same as VivaldiUsingHeight, that is pharosUsingHeight=VivaldiUsingHeight
-        self.clusterNC = VivaldiNCClient(PHAROS_USING_HEIGHT_LOCAL)
+        self.globalNC = VivaldiNCClient(PHAROS_USING_HEIGHT_GLOBAL, PHAROS_DIMENSION_GLOBAL)  # attention: pharosUsingHeight should be the same as VivaldiUsingHeight, that is pharosUsingHeight=VivaldiUsingHeight
+        self.clusterNC = VivaldiNCClient(PHAROS_USING_HEIGHT_LOCAL, PHAROS_DIMENSION_LOCAL)
         self.clusterID =  ID
         
     def updateGolbalNC(self, client, rtt):
