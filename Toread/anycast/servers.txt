@@ -18,8 +18,9 @@ planetlab1.csie.nuk.edu.tw
 # European Servers
 planetlab-3.imperial.ac.uk
 planetlab1.tlm.unavarra.es
-planetlab1.ceid.upatras.gr
+#planetlab1.ceid.upatras.gr
 planetlab2.informatik.uni-goettingen.de
 mars.planetlab.haw-hamburg.de
 planetlab1.ifi.uio.no
 pl1.grid.kiae.ru
+planetlab-1.dis.uniroma1.it
