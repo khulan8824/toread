@@ -5,7 +5,6 @@ import socket
 import random
 import time
 import math
-import getPharosRE
 
 import sys
 sys.path.append('..')
@@ -55,6 +54,31 @@ def loadHost(hostfile=""):
 		if(len(h)):
 			hostlist.append(h)
 	return hostlist
+
+def udpPing(hostname):
+    pround = 4  # ping 5 times and use the average rtt
+    port = PINGPORT
+    try:
+        ip = socket.gethostbyname( hostname )
+    except:
+        print "DNS query error for ", hostname
+        return -100
+    rtt = 0
+    for i in range(pround):
+        try:
+            sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+            sock.settimeout(3)
+            rtt = rtt - time.time()
+            sock.sendto("this is a tcp ping test!\n",(ip,port))
+            buf = sock.recv(1024)
+            rtt = rtt + time.time()
+            sock.close()
+        except:
+            print "Error when ping host: ", hostname
+            return -100
+    rtt = rtt / pround
+    return rtt * 1000  # time.time() returns the seconds, here we need micro-seconds    
+
 
 
 def tcpPing(hostname):
@@ -191,7 +215,7 @@ if (__name__=="__main__"):
         if TCP == True:
             rtt = tcpPing(host)
         else:
-            rtt = getPharosRE.udpPing(host)
+            rtt = udpPing(host)
         if (rtt == -100):
             print "ping ",host," Error!"
             continue
