@@ -33,6 +33,8 @@ class Vivaldi():
         self.myClient.set(MYIP, tmpCoor, 1.5)
         for boot in SERVERS:
             bootip = socket.gethostbyname(boot)
+	    print bootip
+	    print MYIP
             if bootip!=MYIP:
                 self.myMananger.addIP(bootip)
         self.round = 0
@@ -86,21 +88,24 @@ class Vivaldi():
         print 'Round ' + str(self.round) + ': '    # write in log
         self.myClient.printInfo()
         ip = self.myMananger.selectIP()
-        print 'neighborIP = ' + ip  # write in log
-        self.neighborIP = ip
-        '''
-        self.neighborIP = "192.168.1.2"
-        self.myClient.coor.printCoor()
-        print self.myClient.error
-        '''
+	if ip:
+           print 'neighborIP = ' + ip  # write in log
+           self.neighborIP = ip
+           '''
+           self.neighborIP = "192.168.1.2"
+           self.myClient.coor.printCoor()
+           print self.myClient.error
+           '''
         #ping
-        pingDefer = PingClientIF.ping(PINGMETHOD,ip,PINGPORT,PINGTIMEOUT,PINGNUM,PINGBYTES)
+           pingDefer = PingClientIF.ping(PINGMETHOD,ip,PINGPORT,PINGTIMEOUT,PINGNUM,PINGBYTES)
         #pingDefer = PingClientIF.ping(PINGMETHOD,self.neighborIP,PINGPORT,PINGTIMEOUT,PINGNUM,PINGBYTES)
-        pingDefer.addCallback(self.PingFinish)
+           pingDefer.addCallback(self.PingFinish)
         #Run every LOOPTIME
         reactor.callLater(LOOPTIME,self.mainloop)
 
+
 def start():
-    global main 
+    print 'Starting Vivaldi...' 
+    global main
     main = Vivaldi()
 

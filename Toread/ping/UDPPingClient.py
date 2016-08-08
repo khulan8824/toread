@@ -40,7 +40,7 @@ class UDPPingClient(DatagramProtocol):
     def stopProtocol(self):
         if self.done==False:
             self.done=True
-            self.transport.stopListening()
+            #self.transport.stopListening()
             self.defer.callback(self.option)
     
     def connectionRefused(self):

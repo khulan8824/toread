@@ -3,7 +3,6 @@ from VivaldiNeighbor import *
 
 
 
-
 class VivaldiNeighborManager(NeighborManagerIF):
     def __init__(self, _using_h = VIVALDI_USING_HEIGHT, _dim = DIMENTION, _strategy = VIVALDI_UPDATE_STRATEGY):
         self.update_strategy = _strategy
@@ -157,7 +156,10 @@ class VivaldiNeighborManager(NeighborManagerIF):
             self.closestNC()
         elif (self.update_strategy == 2):
             self.hybridNC()
-        tmp = self.updateList[self.updateCount]
+	try:
+       	    tmp = self.updateList[self.updateCount]
+	except Exception as e:
+	    return None 
         return self.neighborList[tmp].getIP()
       
     def upload(self):
