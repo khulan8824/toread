@@ -17,12 +17,14 @@ if MYIP==None:
     print "exit..." 
     sys.exit(1)   
 
+MYIP = "10.228.207.209"
 #print "myIP:",MYIP
 
 '''UESD FOR INIT'''
 '''bootstramp hosts, we can use ip or hostname in the following list'''
 #SERVERS = ['132.239.17.225','202.112.8.2','195.113.161.83','131.179.50.72']
-SERVERS = ["planetlab2.ucsd.edu","pl1.pku.edu.cn","planetlab2.cesnet.cz","planetlab2.cs.ucla.edu"]
+#SERVERS = ["planetlab2.ucsd.edu","pl1.pku.edu.cn","planetlab2.cesnet.cz","planetlab2.cs.ucla.edu"]
+SERVERS = ["emmdim.pc.ac.upc.edu"]
 
 '''FOR LOG'''
 LOG_IN_DETAIL=0
@@ -108,8 +110,8 @@ planetlab-1.sjtu.edu.cn
 PHAROS_LOOP_TIME = 20  # make sure that PHAROS_LOOP_TIME>2*max(GOSSIPTIMEOUT,NCTIMEOUT,PINGTIMEOUT)
 
 '''USED IN TWISTED'''
-ALGORITHM = "PHAROS"
-#ALGORITHM = "Vivaldi"
+#ALGORITHM = "PHAROS"
+ALGORITHM = "Vivaldi"
 LOOPTIME = 10
 PINGMETHOD = "UDP"
 PINGPORT = 11230
