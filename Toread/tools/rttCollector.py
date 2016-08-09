@@ -8,7 +8,7 @@ import random
 import socket
 import time
 
-inputfile = "../../myPLnodes.txt"
+inputfile = "../../myGuifiNodes.txt"
 
 hosts = getPharosRE.loadHost( inputfile )
 # shuffle the host, make sure the traffic is not converge to one node at the same time

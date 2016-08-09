@@ -149,7 +149,7 @@ if (__name__=="__main__"):
     #
     #This tool can caculate the CNAE, RE of the Vivaldi system
     #
-    inputfile = "../../myGufinodes.txt"
+    inputfile = "../../myGufiNodes.txt"
     #inputfile = "../../pharosDebuglist.txt"
     out_re_file = "../evaluationResult/vivaldiRE.txt"
     out_err_file = "../evaluationResult/vivaldiNC.txt"
