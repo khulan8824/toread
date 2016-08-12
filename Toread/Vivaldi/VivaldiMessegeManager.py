@@ -45,13 +45,15 @@ class VivaldiMessegeManager():
             if VIVALDI_USING_HEIGHT>0:
                 temp.height = Vivaldi.main.myMananger.neighborList[index].client.coor.height
             temp.error = Vivaldi.main.myMananger.neighborList[index].getError()
-        print "Messege Encode: IP=",temp.ip,",vec=",temp.vec,",height=",temp.height
+	if VIVALDI_MESSAGES:
+	   print "Messege Encode: IP=",temp.ip,",vec=",temp.vec,",height=",temp.height
         str = pickle.dumps(temp)
         return str
     
     def decodeOne(self,str):
         data = pickle.loads(str)
-        print "Messege Decode: IP=",data.ip,",vec=",data.vec,",height=",data.height
+	if VIVALDI_MESSAGES:
+            print "Messege Decode: IP=",data.ip,",vec=",data.vec,",height=",data.height
         client = VivaldiNCClient()
         if VIVALDI_USING_HEIGHT>0:
             coor = HeightCoordinate(DIMENTION)

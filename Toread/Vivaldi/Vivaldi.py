@@ -8,6 +8,7 @@ from coor.HeightCoordinate import *
 from coor.EuclideanCoordinate import *
 from VivaldiMessegeManager import *
 import socket
+import time
 
 class Vivaldi():
     
@@ -38,6 +39,7 @@ class Vivaldi():
             if bootip!=MYIP:
                 self.myMananger.addIP(bootip)
         self.round = 0
+	self.start_time = time.time()
         self.mainloop();
         
     def PingFinish(self,pingData):
@@ -85,7 +87,8 @@ class Vivaldi():
     def mainloop(self):
         #Choose a neighbor
         self.round = self.round + 1 # used in log
-        print 'Round ' + str(self.round) + ': '    # write in log
+	elapsed = "%2.2f"%(time.time() - self.start_time)
+        print 'Round ' + str(self.round) + ' - '+elapsed+' s : '    # write in log
         self.myClient.printInfo()
         ip = self.myMananger.selectIP()
 	if ip:
