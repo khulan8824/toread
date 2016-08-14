@@ -9,7 +9,6 @@ from coor.EuclideanCoordinate import *
 from VivaldiMessegeManager import *
 import socket
 import time
-from tools.getVivaldiRE import calDistance
 
 class Vivaldi():
     

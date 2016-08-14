@@ -10,7 +10,6 @@ import sys
 sys.path.append('..')
 import pickle
 import random
-from Vivaldi import Vivaldi
 from config import *
 
 
