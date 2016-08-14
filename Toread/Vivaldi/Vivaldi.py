@@ -9,6 +9,8 @@ from coor.EuclideanCoordinate import *
 from VivaldiMessegeManager import *
 import socket
 import time
+import ipdb
+from tools.getVivaldiRE import calDistance
 
 class Vivaldi():
     
@@ -34,20 +36,23 @@ class Vivaldi():
         self.myClient.set(MYIP, tmpCoor, 1.5)
         for boot in SERVERS:
             bootip = socket.gethostbyname(boot)
-	    print bootip
-	    print MYIP
+	    if DEBUG:
+	       print bootip
+	       print MYIP
             if bootip!=MYIP:
                 self.myMananger.addIP(bootip)
         self.round = 0
 	self.start_time = time.time()
+	self.elapsed = 0
         self.mainloop();
         
     def PingFinish(self,pingData):
         self.rtt = pingData.time
-        print "ping neighbor ", self.neighborIP, " rtt: ",self.rtt
+        #print "ping neighbor ", self.neighborIP, " rtt: ",self.rtt
         if self.rtt<PINGTIMEOUT/PINGNUM and self.rtt>0:
             NCDefer = NCClient.request("Vivaldi",self.neighborIP,NCPORT,NCTIMEOUT)
-            print "send a NC request to ",self.neighborIP
+	    if DEBUG:
+	       print "send a NC request to ",self.neighborIP
             NCDefer.addCallback(self.NCRecieved)  
         return
 
@@ -76,8 +81,12 @@ class Vivaldi():
         gossipDefer = GossipClient.request("Vivaldi",self.neighborIP,GOSSIPPORT,GOSSIPTIMEOUT)
         gossipDefer.addCallback(self.GossipRecieved)
         #update
-        print "Update:",targetClient.ip,",RTT=",targetNeighbor.mpFilter()*1000
+        if DEBUG:
+	   print "Update:",targetClient.ip,",RTT=",targetNeighbor.mpFilter()*1000
         self.myClient.update(targetClient,targetNeighbor.mpFilter()*1000)
+	distance = self.myClient.getCoor().getDistance(targetClient.getCoor())
+	error = abs(distance-self.rtt*1000)/min((self.rtt*1000),distance)
+	print "Round:",self.round,",time:",self.elapsed,",NEIGH:",targetClient.ip,",RTT:",self.rtt*1000,",DIST:",distance,"RE:",error
         
         #the following is the old code, which do not use any filter
         #print "Update:",targetClient.ip,",RTT=",self.rtt*1000
@@ -87,12 +96,13 @@ class Vivaldi():
     def mainloop(self):
         #Choose a neighbor
         self.round = self.round + 1 # used in log
-	elapsed = "%2.2f"%(time.time() - self.start_time)
-        print 'Round ' + str(self.round) + ' - '+elapsed+' s : '    # write in log
-        self.myClient.printInfo()
+	self.elapsed = "%2.2f"%(time.time() - self.start_time)
+	if DEBUG:
+	   print 'Round ' + str(self.round) + ' - '+self.elapsed+' s : '    # write in log
+           self.myClient.printInfo()
         ip = self.myMananger.selectIP()
 	if ip:
-           print 'neighborIP = ' + ip  # write in log
+           #print 'neighborIP = ' + ip  # write in log
            self.neighborIP = ip
            '''
            self.neighborIP = "192.168.1.2"
@@ -108,7 +118,6 @@ class Vivaldi():
 
 
 def start():
-    print 'Starting Vivaldi...' 
     global main
     main = Vivaldi()
 
