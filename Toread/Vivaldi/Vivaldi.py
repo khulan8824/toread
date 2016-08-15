@@ -84,8 +84,9 @@ class Vivaldi():
         self.myClient.update(targetClient,targetNeighbor.mpFilter()*1000)
 	distance = self.myClient.getCoor().getDistance(targetClient.getCoor())
 	error = abs(distance-self.rtt*1000)/min((self.rtt*1000),distance)
-	# Prints info on neighbour updated this round
-	#print "Round:",self.round,",time:",self.elapsed,",NEIGH:",targetClient.ip,",RTT:",self.rtt*1000,",DIST:",distance,"RE:",error
+	if DEBUG:
+	   # Prints info on neighbour updated this round
+	   print "Round:",self.round,",time:",self.elapsed,",NEIGH:",targetClient.ip,",RTT:",self.rtt*1000,",DIST:",distance,"RE:",error
         
         #the following is the old code, which do not use any filter
         #print "Update:",targetClient.ip,",RTT=",self.rtt*1000
@@ -106,7 +107,7 @@ class Vivaldi():
 	      continue
 	#print errors
 	mpe = self.median(errors)
-	print "Round:",self.round,",time:",self.elapsed,"MPE:",mpe
+	print "%s,%s,%s" % (self.round,self.elapsed,mpe)
 
 	
     def median(self, lst):
