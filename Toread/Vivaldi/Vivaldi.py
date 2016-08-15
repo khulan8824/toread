@@ -9,6 +9,7 @@ from coor.EuclideanCoordinate import *
 from VivaldiMessegeManager import *
 import socket
 import time
+import sys
 
 class Vivaldi():
     
@@ -42,6 +43,7 @@ class Vivaldi():
         self.round = 0
 	self.start_time = time.time()
 	self.elapsed = 0
+	self.f = open('exp_10_1_0.25_0.25','w')
         self.mainloop();
         
     def PingFinish(self,pingData):
@@ -107,8 +109,8 @@ class Vivaldi():
 	      continue
 	#print errors
 	mpe = self.median(errors)
-	print "%s,%s,%s" % (self.round,self.elapsed,mpe)
-
+	print >> self.f, "%s,%s,%s" % (self.round,self.elapsed,mpe)
+        self.f.flush()
 	
     def median(self, lst):
 	lst = sorted(lst)
