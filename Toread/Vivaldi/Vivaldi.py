@@ -111,7 +111,6 @@ class Vivaldi():
 	      rtts.append(rtt*1000)
 	   else:
 	      continue
-	sys.stderr.write(str(errors))
 	mpe = self.median(errors)
 	mrtt = self.median(rtts)
 	mdist = self.median(dists)
