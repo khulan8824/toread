@@ -43,6 +43,7 @@ class Vivaldi():
         self.round = 0
 	self.start_time = time.time()
 	self.elapsed = 0
+	print "round,elapsed,mrtt,mdist,mpe"
         self.mainloop();
         
     def PingFinish(self,pingData):
@@ -98,18 +99,23 @@ class Vivaldi():
     def calcMPE(self):
 	#Calculate Median prediction error
 	errors = []
+	rtts = []
+	dists = []
 	for neigh in self.myMananger.neighborList:
 	   dist = self.myClient.getCoor().getDistance(neigh.client.getCoor())
 	   if neigh.rtt:
 	      rtt = neigh.rtt[-1]
 	      err = abs(dist-rtt*1000)/min((rtt*1000),dist)
 	      errors.append(err)
+	      dists.append(dist)
+	      rtts.append(rtt*1000)
 	   else:
 	      continue
-	#print errors
+	sys.stderr.write(str(errors))
 	mpe = self.median(errors)
-	print "%s,%s,%s" % (self.round,self.elapsed,mpe)
-        sys.stdout.flush()
+	mrtt = self.median(rtts)
+	mdist = self.median(dists)
+	print("{},{},{},{},{}".format(self.round,self.elapsed, mrtt, mdist, mpe))
 	
     def median(self, lst):
 	lst = sorted(lst)
