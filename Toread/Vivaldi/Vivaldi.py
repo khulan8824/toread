@@ -43,7 +43,6 @@ class Vivaldi():
         self.round = 0
 	self.start_time = time.time()
 	self.elapsed = 0
-	self.f = open('exp_10_1_0.25_0.25','w')
         self.mainloop();
         
     def PingFinish(self,pingData):
@@ -109,8 +108,8 @@ class Vivaldi():
 	      continue
 	#print errors
 	mpe = self.median(errors)
-	print >> self.f, "%s,%s,%s" % (self.round,self.elapsed,mpe)
-        self.f.flush()
+	print "%s,%s,%s" % (self.round,self.elapsed,mpe)
+        sys.stdout.flush()
 	
     def median(self, lst):
 	lst = sorted(lst)
