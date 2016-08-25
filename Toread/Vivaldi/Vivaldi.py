@@ -7,11 +7,11 @@ from VivaldiNeighborManager import *
 from coor.HeightCoordinate import *
 from coor.EuclideanCoordinate import *
 from VivaldiMessegeManager import *
+import RoutingTable as rt
 import socket
 import time
 import sys
 
-VIVALDI_ROUTE_TABLE = "vivaldi_route_table"
 
 class Vivaldi():
     
@@ -46,7 +46,7 @@ class Vivaldi():
 	self.start_time = time.time()
 	self.elapsed = 0
 	print "round,elapsed,mrtt,mdist,mpe"
-	self.routeTable = {}
+	self.routeTable = rt.RoutingTable()
         self.mainloop();
         
     def PingFinish(self,pingData):
@@ -112,16 +112,14 @@ class Vivaldi():
 	      errors.append(err)
 	      dists.append(dist)
 	      rtts.append(rtt*1000)
-	      self.routeTable[neigh.client.ip] = dist
+	      self.routeTable.addRoute(neigh.client.ip,dist)
 	   else:
 	      continue
 	mpe = self.median(errors)
 	mrtt = self.median(rtts)
 	mdist = self.median(dists)
 	print("{},{},{},{},{}".format(self.round,self.elapsed, mrtt, mdist, mpe))
-	with open(VIVALDI_ROUTE_TABLE, 'wb') as f:
-		for w in sorted(self.routeTable, key=self.routeTable.get):
-			f.write("{}\t{}\n".format(w,self.routeTable[w]))
+	self.routeTable.store()
 	
     def median(self, lst):
 	lst = sorted(lst)
