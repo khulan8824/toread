@@ -79,10 +79,14 @@ class VivaldiMessegeManager():
 	temp = ProxyMessage()
 	temp.ip = proxy_route.ip
 	temp.ttfb = proxy_route.ttfb
+	if VIVALDI_MESSAGES:
+            print "Proxy Message Encode: IP=",temp.ip,",TTFB=",temp.ttfb
 	str = pickle.dumps(temp)
 	return str
 
     def decodeProxy(self, data):
+	if VIVALDI_MESSAGES:
+            print "Proxy Message Decode: IP=",data.ip,",TTFB=",data.ttfb
 	if data.ip != MYIP:
 	    Vivaldi.main.routeTable.updateTTFB(data.ip,data.ttfb)
 	return "{}\t{}".format(data.ip,data.ttfb),'proxy'
