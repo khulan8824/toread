@@ -75,7 +75,7 @@ class VivaldiMessegeManager():
         return client, 'normal'
     
     def encodeProxy(self, proxy):
-	proxy_route = Vivaldi.main.routeTable[proxy]
+	proxy_route = Vivaldi.main.routeTable.getRoute(proxy)
 	temp = ProxyMessage()
 	temp.ip = proxy_route.ip
 	temp.ttfb = proxy_route.ttfb
@@ -89,7 +89,7 @@ class VivaldiMessegeManager():
 
     def encodeGossip(self,host):
         list = []
-	proxy =Vivaldi.main.routeTable.proxy
+	proxy =Vivaldi.main.routeTable.getProxy()
 	if proxy:
 	    list.append(self.encodeProxy(proxy))
         index=Vivaldi.main.myMananger.upload()

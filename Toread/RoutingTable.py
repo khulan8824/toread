@@ -44,6 +44,12 @@ class RoutingTable(object):
 		self.routes = {}
 		self.proxy = None
 	
+	def getRoute(self,ip):
+		if ip in self.routes:
+			return self.routes[ip]
+		else:
+			return None
+	
 	def addRoute(self,ip,distance,ttfb=0,myProxy=False):
 		proxy = True if ip in PROXIES else False
 		route = Route(ip=ip,distance=distance,proxy=proxy,ttfb=ttfb,myProxy=myProxy)
@@ -64,7 +70,9 @@ class RoutingTable(object):
 	
 	def updateTTFB(self,ip,ttfb):
 		self.routes[ip].updateTTFB(ttfb)
-	
+
+	def getProxy(self):
+		return self.proxy
 
 	def chooseBestProxy(self):
 		routes = self.routes.values()

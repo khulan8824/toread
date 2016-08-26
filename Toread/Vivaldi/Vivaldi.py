@@ -81,9 +81,6 @@ class Vivaldi():
         targetNeighbor.updateRTT(self.rtt)
         self.myMananger.addClient(targetClient)
         self.myMananger.update(targetNeighbor)
-        #gossip
-        gossipDefer = GossipClient.request("Vivaldi",self.neighborIP,GOSSIPPORT,GOSSIPTIMEOUT)
-        gossipDefer.addCallback(self.GossipRecieved)
         #update
         if DEBUG:
 	   print "Update:",targetClient.ip,",RTT=",targetNeighbor.mpFilter()*1000
@@ -98,6 +95,9 @@ class Vivaldi():
         #print "Update:",targetClient.ip,",RTT=",self.rtt*1000
         #self.myClient.update(targetClient,self.rtt*1000) #Attention!self.rtt must be multiplied by 1000
 	self.calcMPE()
+        #gossip
+        gossipDefer = GossipClient.request("Vivaldi",self.neighborIP,GOSSIPPORT,GOSSIPTIMEOUT)
+        gossipDefer.addCallback(self.GossipRecieved)
         return
 
     def calcMPE(self):
