@@ -35,7 +35,7 @@ class Route(object):
 		return self.proxy
 
 	def __str__(self):
-		return "{0}\t{1}\t{2}\t{3}\t{4}\n".format(self.ip,self.distance,self.ttfb, self.total, self.proxy,self.myProxy)
+		return "{0}\t{1}\t{2}\t{3}\t{4}\t{5}\n".format(self.ip,self.distance,self.ttfb, self.total, self.proxy,self.myProxy)
 
 
 		
@@ -55,9 +55,12 @@ class RoutingTable(object):
 		self.routes[ip].updateDistance(distance)
 
 	def chooseAsProxy(self,ip):
-		self.routes[self.proxy].unmakeMyProxy()
+		if self.proxy is not None:
+			self.routes[self.proxy].unmakeMyProxy()
 		self.routes[ip].makeMyProxy()
 		self.proxy = ip
+		if DEBUG:
+			print "Chosen {} as proxy".format(ip)
 	
 	def updateTTFB(self,ip,ttfb):
 		self.routes[ip].updateTTFB(ttfb)
