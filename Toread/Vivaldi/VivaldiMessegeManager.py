@@ -59,7 +59,7 @@ class VivaldiMessegeManager():
     def decodeOne(self,str):
         data = pickle.loads(str)
 	if isinstance(data,ProxyMessage):
-		msg,typ = decodeProxy(data)
+		msg,typ = self.decodeProxy(data)
 		return msg, typ
 	if VIVALDI_MESSAGES:
             print "Messege Decode: IP=",data.ip,",vec=",data.vec,",height=",data.height
