@@ -74,6 +74,12 @@ class RoutingTable(object):
 	def getProxy(self):
 		return self.proxy
 
+	def getProxiesIPs(self):
+		routes = self.routes.values()
+		proxy_ips = [r.ip for r in routes if r.proxy]
+		return proxy_ips
+
+
 	def chooseBestProxy(self):
 		routes = self.routes.values()
 		proxy_routes = [r for r in routes if r.proxy]

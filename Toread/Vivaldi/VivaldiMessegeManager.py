@@ -94,9 +94,10 @@ class VivaldiMessegeManager():
 
     def encodeGossip(self,host):
         list = []
-	proxy =Vivaldi.main.routeTable.getProxy()
-	if proxy:
-	    list.append(self.encodeProxy(proxy))
+	if host not in Vivaldi.main.routeTable.getProxiesIPs():
+	    proxy = Vivaldi.main.routeTable.getProxy()
+	    if proxy:
+	        list.append(self.encodeProxy(proxy))
         index=Vivaldi.main.myMananger.upload()
         for i in index:
             list.append(self.encodeOne(i))
