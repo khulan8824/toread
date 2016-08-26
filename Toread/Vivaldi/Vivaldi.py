@@ -71,7 +71,7 @@ class Vivaldi():
 
     def NCRecieved(self,ncData):
         #translate from messege
-        targetClient=self.messegeManager.decodeOne(ncData.recv)
+        targetClient,_=self.messegeManager.decodeOne(ncData.recv)
         #print "Update:",targetClient.ip,",RTT=",self.rtt*1000
         # this part needs to be modified to use filter
         targetNeighbor=self.myMananger.getNeighbor(targetClient.ip)
