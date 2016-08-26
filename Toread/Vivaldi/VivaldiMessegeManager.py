@@ -83,7 +83,8 @@ class VivaldiMessegeManager():
 	return str
 
     def decodeProxy(self, data):
-	Vivaldi.main.routeTable.updateTTFB(data.ip,data.ttfb)
+	if data.ip != MYIP:
+	    Vivaldi.main.routeTable.updateTTFB(data.ip,data.ttfb)
 	return "{}\t{}".format(data.ip,data.ttfb),'proxy'
 		    
 
