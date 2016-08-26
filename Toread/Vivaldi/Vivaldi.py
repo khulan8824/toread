@@ -66,7 +66,8 @@ class Vivaldi():
             if eachClient.getIP()!=MYIP:
                 self.myMananger.addClient(eachClient)
         '''update neighbors'''
-	self.routeTable.chooseBestProxy()
+	if not ME_PROXY:
+	    self.routeTable.chooseBestProxy()
         return
 
     def NCRecieved(self,ncData):
