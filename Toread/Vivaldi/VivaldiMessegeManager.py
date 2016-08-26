@@ -79,7 +79,8 @@ class VivaldiMessegeManager():
 	temp = ProxyMessage()
 	temp.ip = proxy_route.ip
 	temp.ttfb = proxy_route.ttfb
-	return temp 
+	str = pickle.dumps(temp)
+	return str
 
     def decodeProxy(self, data):
 	Vivaldi.main.routeTable.updateTTFB(data.ip,data.ttfb)
@@ -103,7 +104,6 @@ class VivaldiMessegeManager():
         for eachStr in list:
 	    decoded,typ = self.decodeOne(eachStr)
 	    if typ != 'proxy':
-		print decoded
                 result.append(decoded)
         return result
 
