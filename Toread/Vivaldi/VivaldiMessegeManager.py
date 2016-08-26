@@ -3,6 +3,8 @@ import Vivaldi
 from coor.HeightCoordinate import *
 from VivaldiNCClient import *
 from config import *
+import os
+
 '''
 class VivaldiNCMessege():
     ip = "127.0.0.1"
@@ -16,7 +18,11 @@ class VivaldiNCMessege():
     vec = []
     height = 0
     error = 0
-    
+
+class ProxyMessage():
+	ip = ""
+	ttfb = 0
+
 class VivaldiMessegeManager():
     
     def encodeOne(self,index):
@@ -52,6 +58,9 @@ class VivaldiMessegeManager():
     
     def decodeOne(self,str):
         data = pickle.loads(str)
+	if isinstance(data,ProxyMessage):
+		msg,typ = decodeProxy(data)
+		return msg, typ
 	if VIVALDI_MESSAGES:
             print "Messege Decode: IP=",data.ip,",vec=",data.vec,",height=",data.height
         client = VivaldiNCClient()
@@ -63,10 +72,25 @@ class VivaldiMessegeManager():
             coor.setCoor(data.vec)
                 
         client.set(data.ip,coor,data.error)
-        return client
+        return client, 'normal'
     
+    def encodeProxy(self, proxy):
+	proxy_route = Vivaldi.main.routeTable[proxy]
+	temp = ProxyMessage()
+	temp.ip = proxy_route.ip
+	temp.ttfb = proxy_route.ttfb
+	return temp 
+
+    def decodeProxy(self, data):
+	Vivaldi.main.routeTable.updateTTFB(data.ip,data.ttfb)
+	return "{}\t{}".format(data.ip,data.ttfb),'proxy'
+		    
+
     def encodeGossip(self,host):
         list = []
+	proxy =Vivaldi.main.routeTable.proxy
+	if proxy:
+	    list.append(self.encodeProxy(proxy))
         index=Vivaldi.main.myMananger.upload()
         for i in index:
             list.append(self.encodeOne(i))
@@ -77,7 +101,10 @@ class VivaldiMessegeManager():
         list = pickle.loads(str)
         result = []
         for eachStr in list:
-            result.append(self.decodeOne(eachStr))
+	    decoded,typ = self.decodeOne(eachStr)
+	    if typ != 'proxy':
+		print decoded
+                result.append(decoded)
         return result
 
     def encodeVivaldiString(self):

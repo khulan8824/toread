@@ -66,6 +66,7 @@ class Vivaldi():
             if eachClient.getIP()!=MYIP:
                 self.myMananger.addClient(eachClient)
         '''update neighbors'''
+	self.routeTable.chooseBestProxy()
         return
 
     def NCRecieved(self,ncData):
@@ -120,6 +121,7 @@ class Vivaldi():
 	mdist = self.median(dists)
 	print("{},{},{},{},{}".format(self.round,self.elapsed, mrtt, mdist, mpe))
 	self.routeTable.store()
+	
 	
     def median(self, lst):
 	lst = sorted(lst)
