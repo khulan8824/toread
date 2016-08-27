@@ -87,8 +87,8 @@ class VivaldiMessegeManager():
 	msgs = []
 	for proxy in Vivaldi.main.proxiesManager.neighborList:
 	    temp = VivaldiProxyMessage()
-	    temp.ip = temp.getIP()
-	    temp.vec = temp.client.coor.vec
+	    temp.ip = proxy.getIP()
+	    temp.vec = proxy.client.coor.vec
 	    if VIVALDI_USING_HEIGHT>0:
 	        temp.height = proxy.client.coor.height
 	    temp.error = proxy.getError()
