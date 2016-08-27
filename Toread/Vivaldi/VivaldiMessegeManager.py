@@ -86,7 +86,7 @@ class VivaldiMessegeManager():
     def encodeProxies(self):
 	msgs = []
 	for proxy in Vivaldi.main.proxiesManager.neighborList:
-	    temp = VivalidProxyMessage()
+	    temp = VivaldiProxyMessage()
 	    temp.ip = temp.getIP()
 	    temp.vec = temp.client.coor.vec
 	    if VIVALDI_USING_HEIGHT>0:
