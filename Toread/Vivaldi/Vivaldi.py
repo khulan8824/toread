@@ -61,6 +61,8 @@ class Vivaldi():
 
     def GossipRecieved(self,gossipData):
         #translate from messege
+	if VIVALDI_MESSAGES:
+	   print 'Gossip Received'
         gossipClientList = self.messegeManager.decodeGossip(gossipData.recv)
         for eachClient in gossipClientList:
             if eachClient.getIP()!=MYIP:
@@ -97,6 +99,8 @@ class Vivaldi():
         #self.myClient.update(targetClient,self.rtt*1000) #Attention!self.rtt must be multiplied by 1000
 	self.calcMPE()
         #gossip
+	if VIVALDI_MESSAGES:
+	   print 'Gossip Request Sent to {}'.format(self.neighborIP)
         gossipDefer = GossipClient.request("Vivaldi",self.neighborIP,GOSSIPPORT,GOSSIPTIMEOUT)
         gossipDefer.addCallback(self.GossipRecieved)
         return
