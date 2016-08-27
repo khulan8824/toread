@@ -187,7 +187,7 @@ class Vivaldi():
 	    proxy_ip = self.proxiesManager.selectIP()
 	    if proxy_ip:
 	        self.proxy_ip = proxy_ip
-		proxyPingDefer = PingClientIF.ping(PINGMETHOD,ip,PINGPORT,PINGTIMEOUT,PINGNUM,PINGBYTES)
+		proxyPingDefer = PingClientIF.ping(PINGMETHOD,proxy_ip,PINGPORT,PINGTIMEOUT,PINGNUM,PINGBYTES)
 		proxyPingDefer.addCallback(self.proxyPingFinish)
         #Run every LOOPTIME
         reactor.callLater(LOOPTIME,self.mainloop)
