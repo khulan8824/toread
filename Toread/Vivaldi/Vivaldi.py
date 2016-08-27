@@ -18,7 +18,9 @@ class Vivaldi():
     myClient = VivaldiNCClient()
     myMananger = VivaldiNeighborManager()
     messegeManager = VivaldiMessegeManager()
-   
+    if PROXY_MODE:
+    	proxiesManager = VivaldiNeighborManager()
+
     def __init__(self):
         '''init'''
         tmpVec = []
@@ -47,6 +49,9 @@ class Vivaldi():
 	self.elapsed = 0
 	print "round,elapsed,mrtt,mdist,mpe"
 	self.routeTable = rt.RoutingTable()
+	if PROXY_MODE:
+	    for ip in PROXIES:
+	        self.proxiesManager.addIP(ip)
         self.mainloop();
         
     def PingFinish(self,pingData):
@@ -58,12 +63,33 @@ class Vivaldi():
 	       print "send a NC request to ",self.neighborIP
             NCDefer.addCallback(self.NCRecieved)  
         return
+    
+
+    def proxyPingFinish(self,pingData):
+        self.proxy_rtt = pingData.time
+        #print "ping neighbor ", self.neighborIP, " rtt: ",self.rtt
+        if self.proxy_rtt<PINGTIMEOUT/PINGNUM and self.proxy_rtt>0:
+	    proxy_neighbor = self.proxiesManager.getNeighbor(self.proxy_ip)
+	    proxy_neighbor.updateRTT(self.RTT)
+	    proxy_neighbor.client.update(self.myClient,proxy_neighbor.mpFilter()*1000)
+        return
 
     def GossipRecieved(self,gossipData):
         #translate from messege
 	if VIVALDI_MESSAGES:
 	   print 'Gossip Received'
-        gossipClientList = self.messegeManager.decodeGossip(gossipData.recv)
+        gossipReply = self.messegeManager.decodeGossip(gossipData.recv)
+	# If the neighbour is using a proxy he sends me his ttfb
+	if gossipReply['ttfb']:
+	    for (ip,ttfb) in gossipReply['ttfb']:
+		if ip != MYIP:
+	            self.routeTable.updateTTFB(ip,ttfb)
+	# If the are proxy coords on the neighbour with smaller error then
+	# i replace mine with those
+        if gossipReply['proxies']:
+	    for proxy_client in gossipeReply['proxies']:
+	        self.proxiesManager.addClient(proxy_client)
+	gossipClientList = gossipReply['normal']
         for eachClient in gossipClientList:
             if eachClient.getIP()!=MYIP:
                 self.myMananger.addClient(eachClient)
@@ -157,6 +183,12 @@ class Vivaldi():
            pingDefer = PingClientIF.ping(PINGMETHOD,ip,PINGPORT,PINGTIMEOUT,PINGNUM,PINGBYTES)
         #pingDefer = PingClientIF.ping(PINGMETHOD,self.neighborIP,PINGPORT,PINGTIMEOUT,PINGNUM,PINGBYTES)
            pingDefer.addCallback(self.PingFinish)
+	if not ME_PROXY:
+	    proxy_ip = self.proxiesManager.selectIP()
+	    if proxy_ip:
+	        self.proxy_ip = proxy_ip
+		proxyPingDefer = PingClientIF.ping(PINGMETHOD,ip,PINGPORT,PINGTIMEOUT,PINGNUM,PINGBYTES)
+		proxyPingDefer.addCallback(self.proxyPingFinish)
         #Run every LOOPTIME
         reactor.callLater(LOOPTIME,self.mainloop)
 

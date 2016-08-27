@@ -19,6 +19,12 @@ class VivaldiNCMessege():
     height = 0
     error = 0
 
+class VivaldiProxyMessage():
+    ip = ""
+    vec = []
+    height = 0
+    error = 0
+
 class ProxyMessage():
 	ip = ""
 	ttfb = 0
@@ -61,6 +67,9 @@ class VivaldiMessegeManager():
 	if isinstance(data,ProxyMessage):
 		msg,typ = self.decodeProxy(data)
 		return msg, typ
+	if isinstance(data,VivaldiProxyMessage):
+		msg,typ = self.decodeProxyOne(data)
+		return msg, typ
 	if VIVALDI_MESSAGES:
             print "Messege Decode: IP=",data.ip,",vec=",data.vec,",height=",data.height
         client = VivaldiNCClient()
@@ -74,30 +83,60 @@ class VivaldiMessegeManager():
         client.set(data.ip,coor,data.error)
         return client, 'normal'
     
+    def encodeProxies(self):
+	msgs = []
+	for proxy in Vivaldi.main.proxiesManager.neighborList:
+	    temp = VivalidProxyMessage()
+	    temp.ip = temp.getIP()
+	    temp.vec = temp.client.coor.vec
+	    if VIVALDI_USING_HEIGHT>0:
+	        temp.height = proxy.client.coor.height
+	    temp.error = proxy.getError()
+	    if VIVALDI_MESSAGES:
+	        print "Vivaldi Proxy Message Encode IP=", temp.ip,", vec", temp.vec, ",height", temp.height
+	    str = pickle.dumps(temp)
+	    msgs.append(str)
+        return str
+
     def encodeProxy(self, proxy):
-	proxy_route = Vivaldi.main.routeTable.getRoute(proxy)
+        proxy_route = Vivaldi.main.routeTable.getRoute(proxy)
 	temp = ProxyMessage()
 	temp.ip = proxy_route.ip
 	temp.ttfb = proxy_route.ttfb
 	if VIVALDI_MESSAGES:
-            print "Proxy Message Encode: IP=",temp.ip,",TTFB=",temp.ttfb
-	str = pickle.dumps(temp)
+	    print "TTFB Proxy Message Encode: IP=",temp.ip,",TTFB=",temp.ttfb
+        str = pickle.dumps(temp)
 	return str
 
     def decodeProxy(self, data):
 	if VIVALDI_MESSAGES:
-            print "Proxy Message Decode: IP=",data.ip,",TTFB=",data.ttfb
-	if data.ip != MYIP:
-	    Vivaldi.main.routeTable.updateTTFB(data.ip,data.ttfb)
-	return "{}\t{}".format(data.ip,data.ttfb),'proxy'
+            print "TTFB Proxy Message Decode: IP=",data.ip,",TTFB=",data.ttfb
+	return (data.ip,data.ttfb),'ttfb'
 		    
+    def decodeProxyOne(self, data):
+        client = VivaldiNCClient()
+        if VIVALDI_USING_HEIGHT>0:
+            coor = HeightCoordinate(DIMENTION)
+            coor.setCoor(data.vec,data.height)
+        else:
+            coor = EuclideanCoordinate(DIMENTION)
+            coor.setCoor(data.vec)
+	if VIVALDI_MESSAGES:
+	    print "Vivaldi Proxy Message Decode IP=", data.ip,", vec", data.vec, ",height", data.height
+        client.set(data.ip,coor,data.error)
+        return client, 'proxies'
 
     def encodeGossip(self,host):
         list = []
+	# If using a proxy share the TTFB of the proxy with the others
 	if host not in Vivaldi.main.routeTable.getProxiesIPs():
 	    proxy = Vivaldi.main.routeTable.getProxy()
 	    if proxy:
 	        list.append(self.encodeProxy(proxy))
+	# If measuring in external procy coordinates share them
+	if PROXY_MODE:
+		list.extend(self.encodeProxies())
+	# Normal vivaldi gossip messages
         index=Vivaldi.main.myMananger.upload()
         for i in index:
             list.append(self.encodeOne(i))
@@ -106,11 +145,10 @@ class VivaldiMessegeManager():
         
     def decodeGossip(self,str):
         list = pickle.loads(str)
-        result = []
+	result = {'normal':[],'ttfb':[],'proxies':[]}
         for eachStr in list:
 	    decoded,typ = self.decodeOne(eachStr)
-	    if typ != 'proxy':
-                result.append(decoded)
+            result[typ].append(decoded)
         return result
 
     def encodeVivaldiString(self):

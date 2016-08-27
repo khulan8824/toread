@@ -19,7 +19,7 @@ reactor.listenTCP(GOSSIPPORT,GossipServer.GossipServerFactory())
 reactor.listenTCP(NCPORT,NCServer.NCServerFactory())
 
 #set algorithm
-if ALGORITHM == "Vivaldi":
+if ALGORITHM == "Vivaldi" and not ME_PROXY:
     reactor.callWhenRunning(Vivaldi.start)
 if ALGORITHM == "PHAROS":
     reactor.callWhenRunning(PHAROS.start)
