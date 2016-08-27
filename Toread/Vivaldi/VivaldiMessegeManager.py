@@ -96,7 +96,7 @@ class VivaldiMessegeManager():
 	        print "Vivaldi Proxy Message Encode IP=", temp.ip,", vec", temp.vec, ",height", temp.height
 	    str = pickle.dumps(temp)
 	    msgs.append(str)
-        return str
+        return msgs
 
     def encodeProxy(self, proxy):
         proxy_route = Vivaldi.main.routeTable.getRoute(proxy)
