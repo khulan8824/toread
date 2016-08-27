@@ -70,7 +70,7 @@ class Vivaldi():
         #print "ping neighbor ", self.neighborIP, " rtt: ",self.rtt
         if self.proxy_rtt<PINGTIMEOUT/PINGNUM and self.proxy_rtt>0:
 	    proxy_neighbor = self.proxiesManager.getNeighbor(self.proxy_ip)
-	    proxy_neighbor.updateRTT(self.RTT)
+	    proxy_neighbor.updateRTT(self.proxy_rtt)
 	    proxy_neighbor.client.update(self.myClient,proxy_neighbor.mpFilter()*1000)
         return
 
