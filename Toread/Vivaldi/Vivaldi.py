@@ -153,7 +153,7 @@ class Vivaldi():
 	proxy_errors = []
 	proxy_rtts = []
 	proxy_dists = []
-	for proxy in self.proxiesMananger.neighborList:
+	for proxy in self.proxiesManager.neighborList:
 	   dist = self.myClient.getCoor().getDistance(proxy.client.getCoor())
 	   if proxy.rtt:
 	      rtt = proxy.rtt[-1]
