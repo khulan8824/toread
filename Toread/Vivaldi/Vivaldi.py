@@ -47,7 +47,7 @@ class Vivaldi():
         self.round = 0
 	self.start_time = time.time()
 	self.elapsed = 0
-	print "round,elapsed,mrtt,mdist,mpe"
+	print "round,elapsed,mrtt,mdist,mpe,proxy_mrtt,proxy_mdist,proxy_mpe"
 	self.routeTable = rt.RoutingTable()
 	if PROXY_MODE:
 	    for ip in PROXIES:
@@ -132,7 +132,7 @@ class Vivaldi():
         return
 
     def calcMPE(self):
-	#Calculate Median prediction error
+	#Calculate Neighbours Median prediction error
 	errors = []
 	rtts = []
 	dists = []
@@ -150,7 +150,23 @@ class Vivaldi():
 	mpe = self.median(errors)
 	mrtt = self.median(rtts)
 	mdist = self.median(dists)
-	print("{},{},{},{},{}".format(self.round,self.elapsed, mrtt, mdist, mpe))
+	proxy_errors = []
+	proxy_rtts = []
+	proxy_dists = []
+	for proxy in self.proxiesMananger.neighborList:
+	   dist = self.myClient.getCoor().getDistance(proxy.client.getCoor())
+	   if proxy.rtt:
+	      rtt = proxy.rtt[-1]
+	      err = abs(dist-rtt*1000)/min((rtt*1000),dist)
+	      proxy_errors.append(err)
+	      proxy_dists.append(dist)
+	      proxy_rtts.append(rtt*1000)
+	   else:
+	      continue
+	proxy_mpe = self.median(proxy_errors)
+	proxy_mrtt = self.median(proxy_rtts)
+	proxy_mdist = self.median(proxy_dists)
+	print("{},{},{},{},{},{},{},{}".format(self.round,self.elapsed, mrtt, mdist, mpe, proxy_mrtt, proxy_mdist, proxy_mpe))
 	self.routeTable.store()
 	
 	
