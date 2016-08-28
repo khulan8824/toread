@@ -1,5 +1,5 @@
 from twisted.internet import protocol
-from tiwsted.protocols.base import LineReceiver
+from twisted.protocols.base import LineReceiver
 import NCResponse
 
 #class NCServerProtocol(protocol.Protocol):
