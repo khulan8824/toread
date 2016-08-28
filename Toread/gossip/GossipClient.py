@@ -11,7 +11,7 @@ class GossipData():
     
 
 #class GossipClientProtocol(protocol.Protocol):
-class GossipClientProtocol(NetStringReceiver):
+class GossipClientProtocol(NetstringReceiver):
 
     def __init__(self):
         pass
