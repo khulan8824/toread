@@ -60,12 +60,12 @@ class VivaldiMessegeManager():
 	if VIVALDI_MESSAGES:
 	   print "Messege Encode: IP=",temp.ip,",vec=",temp.vec,",height=",temp.height
         #str = jsonpickle.encode(temp)
-        str = temp
-	return str
+        mystr = temp
+	return mystr
     
-    def decodeOne(self,str):
-        #data = jsonpickle.decode(str)
-	data = str
+    def decodeOne(self,mystr):
+        #data = jsonpickle.decode(mystr)
+	data = mystr
 	if isinstance(data,ProxyMessage):
 		msg,typ = self.decodeProxy(data)
 		return msg, typ
@@ -97,8 +97,8 @@ class VivaldiMessegeManager():
 	    if VIVALDI_MESSAGES:
 	        print "Vivaldi Proxy Message Encode IP=", temp.ip,", vec", temp.vec, ",height", temp.height
 	    #str = jsonpickle.encode(temp)
-	    str = temp
-	    msgs.append(str)
+	    mystr = temp
+	    msgs.append(mystr)
         return msgs
 
     def encodeProxy(self, proxy):
@@ -109,8 +109,8 @@ class VivaldiMessegeManager():
 	if VIVALDI_MESSAGES:
 	    print "TTFB Proxy Message Encode: IP=",temp.ip,",TTFB=",temp.ttfb
         #str = jsonpickle.encode(temp)
-	str = temp
-	return str
+	mystr = temp
+	return mystr
 
     def decodeProxy(self, data):
 	if VIVALDI_MESSAGES:
@@ -131,26 +131,26 @@ class VivaldiMessegeManager():
         return client, 'proxies'
 
     def encodeGossip(self,host):
-        list = []
+        mylist = []
 	# If using a proxy share the TTFB of the proxy with the others
 	if host not in Vivaldi.main.routeTable.getProxiesIPs():
 	    proxy = Vivaldi.main.routeTable.getProxy()
 	    if proxy:
-	        list.append(self.encodeProxy(proxy))
+	        mylist.append(self.encodeProxy(proxy))
 	# If measuring in external procy coordinates share them
 	if PROXY_MODE:
-		list.extend(self.encodeProxies())
+		mylist.extend(self.encodeProxies())
 	# Normal vivaldi gossip messages
         index=Vivaldi.main.myMananger.upload()
         for i in index:
-            list.append(self.encodeOne(i))
-        str = jsonpickle.encode(list)
-        return str
+            mylist.append(self.encodeOne(i))
+        mystr = jsonpickle.encode(mylist)
+        return mystr
         
-    def decodeGossip(self,str):
-        list = jsonpickle.decode(str)
+    def decodeGossip(self,mystr):
+        mylist = jsonpickle.decode(mystr)
 	result = {'normal':[],'ttfb':[],'proxies':[]}
-        for eachStr in list:
+        for eachStr in mylist:
 	    decoded,typ = self.decodeOne(eachStr)
             result[typ].append(decoded)
         return result
