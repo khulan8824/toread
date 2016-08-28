@@ -1,11 +1,11 @@
 from twisted.internet import protocol
-from twisted.protocols.base import LineReceiver
+from twisted.protocols.basic import LineReceiver
 import NCResponse
 
 #class NCServerProtocol(protocol.Protocol):
 class NCServerProtocol(LineReceiver):
     #def dataReceived(self,recvdata):
-    def LineReceived(self,recvdata):
+    def lineReceived(self,recvdata):
         senddata = NCResponse.getResponseData(self.client,recvdata)
         self.transport.write(senddata)
         
