@@ -1,8 +1,10 @@
 from twisted.internet import protocol
+from twisted.protocols.basic import LineReceiver
 import GossipResponse
 
-class GossipServerProtocol(protocol.Protocol):
-    def dataReceived(self,recvdata):
+#class GossipServerProtocol(protocol.Protocol):
+class GossipServerProtocol(LineReceiver):
+    def lineReceived(self,recvdata):
         senddata = GossipResponse.getResponseData(self.client,recvdata)
         self.transport.write(senddata)
         
