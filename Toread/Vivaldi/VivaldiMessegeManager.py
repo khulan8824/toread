@@ -59,13 +59,15 @@ class VivaldiMessegeManager():
             temp.error = Vivaldi.main.myMananger.neighborList[index].getError()
 	if VIVALDI_MESSAGES:
 	   print "Messege Encode: IP=",temp.ip,",vec=",temp.vec,",height=",temp.height
-        #str = jsonpickle.encode(temp)
-        mystr = temp
+        #mystr = jsonpickle.encode(temp)
+        #mystr = temp
+	mystr = pickle.dumps(temp)
 	return mystr
     
     def decodeOne(self,mystr):
         #data = jsonpickle.decode(mystr)
-	data = mystr
+	data = pickl.loads(mystr)
+	#data = mystr
 	if isinstance(data,ProxyMessage):
 		msg,typ = self.decodeProxy(data)
 		return msg, typ
@@ -97,7 +99,8 @@ class VivaldiMessegeManager():
 	    if VIVALDI_MESSAGES:
 	        print "Vivaldi Proxy Message Encode IP=", temp.ip,", vec", temp.vec, ",height", temp.height
 	    #str = jsonpickle.encode(temp)
-	    mystr = temp
+	    #mystr = temp
+	    mystr = pickle.dumps(temp)
 	    msgs.append(mystr)
         return msgs
 
@@ -109,7 +112,8 @@ class VivaldiMessegeManager():
 	if VIVALDI_MESSAGES:
 	    print "TTFB Proxy Message Encode: IP=",temp.ip,",TTFB=",temp.ttfb
         #str = jsonpickle.encode(temp)
-	mystr = temp
+	#mystr = temp
+	mystr = pickle.dumps(temp)
 	return mystr
 
     def decodeProxy(self, data):
