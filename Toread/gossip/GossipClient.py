@@ -17,12 +17,13 @@ class GossipClientProtocol(IntNStringReceiver):
         pass
         
     #def sendData(self):
-    def sendString(self):
+    #def sendString(self):
         #self.transport.write(self.factory.recvbuff.send)
-        self.sendString(self.factory.recvbuff.send)
+    #    self.sendString(self.factory.recvbuff.send)
     
     def connectionMade(self):
-        self.sendData()
+        #self.sendData()
+        self.sendString(self.factory.recvbuff.send)
         
     def dataReceived(self, data):
         self.factory.recvbuff.recv=data
