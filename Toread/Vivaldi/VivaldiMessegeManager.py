@@ -1,4 +1,4 @@
-import pickle
+import jsonpickle
 import Vivaldi
 from coor.HeightCoordinate import *
 from VivaldiNCClient import *
@@ -59,11 +59,11 @@ class VivaldiMessegeManager():
             temp.error = Vivaldi.main.myMananger.neighborList[index].getError()
 	if VIVALDI_MESSAGES:
 	   print "Messege Encode: IP=",temp.ip,",vec=",temp.vec,",height=",temp.height
-        str = pickle.dumps(temp)
+        str = jsonpickle.encode(temp)
         return str
     
     def decodeOne(self,str):
-        data = pickle.loads(str)
+        data = jsonpickle.decode(str)
 	if isinstance(data,ProxyMessage):
 		msg,typ = self.decodeProxy(data)
 		return msg, typ
@@ -94,7 +94,7 @@ class VivaldiMessegeManager():
 	    temp.error = proxy.getError()
 	    if VIVALDI_MESSAGES:
 	        print "Vivaldi Proxy Message Encode IP=", temp.ip,", vec", temp.vec, ",height", temp.height
-	    str = pickle.dumps(temp)
+	    str = jsonpickle.encode(temp)
 	    msgs.append(str)
         return msgs
 
@@ -105,7 +105,7 @@ class VivaldiMessegeManager():
 	temp.ttfb = proxy_route.ttfb
 	if VIVALDI_MESSAGES:
 	    print "TTFB Proxy Message Encode: IP=",temp.ip,",TTFB=",temp.ttfb
-        str = pickle.dumps(temp)
+        str = jsonpickle.encode(temp)
 	return str
 
     def decodeProxy(self, data):
@@ -140,11 +140,11 @@ class VivaldiMessegeManager():
         index=Vivaldi.main.myMananger.upload()
         for i in index:
             list.append(self.encodeOne(i))
-        str = pickle.dumps(list)
+        str = jsonpickle.encode(list)
         return str
         
     def decodeGossip(self,str):
-        list = pickle.loads(str)
+        list = jsonpickle.decode(str)
 	result = {'normal':[],'ttfb':[],'proxies':[]}
         for eachStr in list:
 	    decoded,typ = self.decodeOne(eachStr)
