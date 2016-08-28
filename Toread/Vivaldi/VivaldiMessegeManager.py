@@ -67,7 +67,7 @@ class VivaldiMessegeManager():
     
     def decodeOne(self,mystr):
         #data = jsonpickle.decode(mystr)
-	data = pickl.loads(mystr)
+	data = pickle.loads(mystr)
 	#data = mystr
 	if isinstance(data,ProxyMessage):
 		msg,typ = self.decodeProxy(data)
