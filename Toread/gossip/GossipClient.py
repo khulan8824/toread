@@ -25,7 +25,8 @@ class GossipClientProtocol(NetstringReceiver):
         #self.sendData()
         self.sendString(self.factory.recvbuff.send)
         
-    def dataReceived(self, data):
+    #def dataReceived(self, data):
+    def stringReceived(self, data):
         self.factory.recvbuff.recv=data
         self.transport.loseConnection()
        
