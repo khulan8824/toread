@@ -79,7 +79,7 @@ class RoutingTable(object):
 		if self.proxy:
 			if os.path.isfile(FILE):
 				values = []
-				with simpleflock.SimpleFlock(FILE):
+				with simpleflock.SimpleFlock("/tmp/foolock"):
 					with open(FILE,'rb') as infile:
 						values = infile.readline().strip().split(',')
 				ip = values[0]
@@ -104,7 +104,7 @@ class RoutingTable(object):
 			self.chooseAsProxy(min_route.ip)
 
 	def store(self):
-		with simpleflock.SimpleFlock(self.outfile):
+		with simpleflock.SimpleFlock("/tmp/foolock1"):
 			with open(self.outfile,'wb') as f:
 				f.write("ip\test_rtt\tTTFB\tTotal\tproxy\tmyProxy\n")
 				for r in sorted(self.routes.values(),key=operator.attrgetter('total')):
