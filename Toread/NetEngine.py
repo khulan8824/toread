@@ -21,7 +21,9 @@ reactor.listenTCP(NCPORT,NCServer.NCServerFactory())
 
 #set algorithm
 if ALGORITHM == "Vivaldi" and not ME_PROXY:
-    os.remove('vivaldi_ttfb')
+    if os.path.isfile('vivaldi_ttfb'):
+        os.remove('vivaldi_ttfb')
+    if os.path.isfile('proxy_route_table'):
     os.remove('proxy_route_table')
     reactor.callWhenRunning(Vivaldi.start)
 if ALGORITHM == "PHAROS":
