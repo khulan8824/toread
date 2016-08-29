@@ -106,7 +106,7 @@ class VivaldiMessegeManager():
         return msgs
 
     def encodeProxy(self, proxy):
-        proxy_route = Vivaldi.main.routeTable.getRoute(proxy)
+        proxy_route = Vivaldi.main.proxyRouteTable.getRoute(proxy)
 	temp = ProxyMessage()
 	temp.ip = proxy_route.ip
 	temp.ttfb = proxy_route.ttfb
