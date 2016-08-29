@@ -29,6 +29,7 @@ class VivaldiProxyMessage():
 class ProxyMessage():
 	ip = ""
 	ttfb = 0
+	time_from_last_ttfb = 0
 
 class VivaldiMessegeManager():
     
@@ -109,9 +110,11 @@ class VivaldiMessegeManager():
         proxy_route = Vivaldi.main.proxyRouteTable.getRoute(proxy)
 	temp = ProxyMessage()
 	temp.ip = proxy_route.ip
-	temp.ttfb = proxy_route.ttfb
+	ttfb, time_from_last_ttfb = proxy_route.getTTFBnTime()
+	temp.ttfb = ttfb
+	temp.time_from_last_ttfb =  time_from_last_ttfb
 	if VIVALDI_MESSAGES:
-	    print "TTFB Proxy Message Encode: IP=",temp.ip,",TTFB=",temp.ttfb
+	    print "TTFB Proxy Message Encode: IP=",temp.ip,",TTFB=",temp.ttfb, ", Time from last TTFB", temp.time_from_last_ttfb
         #str = jsonpickle.encode(temp)
 	#mystr = temp
 	mystr = pickle.dumps(temp)
@@ -119,8 +122,9 @@ class VivaldiMessegeManager():
 
     def decodeProxy(self, data):
 	if VIVALDI_MESSAGES:
-            print "TTFB Proxy Message Decode: IP=",data.ip,",TTFB=",data.ttfb
-	return (data.ip,data.ttfb),'ttfb'
+            print "TTFB Proxy Message Decode: IP=",data.ip,",TTFB=",data.ttfb,", Time from last TTFB", data.time_from_last_ttfb
+
+	return (data.ip,data.ttfb, data.time_from_last_ttfb),'ttfb'
 		    
     def decodeProxyOne(self, data):
         client = VivaldiNCClient()

@@ -86,9 +86,9 @@ class Vivaldi():
         gossipReply = self.messegeManager.decodeGossip(gossipData.recv)
 	# If the neighbour is using a proxy he sends me his ttfb
 	if gossipReply['ttfb']:
-	    for (ip,ttfb) in gossipReply['ttfb']:
+	    for (ip,ttfb,time_from_last_ttfb) in gossipReply['ttfb']:
 		if ip != MYIP:
-	            self.proxyRouteTable.updateTTFB(ip,ttfb)
+	            self.proxyRouteTable.updateTTFB(ip,ttfb, time_from_last_ttfb)
 	# If the are proxy coords on the neighbour with smaller error then
 	# i replace mine with those
         if gossipReply['proxies']:

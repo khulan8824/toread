@@ -1,6 +1,7 @@
 from config import *
 import operator
 import os
+from time import time
 import simpleflock
 
 FILE = "vivaldi_ttfb"
@@ -13,6 +14,7 @@ class Route(object):
 		self.proxy = proxy
 		self.myProxy = myProxy
 		self.total = self.distance + self.ttfb
+		self.last_ttfb_time = time()
 	
 	def updateDistance(self,distance):
 		self.distance =float(distance)/1000.0
@@ -21,12 +23,18 @@ class Route(object):
 	def getDistance(self):
 		return self.distance
 	
-	def updateTTFB(self,ttfb):
-		self.ttfb = float(ttfb)
-		self.total = self.distance + self.ttfb
+	def updateTTFB(self,ttfb, time_from_last_ttfb):
+		current_time = time()
+		if (current_time-self.last_ttfb_time) > time_from_last_ttfb : 
+			self.ttfb = float(ttfb)
+			self.total = self.distance + self.ttfb
+			self.last_ttfb_time = current_time - time_from_last_ttfb
 	
 	def getTTFB(self):
 		return self.ttfb
+
+	def getTTFBnTime(self):
+		return (time()-self.last_tttfb_time), self.ttfb
 	
 	def makeMyProxy(self):
 		self.myProxy = True
@@ -72,8 +80,8 @@ class RoutingTable(object):
 		if DEBUG:
 			print "Chosen {} as proxy".format(ip)
 	
-	def updateTTFB(self,ip,ttfb):
-		self.routes[ip].updateTTFB(ttfb)
+	def updateTTFB(self,ip,ttfb, time_from_last_ttfb):
+		self.routes[ip].updateTTFB(ttfb, time_from_last_ttfb)
 	
 	def readTTFB(self):
 		if self.proxy:
@@ -85,7 +93,7 @@ class RoutingTable(object):
 				ip = values[0]
 				ttfb = values[1]
 				if self.proxy == ip:
-					self.updateTTFB(self.proxy,ttfb)
+					self.updateTTFB(self.proxy,ttfb,0)
 
 	def getProxy(self):
 		return self.proxy
