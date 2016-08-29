@@ -85,7 +85,7 @@ class RoutingTable(object):
 				ip = values[0]
 				ttfb = values[1]
 				if self.proxy == ip:
-					self.updateTTFB(ttfb)
+					self.updateTTFB(self.proxy,ttfb)
 
 	def getProxy(self):
 		return self.proxy
