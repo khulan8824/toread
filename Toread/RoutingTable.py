@@ -40,10 +40,10 @@ class Route(object):
 
 		
 class RoutingTable(object):
-	def __init__(self, outfile='vivalid_route_table'):
+	def __init__(self, outfile='proxy_route_table'):
 		self.routes = {}
 		self.proxy = None
-		self.outfile = outefile
+		self.outfile = outfile
 	
 	def getRoute(self,ip):
 		if ip in self.routes:
