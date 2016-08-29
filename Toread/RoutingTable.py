@@ -40,9 +40,10 @@ class Route(object):
 
 		
 class RoutingTable(object):
-	def __init__(self):
+	def __init__(self, outfile='vivalid_route_table'):
 		self.routes = {}
 		self.proxy = None
+		self.outfile = outefile
 	
 	def getRoute(self,ip):
 		if ip in self.routes:
@@ -88,8 +89,8 @@ class RoutingTable(object):
 			self.chooseAsProxy(min_route.ip)
 
 	def store(self):
-		with open(VIVALDI_ROUTE_TABLE,'wb') as f:
-			f.write("ip\test_rtt\TTFB\tTotal\tproxy\ttotal\tmyProxy\n")
+		with open(outfile,'wb') as f:
+			f.write("ip\test_rtt\tTTFB\tTotal\tproxy\tmyProxy\n")
 			for r in sorted(self.routes.values(),key=operator.attrgetter('total')):
 				f.write(r.__str__())
 				#print r.__str__()

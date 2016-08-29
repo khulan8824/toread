@@ -48,7 +48,7 @@ class Vivaldi():
 	self.start_time = time.time()
 	self.elapsed = 0
 	print "round,elapsed,mrtt,mdist,mpe,proxy_mrtt,proxy_mdist,proxy_mpe"
-	self.routeTable = rt.RoutingTable()
+	self.proxyRouteTable = rt.RoutingTable('proxy_route_table')
 	if PROXY_MODE:
 	    for ip in PROXIES:
 	        self.proxiesManager.addIP(ip)
@@ -72,6 +72,8 @@ class Vivaldi():
 	    proxy_neighbor = self.proxiesManager.getNeighbor(self.proxy_ip)
 	    proxy_neighbor.updateRTT(self.proxy_rtt)
 	    proxy_neighbor.client.update(self.myClient,proxy_neighbor.mpFilter()*1000)
+	    distance = self.myClient.getCoor().getDistance(proxy_neighbor.client.getCoor())
+	    self.proxyRouteTable.addRoute(self.proxy_ip,distance)
         return
 
     def GossipRecieved(self,gossipData):
@@ -83,7 +85,7 @@ class Vivaldi():
 	if gossipReply['ttfb']:
 	    for (ip,ttfb) in gossipReply['ttfb']:
 		if ip != MYIP:
-	            self.routeTable.updateTTFB(ip,ttfb)
+	            self.proxyRouteTable.updateTTFB(ip,ttfb)
 	# If the are proxy coords on the neighbour with smaller error then
 	# i replace mine with those
         if gossipReply['proxies']:
@@ -95,7 +97,8 @@ class Vivaldi():
                 self.myMananger.addClient(eachClient)
         '''update neighbors'''
 	if not ME_PROXY:
-	    self.routeTable.chooseBestProxy()
+	    self.proxyRouteTable.chooseBestProxy()
+	    self.proxyRouteTable.store()
         return
 
     def NCRecieved(self,ncData):
@@ -144,7 +147,6 @@ class Vivaldi():
 	      errors.append(err)
 	      dists.append(dist)
 	      rtts.append(rtt*1000)
-	      self.routeTable.addRoute(neigh.client.ip,dist)
 	   else:
 	      continue
 	mpe = self.median(errors)
@@ -167,7 +169,6 @@ class Vivaldi():
 	proxy_mrtt = self.median(proxy_rtts)
 	proxy_mdist = self.median(proxy_dists)
 	print("{},{},{},{},{},{},{},{}".format(self.round,self.elapsed, mrtt, mdist, mpe, proxy_mrtt, proxy_mdist, proxy_mpe))
-	self.routeTable.store()
 	
 	
     def median(self, lst):
