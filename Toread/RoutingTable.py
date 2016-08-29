@@ -34,7 +34,7 @@ class Route(object):
 		return self.ttfb
 
 	def getTTFBnTime(self):
-		return (time()-self.last_ttfb_time), self.ttfb
+		return self.ttfb, (time()-self.last_ttfb_time)
 	
 	def makeMyProxy(self):
 		self.myProxy = True
