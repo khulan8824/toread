@@ -138,8 +138,8 @@ class VivaldiMessegeManager():
     def encodeGossip(self,host):
         mylist = []
 	# If using a proxy share the TTFB of the proxy with the others
-	if host not in Vivaldi.main.routeTable.getProxiesIPs():
-	    proxy = Vivaldi.main.routeTable.getProxy()
+	if host not in Vivaldi.main.proxyRouteTable.getProxiesIPs():
+	    proxy = Vivaldi.main.proxyRouteTable.getProxy()
 	    if proxy:
 	        mylist.append(self.encodeProxy(proxy))
 	# If measuring in external procy coordinates share them
