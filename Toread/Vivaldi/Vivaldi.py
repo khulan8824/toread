@@ -73,7 +73,10 @@ class Vivaldi():
 	    proxy_neighbor.updateRTT(self.proxy_rtt)
 	    proxy_neighbor.client.update(self.myClient,proxy_neighbor.mpFilter()*1000)
 	    distance = self.myClient.getCoor().getDistance(proxy_neighbor.client.getCoor())
-	    self.proxyRouteTable.addRoute(self.proxy_ip,distance)
+	    if self.proxy_ip not in self.proxyRouteTable.getProxiesIPs():
+	    	self.proxyRouteTable.addRoute(self.proxy_ip,distance)
+	    else:
+		self.proxyRouteTable.updateDistance(self.proxy_ip,distance)
         return
 
     def GossipRecieved(self,gossipData):
