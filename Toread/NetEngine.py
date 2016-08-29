@@ -8,6 +8,7 @@ from nc import NCServer
 from config import *
 from Vivaldi import Vivaldi #import Vivaldi module
 from Pharos import PHAROS
+import os
 
 if LOG_IN_DETAIL>0:
     log.startLogging(sys.stdout)
@@ -20,6 +21,8 @@ reactor.listenTCP(NCPORT,NCServer.NCServerFactory())
 
 #set algorithm
 if ALGORITHM == "Vivaldi" and not ME_PROXY:
+    os.remove('vivaldi_ttfb')
+    os.remove('proxy_route_table')
     reactor.callWhenRunning(Vivaldi.start)
 if ALGORITHM == "PHAROS":
     reactor.callWhenRunning(PHAROS.start)
