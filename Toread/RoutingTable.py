@@ -89,7 +89,7 @@ class RoutingTable(object):
 			self.chooseAsProxy(min_route.ip)
 
 	def store(self):
-		with open(outfile,'wb') as f:
+		with open(self.outfile,'wb') as f:
 			f.write("ip\test_rtt\tTTFB\tTotal\tproxy\tmyProxy\n")
 			for r in sorted(self.routes.values(),key=operator.attrgetter('total')):
 				f.write(r.__str__())
