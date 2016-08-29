@@ -1,6 +1,9 @@
 from config import *
 import operator
+import os
+import simpleflock
 
+FILE = "vivaldi_ttfb"
 
 class Route(object):
 	def __init__(self,ip,distance,proxy=False, ttfb=0, myProxy=False):
@@ -71,6 +74,18 @@ class RoutingTable(object):
 	
 	def updateTTFB(self,ip,ttfb):
 		self.routes[ip].updateTTFB(ttfb)
+	
+	def readTTFB(self):
+		if self.proxy:
+			if os.path.isfile(FILE):
+				values = []
+				with simpleflock.SimpleFlock(FILE):
+					with open(FILE,'rb') as infile:
+						values = infile.readline().strip().split(',')
+				ip = values[0]
+				ttfb = values[1]
+				if self.proxy == ip:
+					self.updateTTFB(ttfb)
 
 	def getProxy(self):
 		return self.proxy
@@ -89,9 +104,10 @@ class RoutingTable(object):
 			self.chooseAsProxy(min_route.ip)
 
 	def store(self):
-		with open(self.outfile,'wb') as f:
-			f.write("ip\test_rtt\tTTFB\tTotal\tproxy\tmyProxy\n")
-			for r in sorted(self.routes.values(),key=operator.attrgetter('total')):
-				f.write(r.__str__())
-				#print r.__str__()
+		with simpleflock.SimpleFlock(self.outfile):
+			with open(self.outfile,'wb') as f:
+				f.write("ip\test_rtt\tTTFB\tTotal\tproxy\tmyProxy\n")
+				for r in sorted(self.routes.values(),key=operator.attrgetter('total')):
+					f.write(r.__str__())
+					#print r.__str__()
 	

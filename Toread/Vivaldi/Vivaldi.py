@@ -97,6 +97,8 @@ class Vivaldi():
                 self.myMananger.addClient(eachClient)
         '''update neighbors'''
 	if not ME_PROXY:
+	    # Update my proxies TTFB
+	    self.proxyRouteTable.readTTFB()
 	    self.proxyRouteTable.chooseBestProxy()
 	    self.proxyRouteTable.store()
         return
