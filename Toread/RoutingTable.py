@@ -81,7 +81,8 @@ class RoutingTable(object):
 			print "Chosen {} as proxy".format(ip)
 	
 	def updateTTFB(self,ip,ttfb, time_from_last_ttfb):
-		self.routes[ip].updateTTFB(ttfb, time_from_last_ttfb)
+		if ip in self.routes:
+			self.routes[ip].updateTTFB(ttfb, time_from_last_ttfb)
 	
 	def readTTFB(self):
 		if self.proxy:
