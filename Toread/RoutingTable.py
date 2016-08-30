@@ -121,7 +121,7 @@ class RoutingTable(object):
 			last_backoff = route.getLastBackoff()
 			t1 = current_time-route.last_ttfb_time
 			t2 = current_time - last_backoff
-			if t1>neihgbors_number*LOOPTIME and t2 > neighbors_number*LOOPTIME:
+			if t1>neihgbors_number*LOOPTIME and t2 > neihgbors_number*LOOPTIME:
 				ttfb = route.getTTFB()
 				route.setTTFB(ttfb/2)
 				route.setLastBackoff(current_time)
