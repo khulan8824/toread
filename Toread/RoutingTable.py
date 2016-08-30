@@ -33,6 +33,9 @@ class Route(object):
 	def getTTFB(self):
 		return self.ttfb
 
+	def setTTFB(self,ttfb):
+		self.ttfb = ttfb
+
 	def getTTFBnTime(self):
 		return self.ttfb, (time()-self.last_ttfb_time)
 	
@@ -103,6 +106,14 @@ class RoutingTable(object):
 		routes = self.routes.values()
 		proxy_ips = [r.ip for r in routes if r.proxy]
 		return proxy_ips
+
+	def checkTTFBUpdate(self, neihgbors_number):
+		current_time = time()
+		for route in self.routes.values():
+			if (current_time-route.last_ttfb_time)>neihgbors_number*LOOP_TIME:
+				ttfb = route.getTTFB()
+				route.setTTFB(ttfb/2)
+
 
 
 	def chooseBestProxy(self):
