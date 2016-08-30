@@ -102,7 +102,7 @@ class Vivaldi():
 	if not ME_PROXY:
 	    # Update my proxies TTFB
 	    self.proxyRouteTable.readTTFB()
-	    self.proxyRouteTable.checkTTFBUpdate(myMananger.getLength())
+	    self.proxyRouteTable.checkTTFBUpdate(self.myMananger.getLength())
 	    self.proxyRouteTable.chooseBestProxy()
 	    self.proxyRouteTable.store()
         return
