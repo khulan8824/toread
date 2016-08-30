@@ -15,6 +15,7 @@ class Route(object):
 		self.myProxy = myProxy
 		self.total = self.distance + self.ttfb
 		self.last_ttfb_time = time()
+		self.last_ttfb_backoff = time()
 	
 	def updateDistance(self,distance):
 		self.distance =float(distance)/1000.0
@@ -22,6 +23,13 @@ class Route(object):
 	
 	def getDistance(self):
 		return self.distance
+
+	def setLastBackoff(self,last_backoff):
+		self.last_ttfb_backoff = last_backoff
+
+
+	def getLastBackoff(self):
+		return self.last_ttfb_backoff
 	
 	def updateTTFB(self,ttfb, time_from_last_ttfb):
 		current_time = time()
@@ -110,9 +118,13 @@ class RoutingTable(object):
 	def checkTTFBUpdate(self, neihgbors_number):
 		current_time = time()
 		for route in self.routes.values():
-			if (current_time-route.last_ttfb_time)>neihgbors_number*LOOPTIME:
+			last_backoff = route.getLastBackoff()
+			t1 = current_time-route.last_ttfb_time
+			t2 = current_time - last_backoff
+			if t1>neihgbors_number*LOOPTIME and t2 > neighbors_number*LOOPTIME:
 				ttfb = route.getTTFB()
 				route.setTTFB(ttfb/2)
+				route.setLastBackoff(current_time)
 
 
 
