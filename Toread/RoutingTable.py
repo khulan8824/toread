@@ -110,7 +110,7 @@ class RoutingTable(object):
 	def checkTTFBUpdate(self, neihgbors_number):
 		current_time = time()
 		for route in self.routes.values():
-			if (current_time-route.last_ttfb_time)>neihgbors_number*LOOP_TIME:
+			if (current_time-route.last_ttfb_time)>neihgbors_number*LOOPTIME:
 				ttfb = route.getTTFB()
 				route.setTTFB(ttfb/2)
 
