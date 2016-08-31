@@ -146,7 +146,7 @@ class RoutingTable(object):
 			cmd = queryProxy(proxyToQuery)
 		# If many nodes choose randomly
 		elif len(to_query) > 1:
-			proxyToQuery = random.sample(proxies,1)
+			proxyToQuery = random.sample(proxies,1)[0]
 			cmd =queryProxy(proxyToQuery)
 		else:
 			return
