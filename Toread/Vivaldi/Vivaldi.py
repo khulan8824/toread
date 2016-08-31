@@ -102,7 +102,6 @@ class Vivaldi():
 	if not ME_PROXY:
 	    # Update my proxies TTFB
 	    self.proxyRouteTable.readTTFB()
-	    self.proxyRouteTable.checkTTFBUpdate(self.myMananger.getLength())
 	    self.proxyRouteTable.chooseBestProxy()
 	    self.proxyRouteTable.store()
         return
@@ -209,6 +208,7 @@ class Vivaldi():
 	if not ME_PROXY:
 	    proxy_ip = self.proxiesManager.selectIP()
 	    if proxy_ip:
+	        self.proxyRouteTable.checkTTFBUpdate()
 	        self.proxy_ip = proxy_ip
 		proxyPingDefer = PingClientIF.ping(PINGMETHOD,proxy_ip,PINGPORT,PINGTIMEOUT,PINGNUM,PINGBYTES)
 		proxyPingDefer.addCallback(self.proxyPingFinish)

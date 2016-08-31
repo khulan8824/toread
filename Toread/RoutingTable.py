@@ -1,8 +1,11 @@
 from config import *
+from queryProxy import queryProxy
 import operator
 import os
-from time import time
+from time import time, sleep
 import simpleflock
+import random
+
 
 FILE = "vivaldi_ttfb"
 
@@ -15,7 +18,7 @@ class Route(object):
 		self.myProxy = myProxy
 		self.total = self.distance + self.ttfb
 		self.last_ttfb_time = time()
-		self.last_ttfb_backoff = time()
+		self.command_pending = None
 	
 	def updateDistance(self,distance):
 		self.distance =float(distance)/1000.0
@@ -24,12 +27,11 @@ class Route(object):
 	def getDistance(self):
 		return self.distance
 
-	def setLastBackoff(self,last_backoff):
-		self.last_ttfb_backoff = last_backoff
+	def getPendingCommand(self):
+		return self.command_pending
 
-
-	def getLastBackoff(self):
-		return self.last_ttfb_backoff
+	def setPendingCommand(self, command_pending):
+		self.command_pending = command_pending
 	
 	def updateTTFB(self,ttfb, time_from_last_ttfb):
 		current_time = time()
@@ -115,17 +117,47 @@ class RoutingTable(object):
 		proxy_ips = [r.ip for r in routes if r.proxy]
 		return proxy_ips
 
-	def checkTTFBUpdate(self, neihgbors_number):
+	def checkTTFBUpdate(self):
+		proxies = self.routes.keys()
+		to_query = []
 		current_time = time()
-		for route in self.routes.values():
-			last_backoff = route.getLastBackoff()
-			t1 = current_time-route.last_ttfb_time
-			t2 = current_time - last_backoff
-			if t1>(neihgbors_number+1)*LOOPTIME and t2 > (neihgbors_number+1)*LOOPTIME:
-				ttfb = route.getTTFB()
-				route.setTTFB(ttfb/2)
-				route.setLastBackoff(current_time)
-
+		if self.proxy:
+			proxies.remove(self.proxy)
+		# Choose random proxy
+		for proxy in proxies:
+			route = self.routes[proxy]
+			# If a command is pending from previous round
+			command_pending = route.getPendingCommand()
+			if command_pending:
+				code = command_pending.poll()
+				if code is not None:
+					out, err = command_pending.communicate()
+					self.updateTTFB(proxy,out,0)
+					route.setPendingCommand(None)
+				# No need for else, if no results check next time
+				continue
+			# If time from last known measurement higher than threshold
+			if (current_time-route.last_ttfb_time) > (PROXY_RECOVER_TIME+route.distance*1000):
+				to_query.append(proxy)
+		cmd = None
+		proxyToQuery = None
+		if len(to_query) == 1:
+			proxyToQuery = to_query[0]
+			cmd = queryProxy(proxyToQuery)
+		# If many nodes choose randomly
+		elif len(to_query) > 1:
+			proxyToQuery = random.sample(proxies,1)
+			cmd =queryProxy(proxyToQuery)
+		else:
+			return
+		
+		sleep(1)
+		code = cmd.poll()
+		if code is not None:
+			out, err = command.communicate()
+			self.updateTTFB(proxyToQuery,out,0)
+		else:
+			route.setPendingCommand(cmd)
 
 
 	def chooseBestProxy(self):
