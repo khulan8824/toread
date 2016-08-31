@@ -7,6 +7,6 @@ def get_cmd(proxy):
         return cmd
 
 def queryProxy(proxy):
-	command = Popen(shlex.split(get_cmd2(PROXY)),stdout=PIPE, stderr=PIPE)
+	command = Popen(shlex.split(get_cmd(proxy)),stdout=PIPE, stderr=PIPE)
 	return command
 
