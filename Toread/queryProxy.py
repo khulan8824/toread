@@ -3,8 +3,7 @@ import shlex
 
 
 def get_cmd(proxy):
-        cmd='curl -x '+proxy+':3128 -U '+USER+':\"'+PASS+'\" -m 180 -w %{time_starttransfer} www.google.com -o /dev/nul
-l -s'
+        cmd='curl -x '+proxy+':3128 -U '+USER+':\"'+PASS+'\" -m 180 -w %{time_starttransfer} www.google.com -o /dev/null -s'
         return cmd
 
 def queryProxy(proxy):
