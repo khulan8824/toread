@@ -167,7 +167,7 @@ class RoutingTable(object):
 			min_route = min(proxy_routes,key=operator.attrgetter('total'))
 			if self.proxy:
 				#Change proxy only if difference with current route more than 200 ms
-				if abs(min_route.total - self.routes[self.proxy].total) < 200:
+				if abs(min_route.total - self.routes[self.proxy].total) < CHANGE_PROXY_THRESHOLD:
 					return
 			self.chooseAsProxy(min_route.ip)
 

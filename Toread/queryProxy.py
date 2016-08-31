@@ -6,6 +6,7 @@ import random
 
 USER = 'david.pinilla'
 PASS = r'|Jn 5DJ\\7inbNniK|m@^ja&>C'
+URL = "www.google.com"
 
 def get_cmd(proxy):
 	hash1 = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(50))
