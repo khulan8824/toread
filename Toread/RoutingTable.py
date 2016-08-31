@@ -154,7 +154,7 @@ class RoutingTable(object):
 		sleep(1)
 		code = cmd.poll()
 		if code is not None:
-			out, err = command.communicate()
+			out, err = cmd.communicate()
 			self.updateTTFB(proxyToQuery,out,0)
 		else:
 			route.setPendingCommand(cmd)
