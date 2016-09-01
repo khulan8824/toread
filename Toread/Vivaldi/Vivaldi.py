@@ -107,13 +107,13 @@ class Vivaldi():
 	neigh = self.myMananger.getNeighbor(MONITORED_CLIENT)
 	if neigh:
 	    with open('monitored_client','a') as f:
-		if neigh.getRRT():	
+		if neigh.getRTT():	
 		    distance = self.myClient.getCoor().getDistance(neigh.client.getCoor())
 	            f.write("{},{},{},{}\n".format(self.round,neigh.getRTT()[-1],distance,neigh.getError()))
 	neigh = self.proxiesManager.getNeighbor(MONITORED_PROXY)
 	if neigh:
 	    with open('monitored_proxy','a') as f:
-		if neigh.getRRT():	
+		if neigh.getRTT():	
 	            distance = self.myClient.getCoor().getDistance(neigh.client.getCoor())
 		    f.write("{},{},{},{}\n".format(self.round,neigh.getRTT()[-1],distance,neigh.getError()))
 	if not ME_PROXY:
