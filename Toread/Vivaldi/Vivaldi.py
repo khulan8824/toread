@@ -109,14 +109,14 @@ class Vivaldi():
 	    with open('monitored_client','a') as f:
 		if neigh.getRTT():	
 		    distance = self.myClient.getCoor().getDistance(neigh.client.getCoor())
-	            error = abs(distance-neigh.getRTT()[-1]*1000)/min((neigh.getRTT()[-1]*1000),distance)
+	            error = abs(distance-neigh.getRTT()[-1]*1000)
 		    f.write("{},{},{},{}\n".format(self.round,neigh.getRTT()[-1]*1000,distance,error))
 	neigh = self.proxiesManager.getNeighbor(MONITORED_PROXY)
 	if neigh:
 	    with open('monitored_proxy','a') as f:
 		if neigh.getRTT():	
 	            distance = self.myClient.getCoor().getDistance(neigh.client.getCoor())
-	            error = abs(distance-neigh.getRTT()[-1]*1000)/min((neigh.getRTT()[-1]*1000),distance)
+	            error = abs(distance-neigh.getRTT()[-1]*1000)
 		    f.write("{},{},{},{}\n".format(self.round,neigh.getRTT()[-1]*1000,distance,error))
 	if not ME_PROXY:
 	    # Update my proxies TTFB
@@ -167,7 +167,7 @@ class Vivaldi():
 	   dist = self.myClient.getCoor().getDistance(neigh.client.getCoor())
 	   if neigh.rtt:
 	      rtt = neigh.rtt[-1]
-	      err = abs(dist-rtt*1000)/min((rtt*1000),dist)
+	      err = abs(dist-rtt*1000)
 	      errors.append(err)
 	      dists.append(dist)
 	      rtts.append(rtt*1000)
@@ -183,7 +183,7 @@ class Vivaldi():
 	   dist = self.myClient.getCoor().getDistance(proxy.client.getCoor())
 	   if proxy.rtt:
 	      rtt = proxy.rtt[-1]
-	      err = abs(dist-rtt*1000)/min((rtt*1000),dist)
+	      err = abs(dist-rtt*1000)
 	      proxy_errors.append(err)
 	      proxy_dists.append(dist)
 	      proxy_rtts.append(rtt*1000)
