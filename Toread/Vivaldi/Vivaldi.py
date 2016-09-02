@@ -96,11 +96,10 @@ class Vivaldi():
 	# If the are proxy coords on the neighbour with smaller error then
 	# i replace mine with those
         if gossipReply['proxies']:
-	    proxy_data = gossipReply['proxies']
-	    if proxy_data:
-	        local_proxy =  self.proxiesManager.getNeighbor(proxy_data.proxy_ip)
-	        if local_proxy:
-		    local_proxy.client.update(self.myMananger.getNeighbor(proxy_data.client_ip).client,proxy_data.last_rtt)
+	    proxy_ip,client_ip, last_rtt = gossipReply['proxies'][0]
+	    local_proxy =  self.proxiesManager.getNeighbor(proxy_ip)
+	    if local_proxy:
+	        local_proxy.client.update(self.myMananger.getNeighbor(client_ip).client,last_rtt)
 	gossipClientList = gossipReply['normal']
         for eachClient in gossipClientList:
             if eachClient.getIP()!=MYIP:
