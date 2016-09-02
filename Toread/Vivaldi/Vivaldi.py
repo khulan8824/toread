@@ -47,15 +47,15 @@ class Vivaldi():
         self.round = 0
 	self.start_time = time.time()
 	self.elapsed = 0
-	print "round,elapsed,mrtt,mdist,mpe,proxy_mrtt,proxy_mdist,proxy_mpe"
+	print "round,elapsed,mrtt,mdist,mpe,mrpe,proxy_mrtt,proxy_mdist,proxy_mpe,proxy_mrpe"
 	self.proxyRouteTable = rt.RoutingTable('proxy_route_table')
 	if PROXY_MODE:
 	    for ip in PROXIES:
 	        self.proxiesManager.addIP(ip)
 	with open('monitored_client','w') as f:
-	    f.write("round,rtt,distance,error\n")
+	    f.write("round,rtt,distance,error,rerror\n")
 	with open('monitored_proxy','w') as f:
-	    f.write("round,rtt,distance,error\n")
+	    f.write("round,rtt,distance,error,rerror\n")
         self.mainloop();
         
     def PingFinish(self,pingData):
@@ -110,14 +110,16 @@ class Vivaldi():
 		if neigh.getRTT():	
 		    distance = self.myClient.getCoor().getDistance(neigh.client.getCoor())
 	            error = abs(distance-neigh.getRTT()[-1]*1000)
-		    f.write("{},{},{},{}\n".format(self.round,neigh.getRTT()[-1]*1000,distance,error))
+		    rerror = abs(distance-neigh.getRTT()[-1]*1000)/(neigh.getRTT()[-1]*1000)
+		    f.write("{},{},{},{},{}\n".format(self.round,neigh.getRTT()[-1]*1000,distance,error,rerror))
 	neigh = self.proxiesManager.getNeighbor(MONITORED_PROXY)
 	if neigh:
 	    with open('monitored_proxy','a') as f:
 		if neigh.getRTT():	
 	            distance = self.myClient.getCoor().getDistance(neigh.client.getCoor())
 	            error = abs(distance-neigh.getRTT()[-1]*1000)
-		    f.write("{},{},{},{}\n".format(self.round,neigh.getRTT()[-1]*1000,distance,error))
+		    rerror = abs(distance-neigh.getRTT()[-1]*1000)/(neigh.getRTT()[-1]*1000)
+		    f.write("{},{},{},{},{}\n".format(self.round,neigh.getRTT()[-1]*1000,distance,error,rerro))
 	if not ME_PROXY:
 	    # Update my proxies TTFB
 	    self.proxyRouteTable.readTTFB()
@@ -161,6 +163,7 @@ class Vivaldi():
     def calcMPE(self):
 	#Calculate Neighbours Median prediction error
 	errors = []
+	rerrors = []
 	rtts = []
 	dists = []
 	for neigh in self.myMananger.neighborList:
@@ -168,15 +171,19 @@ class Vivaldi():
 	   if neigh.rtt:
 	      rtt = neigh.rtt[-1]
 	      err = abs(dist-rtt*1000)
+	      rerr = abs(dist-rtt*1000)/(rtt*1000)
 	      errors.append(err)
+	      rerrors.append(rerr)
 	      dists.append(dist)
 	      rtts.append(rtt*1000)
 	   else:
 	      continue
 	mpe = self.median(errors)
+	mrpe = self.median(rerrors)
 	mrtt = self.median(rtts)
 	mdist = self.median(dists)
 	proxy_errors = []
+	proxy_rerrors = []
 	proxy_rtts = []
 	proxy_dists = []
 	for proxy in self.proxiesManager.neighborList:
@@ -184,15 +191,17 @@ class Vivaldi():
 	   if proxy.rtt:
 	      rtt = proxy.rtt[-1]
 	      err = abs(dist-rtt*1000)
+	      rerr = abs(dist-rtt*1000)/(rtt*1000)
 	      proxy_errors.append(err)
 	      proxy_dists.append(dist)
 	      proxy_rtts.append(rtt*1000)
 	   else:
 	      continue
 	proxy_mpe = self.median(proxy_errors)
+	proxy_mrpe = self.median(proxy_rerrors)
 	proxy_mrtt = self.median(proxy_rtts)
 	proxy_mdist = self.median(proxy_dists)
-	print("{},{},{},{},{},{},{},{}".format(self.round,self.elapsed, mrtt, mdist, mpe, proxy_mrtt, proxy_mdist, proxy_mpe))
+	print("{},{},{},{},{},{},{},{},{},{}".format(self.round,self.elapsed, mrtt, mdist, mpe, mrpe, proxy_mrtt, proxy_mdist, proxy_mpe, proxy_mrpe))
 	
 	
     def median(self, lst):
