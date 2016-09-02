@@ -193,6 +193,7 @@ class Vivaldi():
 	      err = abs(dist-rtt*1000)
 	      rerr = abs(dist-rtt*1000)/(rtt*1000)
 	      proxy_errors.append(err)
+	      proxy_rerrors.append(rerr)
 	      proxy_dists.append(dist)
 	      proxy_rtts.append(rtt*1000)
 	   else:
