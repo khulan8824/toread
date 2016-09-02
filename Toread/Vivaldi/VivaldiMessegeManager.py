@@ -21,10 +21,9 @@ class VivaldiNCMessege():
     error = 0
 
 class VivaldiProxyMessage():
-    ip = ""
-    vec = []
-    height = 0
-    error = 0
+    client_ip =  ""
+    proxy_ip = ""
+    last_rtt = 0
 
 class ProxyMessage():
 	ip = ""
@@ -89,19 +88,15 @@ class VivaldiMessegeManager():
         client.set(data.ip,coor,data.error)
         return client, 'normal'
     
-    def encodeProxies(self):
+    def encodeProxies(self,proxy_ip):
 	msgs = []
-	for proxy in Vivaldi.main.proxiesManager.neighborList:
+	proxy = Vivaldi.main.proxiesManager.getNeighbor(proxy_ip)
+	rtts = proxy.getRTT()
+	if proxy and rtts:
 	    temp = VivaldiProxyMessage()
-	    temp.ip = proxy.getIP()
-	    temp.vec = proxy.client.coor.vec
-	    if VIVALDI_USING_HEIGHT>0:
-	        temp.height = proxy.client.coor.height
-	    temp.error = proxy.getError()
-	    if VIVALDI_MESSAGES:
-	        print "Vivaldi Proxy Message Encode IP=", temp.ip,", vec", temp.vec, ",height", temp.height
-	    #str = jsonpickle.encode(temp)
-	    #mystr = temp
+	    temp.client_ip = MYIP
+	    temp.proxy_ip = proxy.getIP()
+	    temp.last_rrt = rtts[-1]	
 	    mystr = pickle.dumps(temp)
 	    msgs.append(mystr)
         return msgs
@@ -127,17 +122,9 @@ class VivaldiMessegeManager():
 	return (data.ip,data.ttfb, data.time_from_last_ttfb),'ttfb'
 		    
     def decodeProxyOne(self, data):
-        client = VivaldiNCClient()
-        if VIVALDI_USING_HEIGHT>0:
-            coor = HeightCoordinate(DIMENTION)
-            coor.setCoor(data.vec,data.height)
-        else:
-            coor = EuclideanCoordinate(DIMENTION)
-            coor.setCoor(data.vec)
 	if VIVALDI_MESSAGES:
-	    print "Vivaldi Proxy Message Decode IP=", data.ip,", vec", data.vec, ",height", data.height
-        client.set(data.ip,coor,data.error)
-        return client, 'proxies'
+            print "Vivaldi Proxy Message Decode: IP=",data.client_ip," Proxy IP=",data.proxy_ip,",Last_rtt=",data.last_rtt
+        return (data.client_ip,data_proxy_ip,data.last_rtt), 'proxies'
 
     def encodeGossip(self,host):
         mylist = []
@@ -148,7 +135,9 @@ class VivaldiMessegeManager():
 	        mylist.append(self.encodeProxy(proxy))
 	# If measuring in external procy coordinates share them
 	if PROXY_MODE:
-		mylist.extend(self.encodeProxies())
+		proxy = Vivaldi.main.proxy_ip
+		if proxy:
+			mylist.extend(self.encodeProxies(proxy))
 	# Normal vivaldi gossip messages
         index=Vivaldi.main.myMananger.upload()
         for i in index:
