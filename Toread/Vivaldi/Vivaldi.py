@@ -97,9 +97,10 @@ class Vivaldi():
 	# i replace mine with those
         if gossipReply['proxies']:
 	    proxy_data = gossipReply['proxies']
-	    local_proxy =  self.proxiesManager.getNeighbor(proxy_data.proxy_ip)
-	    if local_proxy:
-		local_proxy.client.update(self.myMananger.getNeighbor(proxy_data.client_ip).client,proxy_data.last_rtt)
+	    if proxy_data:
+	        local_proxy =  self.proxiesManager.getNeighbor(proxy_data.proxy_ip)
+	        if local_proxy:
+		    local_proxy.client.update(self.myMananger.getNeighbor(proxy_data.client_ip).client,proxy_data.last_rtt)
 	gossipClientList = gossipReply['normal']
         for eachClient in gossipClientList:
             if eachClient.getIP()!=MYIP:
