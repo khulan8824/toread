@@ -119,7 +119,7 @@ class Vivaldi():
 	            distance = self.myClient.getCoor().getDistance(neigh.client.getCoor())
 	            error = abs(distance-neigh.getRTT()[-1]*1000)
 		    rerror = abs(distance-neigh.getRTT()[-1]*1000)/(neigh.getRTT()[-1]*1000)
-		    f.write("{},{},{},{},{}\n".format(self.round,neigh.getRTT()[-1]*1000,distance,error,rerro))
+		    f.write("{},{},{},{},{}\n".format(self.round,neigh.getRTT()[-1]*1000,distance,error,rerror))
 	if not ME_PROXY:
 	    # Update my proxies TTFB
 	    self.proxyRouteTable.readTTFB()
