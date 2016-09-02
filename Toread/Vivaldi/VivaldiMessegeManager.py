@@ -124,7 +124,7 @@ class VivaldiMessegeManager():
     def decodeProxyOne(self, data):
 	if VIVALDI_MESSAGES:
             print "Vivaldi Proxy Message Decode: IP=",data.client_ip," Proxy IP=",data.proxy_ip,",Last_rtt=",data.last_rtt
-        return (data.client_ip,data_proxy_ip,data.last_rtt), 'proxies'
+        return (data.client_ip,data.proxy_ip,data.last_rtt), 'proxies'
 
     def encodeGossip(self,host):
         mylist = []
