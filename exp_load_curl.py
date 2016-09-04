@@ -144,7 +144,7 @@ while t < (EXP_TIME+60):
 		f.write("{0:.1f},{1}\n".format(t,PROXY))
 	with simpleflock.SimpleFlock('/tmp/foolock'):
 		with open(VIV_FILE,'a') as viv:
-			viv.write("{},{}".format(PROXY,temp_ema005.last))
+			viv.write("{},{}\n".format(PROXY,temp_ema005.last))
 	getVivaldiProxy()
 	#print("{0:.1f},{1},{2},{3},{4},{5},{6},{7},{8},{9}\n".format(t,out,ema025.last,temp_ema025.last,ema005.last,temp_ema005.last,ema075.last,temp_ema075.last,type,vivaldi_time))
 
