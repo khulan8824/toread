@@ -8,6 +8,8 @@ import os
 import string
 import random
 
+NUM=''
+
 EXP_TIME = 15*60
 FILE = "load_exp_ttfb"
 VIV_FILE = "vivaldi_ttfb"
@@ -73,7 +75,7 @@ class EMA(object):
         return self.last
 
 with open(FILE,"wb") as f:
-	f.write("time,TTFB,TTFB_ema_0.25,TTFB_temp_ema_0.25,TTFB_ema_0.05,TTFB_temp_ema_0.05,TTFB_ema_0.75,TTFB_temp_ema_0.75,type,vivaldi_time\n")
+	f.write("time,TTFB"+num+",TTFB_ema_0.25"+num+",TTFB_temp_ema_0.25"+num+",TTFB_ema_0.05"+num+",TTFB_temp_ema_0.05"+num+",TTFB_ema_0.75"+num+",TTFB_temp_ema_0.75"+num+",type"+num+",vivaldi_time"+num+"\n")
 #print("time,TTFB,TTFB_ema_0.25,TTFB_temp_ema_0.25,TTFB_ema_0.5,TTFB_temp_ema_0.5,TTFB_ema_0.75,TTFB_temp_ema_0.75,type,vivaldi_time\n")
 with open(EXP_FILE,"wb") as f:
 	f.write('time,proxy\n')
@@ -138,13 +140,13 @@ while t < (EXP_TIME+60):
 	if (t-last_vivaldi) > VIVALDI_PERIOD:
 		vivaldi_time = getVivaldiDistance(PROXY)
 		last_vivaldi = t
-	with open(FILE,'wb') as f:
+	with open(FILE,'a') as f:
 		f.write("{0:.1f},{1},{2},{3},{4},{5},{6},{7},{8},{9}\n".format(t,out,ema025.last,temp_ema025.last,ema005.last,temp_ema005.last,ema075.last,temp_ema075.last,type,vivaldi_time))
-	with open(EXP_FILE,'wb') as f:
+	with open(EXP_FILE,'a') as f:
 		f.write("{0:.1f},{1}\n".format(t,PROXY))
 	with simpleflock.SimpleFlock('/tmp/foolock'):
-		with open(VIV_FILE,'wb') as viv:
-			viv.write("{},{}".format(PROXY,temp_ema005.last))
+		with open(VIV_FILE,'a') as viv:
+			viv.write("{},{}\n".format(PROXY,temp_ema005.last))
 	#getVivaldiProxy()
 	#print("{0:.1f},{1},{2},{3},{4},{5},{6},{7},{8},{9}\n".format(t,out,ema025.last,temp_ema025.last,ema005.last,temp_ema005.last,ema075.last,temp_ema075.last,type,vivaldi_time))
 
