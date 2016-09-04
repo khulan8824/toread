@@ -9,7 +9,7 @@ import string
 import random
 
 EXP_TIME = 15*60
-FILE = "final_exp_downlaod"
+FILE = "final_exp_download"
 USER = 'david.pinilla'
 PASS = r'|Jn 5DJ\\7inbNniK|m@^ja&>C'
 
@@ -18,8 +18,7 @@ PROXY = "10.228.207.209"
 URL = "http://ovh.net/files/1Mb.dat"
 
 def get_cmd2(proxy=PROXY):
-	url = URL+'/'+hash
-        cmd='curl -x '+proxy+':3128 -U '+USER+':\"'+PASS+'\" -m 180 -w %{time_starttransfer} '+URL+' -o /dev/null -s'
+        cmd='curl -x '+proxy+':3128 -U '+USER+':\"'+PASS+'\" -m 180 -w \"%{time_total},%{http_code}\" -H \"Cache-control: private\" '+URL+' -o /dev/null -s'
         return cmd
 
 
@@ -57,9 +56,8 @@ while t < (EXP_TIME+60):
 			out1, err = command.communicate()
 			out = out1.split(',')[0]
 			code = out1.split(',')[1]
-		final_out = float(out)-vivaldi_time
 		command = Popen(shlex.split(get_cmd2(PROXY)),stdout=PIPE, stderr=PIPE)
-		with open(FILE,'wb') as f:
+		with open(FILE,'a') as f:
 			f.write("{0:.1f},{1},{2}\n".format(t,out,code))
 		
 	if (t-last_vivaldi) > VIVALDI_PERIOD:
