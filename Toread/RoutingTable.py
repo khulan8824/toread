@@ -161,14 +161,19 @@ class RoutingTable(object):
 
 
 	def chooseBestProxy(self):
+		metric = 'total'
 		routes = self.routes.values()
 		proxy_routes = [r for r in routes if r.proxy]
 		if proxy_routes:
-			min_route = min(proxy_routes,key=operator.attrgetter('total'))
+			min_route = min(proxy_routes,key=operator.attrgetter(metric))
 			if self.proxy:
+				if metric == 'total'
 				#Change proxy only if difference with current route more than 200 ms
-				if abs(min_route.total - self.routes[self.proxy].total) < CHANGE_PROXY_THRESHOLD:
-					return
+					if abs(min_route.total - self.routes[self.proxy].total) < CHANGE_PROXY_TOTAL_THRESHOLD:
+						return
+				elif metric == 'distance':
+					if abs(min_route.distance - self.routes[self.proxy].distance) < CHANGE_PROXY_DISTANCE_THRESHOLD:
+						return
 			self.chooseAsProxy(min_route.ip)
 
 	def store(self):

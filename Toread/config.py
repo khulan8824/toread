@@ -3,28 +3,29 @@ import getSelfIP
 import re, urllib2
 import sys
 
-MYIP = None
-try:
-    MYIP = re.search("td>(\d+\.\d+\.\d+\.\d+)</td", urllib2.urlopen("http://whois.ipcn.org").read())
-    if MYIP:
-        MYIP=MYIP.group(1)    
-except:
-    ip_proxy = getSelfIP.getSelfIP()
-    MYIP = ip_proxy.getip()
 
-if MYIP==None:
-    print "Please check your network!"
-    print "exit..." 
-    sys.exit(1)   
-
-MYIP = "10.228.207.209"
+MYIP = "10.228.207.208"
+VIVALDI_ROUTE_TABLE = "vivaldi_route_table"
+ME_PROXY = False
+PROXY_TTFB = "my_proxy"
 #print "myIP:",MYIP
+
+MONITORED_CLIENT = "10.228.207.208"
+MONITORED_PROXY = "10.139.40.85"
+
+
 
 '''UESD FOR INIT'''
 '''bootstramp hosts, we can use ip or hostname in the following list'''
 #SERVERS = ['132.239.17.225','202.112.8.2','195.113.161.83','131.179.50.72']
 #SERVERS = ["planetlab2.ucsd.edu","pl1.pku.edu.cn","planetlab2.cesnet.cz","planetlab2.cs.ucla.edu"]
-SERVERS = ["emmdim.pc.ac.upc.edu"]
+SERVERS = ['10.1.11.27']
+PROXIES = ["10.138.57.2","10.228.0.83","10.139.40.85"]
+PROXY_MODE = True if not ME_PROXY and PROXIES else False
+PROXY_RECOVER_TIME = 40
+CHANGE_PROXY_TOTAL_THRESHOLD = 0.4
+CHANGE_PROXY_DISTANCE_THRESHOLD = 0.005
+
 
 '''FOR LOG'''
 LOG_IN_DETAIL=0
@@ -116,7 +117,7 @@ LOOPTIME = 10
 PINGMETHOD = "UDP"
 PINGPORT = 11230
 PINGTIMEOUT = 3.0 #please ensure that PINGTIMEOUT<LOOPTIME and that it's a float
-PINGNUM = 3
+PINGNUM = 16
 PINGBYTES = 56
 GOSSIPPORT = 11238
 NCPORT = 11239
@@ -126,3 +127,4 @@ NCTIMEOUT = 3 #please ensure that NCTIMEOUT<LOOPTIME
 
 '''INITIATE DEBUG MODE'''
 DEBUG = False
+VIVALDI_MESSAGES = False
