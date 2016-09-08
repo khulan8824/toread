@@ -36,15 +36,25 @@ def getVivaldiProxy():
 			for row in r:
 				if row[5] == 'True':
 					new_proxy = row[0]
+					new_ttfb = row[2]
 					break
 			if new_proxy != PROXY:
 				PROXY = new_proxy
-				ema025[PROXY] = EMA(0.25)
-				temp_ema025[PROXY] = EMA(0.25)
-				ema005[PROXY] = EMA(0.05)
-				temp_ema005[PROXY] = EMA(0.05)
-				ema075[PROXY] = EMA(0.75)
-				temp_ema075[PROXY] = EMA(0.75)
+				if PROXY not in ema025:
+					ema025[PROXY] = EMA(0.25)
+					temp_ema025[PROXY] = EMA(0.25)
+					ema005[PROXY] = EMA(0.05)
+					temp_ema005[PROXY] = EMA(0.05)
+					ema075[PROXY] = EMA(0.75)
+					temp_ema075[PROXY] = EMA(0.75)
+				else:
+					ema025[PROXY].last = float(new_ttfb)
+					temp_ema025[PROXY].last = float(new_ttfb)
+					ema005[PROXY].last = float(new_ttfb)
+					temp_ema005[PROXY].last = float(new_ttfb)
+					ema075[PROXY].last = float(new_ttfb)
+					temp_ema075[PROXY].last = float(new_ttfb)
+
 
 def getVivaldiDistance(proxy):
 	result = 0.0
