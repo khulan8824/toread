@@ -8,12 +8,12 @@ import os
 import string
 import random
 
-EXP_TIME = 15*60
+EXP_TIME = 17.5*60
 FILE = "final_exp_download"
 USER = 'david.pinilla'
 PASS = r'|Jn 5DJ\\7inbNniK|m@^ja&>C'
 
-PROXY = "10.228.207.209"
+PROXY = "10.228.0.83"
 
 URL = "http://ovh.net/files/1Mb.dat"
 
@@ -34,8 +34,8 @@ def getVivaldiProxy():
 					break
 			PROXY = new_proxy
 
-with open(FILE,"wb") as f:
-	f.write("time,speed_download,code\n")
+with open(FILE,"w") as f:
+	f.write("time,speed_download,code,proxy\n")
 VIVALDI_PERIOD = 10
 last_vivaldi = 0
 t=0
@@ -58,7 +58,7 @@ while t < (EXP_TIME+60):
 			code = out1.split(',')[1]
 		command = Popen(shlex.split(get_cmd2(PROXY)),stdout=PIPE, stderr=PIPE)
 		with open(FILE,'a') as f:
-			f.write("{0:.1f},{1},{2}\n".format(t,out,code))
+			f.write("{0:.1f},{1},{2},{3}\n".format(t,out,code,PROXY))
 		
 	if (t-last_vivaldi) > VIVALDI_PERIOD:
 		last_vivaldi = t

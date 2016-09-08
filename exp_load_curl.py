@@ -8,9 +8,8 @@ import os
 import string
 import random
 
-NUM=''
+num=''
 
-EXP_TIME = 15*60
 FILE = "load_exp_ttfb"
 VIV_FILE = "vivaldi_ttfb"
 EXP_FILE = "my_proxy"
@@ -31,7 +30,7 @@ def get_cmd2(proxy=PROXY):
 def getVivaldiProxy():
 	with simpleflock.SimpleFlock('/tmp/foolock1'):
 		with open('proxy_route_table','r') as f:
-			global PROXY
+			global PROXY, ema025,temp_ema025,ema005,temp_ema005,ema075,temp_ema075
    			r = csv.reader(f,delimiter='\t')
 			new_proxy = None
 			for row in r:
@@ -39,13 +38,13 @@ def getVivaldiProxy():
 					new_proxy = row[0]
 					break
 			if new_proxy != PROXY:
-				ema025 = EMA(0.25)
-				temp_ema025 = EMA(0.25)
-				ema005 = EMA(0.05)
-				temp_ema005 = EMA(0.05)
-				ema075 = EMA(0.75)
-				temp_ema075 = EMA(0.75)
-			PROXY = new_proxy
+				PROXY = new_proxy
+				ema025[PROXY] = EMA(0.25)
+				temp_ema025[PROXY] = EMA(0.25)
+				ema005[PROXY] = EMA(0.05)
+				temp_ema005[PROXY] = EMA(0.05)
+				ema075[PROXY] = EMA(0.75)
+				temp_ema075[PROXY] = EMA(0.75)
 
 def getVivaldiDistance(proxy):
 	result = 0.0
@@ -86,10 +85,17 @@ START = time()
 for i in range(0,15):
 	sleep(1);
 	t = time() - START
-	with open(FILE,'wb') as f:
+	with open(FILE,'a') as f:
 		f.write("{0:.1f},{1},{2},{3},{4},{5},{6},{7},{8},{9}\n".format(t,0,0,0,0,0,0,0,'est',0))
-	with open(EXP_FILE,'wb') as f:
+	with open(EXP_FILE,'a') as f:
 		f.write("{0:.1f},{1}\n".format(t,'None'))
+
+ema025 = {PROXY:EMA(0.25)}
+temp_ema025 = {PROXY:EMA(0.25)}
+ema005 = {PROXY:EMA(0.05)}
+temp_ema005 = {PROXY:EMA(0.05)}
+ema075 = {PROXY:EMA(0.75)}
+temp_ema075 = {PROXY:EMA(0.75)}
 
 getVivaldiProxy()
 vivaldi_time = getVivaldiDistance(PROXY)
@@ -100,16 +106,7 @@ type = 'meas'
 last_time = START
 out = 0
 
-
-ema025 = EMA(0.25)
-temp_ema025 = EMA(0.25)
-ema005 = EMA(0.05)
-temp_ema005 = EMA(0.05)
-ema075 = EMA(0.75)
-temp_ema075 = EMA(0.75)
-
-
-while t < (EXP_TIME+60):
+while True:
 	sleep(0.9945)
 	code = command.poll()
 	if code is not None:
@@ -120,20 +117,20 @@ while t < (EXP_TIME+60):
 		last_value = final_out
 		last_time = time()
 		command = Popen(shlex.split(get_cmd2(PROXY)),stdout=PIPE, stderr=PIPE)
-		ema025.compute(final_out)
-		temp_ema025.last = ema025.last
-		ema005.compute(final_out)
-		temp_ema005.last = ema005.last
-		ema075.compute(final_out)
-		temp_ema075.last = ema075.last
+		ema025[PROXY].compute(final_out)
+		temp_ema025[PROXY].last = ema025[PROXY].last
+		ema005[PROXY].compute(final_out)
+		temp_ema005[PROXY].last = ema005[PROXY].last
+		ema075[PROXY].compute(final_out)
+		temp_ema075[PROXY].last = ema075[PROXY].last
 	else:	
 		temp_time = time()
 		if (temp_time-last_time)>last_value:
 			last_value = temp_time-last_time 
 		#out = last_value
-		temp_ema025.compute(float(last_value))
-		temp_ema005.compute(float(last_value))
-		temp_ema075.compute(float(last_value))
+		temp_ema025[PROXY].compute(float(last_value))
+		temp_ema005[PROXY].compute(float(last_value))
+		temp_ema075[PROXY].compute(float(last_value))
 		type = 'est'
 		
 	t = time()-START
@@ -141,12 +138,12 @@ while t < (EXP_TIME+60):
 		vivaldi_time = getVivaldiDistance(PROXY)
 		last_vivaldi = t
 	with open(FILE,'a') as f:
-		f.write("{0:.1f},{1},{2},{3},{4},{5},{6},{7},{8},{9}\n".format(t,out,ema025.last,temp_ema025.last,ema005.last,temp_ema005.last,ema075.last,temp_ema075.last,type,vivaldi_time))
+		f.write("{0:.1f},{1},{2},{3},{4},{5},{6},{7},{8},{9}\n".format(t,out,ema025[PROXY].last,temp_ema025[PROXY].last,ema005[PROXY].last,temp_ema005[PROXY].last,ema075[PROXY].last,temp_ema075[PROXY].last,type,vivaldi_time))
 	with open(EXP_FILE,'a') as f:
 		f.write("{0:.1f},{1}\n".format(t,PROXY))
 	with simpleflock.SimpleFlock('/tmp/foolock'):
-		with open(VIV_FILE,'a') as viv:
-			viv.write("{},{}\n".format(PROXY,temp_ema005.last))
+		with open(VIV_FILE,'wb') as viv:
+			viv.write("{},{}\n".format(PROXY,temp_ema005[PROXY].last))
 	getVivaldiProxy()
 	#print("{0:.1f},{1},{2},{3},{4},{5},{6},{7},{8},{9}\n".format(t,out,ema025.last,temp_ema025.last,ema005.last,temp_ema005.last,ema075.last,temp_ema075.last,type,vivaldi_time))
 
