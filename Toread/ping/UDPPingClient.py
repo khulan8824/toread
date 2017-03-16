@@ -35,7 +35,7 @@ class UDPPingClient(DatagramProtocol):
             self.option.time = self.time/self.option.num
             if DEBUG:
                 print "[UdpPingClient Protocol] ping ",self.option.host, " result: ", self.option.time
-            #self.transport.stopListening()
+            self.transport.stopListening()
 
     def stopProtocol(self):
         if self.done==False:

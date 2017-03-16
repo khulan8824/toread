@@ -1,4 +1,5 @@
 from twisted.internet import protocol,defer,reactor
+from twisted.protocols.basic import NetstringReceiver
 
 class GossipData():
     def __init__(self,send="",host="127.0.0.1",port=11233,timeout=10):
@@ -9,18 +10,23 @@ class GossipData():
         self.recv=""
     
 
-class GossipClientProtocol(protocol.Protocol):
+#class GossipClientProtocol(protocol.Protocol):
+class GossipClientProtocol(NetstringReceiver):
 
     def __init__(self):
         pass
         
-    def sendData(self):
-        self.transport.write(self.factory.recvbuff.send)
+    #def sendData(self):
+    #def sendString(self):
+        #self.transport.write(self.factory.recvbuff.send)
+    #    self.sendString(self.factory.recvbuff.send)
     
     def connectionMade(self):
-        self.sendData()
+        #self.sendData()
+        self.sendString(self.factory.recvbuff.send)
         
-    def dataReceived(self, data):
+    #def dataReceived(self, data):
+    def stringReceived(self, data):
         self.factory.recvbuff.recv=data
         self.transport.loseConnection()
        
