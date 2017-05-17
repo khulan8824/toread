@@ -1,5 +1,4 @@
 from Vivaldi import Vivaldi
-from Pharos import PHAROS
 from config import *
 
 def getResponseData(host,data):
@@ -12,27 +11,5 @@ def getResponseData(host,data):
     if data == "getVivaldiString":
         if DEBUG:
             print "[NCResponse] Get a Vivaldi get string request from ",host
-        return Vivaldi.main.messegeManager.encodeVivaldiString()    
-    if data == "PharosBase":
-        if DEBUG:
-            print "[NCResponse] Get a Pharos base NC request from", host
-        globalnc = True
-        PHAROS.main.myNbManager.globalNeighborMgr.addIP(host)
-        print "[NC Response] Add global NB ",host
-        return PHAROS.main.myMsgManager.encodeOne( globalnc, -1 )
-    if data == "PharosCluster":
-        if DEBUG:
-            print "[NCResponse] Get a pharos cluster NC request from", host
-        globalnc = False
-        PHAROS.main.myNbManager.clusterNeighborMgr.addIP(host)
-        print "[NC Response] Add cluster NB ", host
-        return PHAROS.main.myMsgManager.encodeOne( globalnc, -1 )
-    if data == "PharosInfo":
-        if DEBUG:
-            print "[NCResponse] Get a pharos info request from", host
-        return PHAROS.main.myMsgManager.encodePharosInfo()
-    if data == "getPharosString":
-        if DEBUG:
-            print "[NCResponse] Get a pharos get string info request from", host
-        return PHAROS.main.myMsgManager.encodePharosInfoAsString()    
+        return Vivaldi.main.messegeManager.encodeVivaldiString()     
     return ""
