@@ -7,7 +7,6 @@ from gossip import GossipServer
 from nc import NCServer
 from config import *
 from Vivaldi import Vivaldi #import Vivaldi module
-from Pharos import PHAROS
 import os
 
 if LOG_IN_DETAIL>0:
@@ -26,8 +25,6 @@ if ALGORITHM == "Vivaldi" and not ME_PROXY:
     if os.path.isfile('proxy_route_table'):
         os.remove('proxy_route_table')
     reactor.callWhenRunning(Vivaldi.start)
-if ALGORITHM == "PHAROS":
-    reactor.callWhenRunning(PHAROS.start)
 
 reactor.run()
 
