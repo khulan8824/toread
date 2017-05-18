@@ -1,6 +1,7 @@
 from twisted.internet import reactor
 from TCPPingClient import TCPPingClientFactory
 from UDPPingClient import UDPPingClient
+from HTTPPingClient import HTTPPingClient
 from config import *
 
 class Option():
@@ -24,10 +25,14 @@ def ping(method="TCP",host="127.0.0.1",port=11232,timeout=10,num=5,bytes=56):
             print "[TCP PingClient] After connection...."
         d = factory.defer
         reactor.callLater(option.timeout, factory.stopFactory)         
-    else:
+    elif method=="UDP":
         protocol = UDPPingClient(option)
         reactor.listenUDP(0, protocol)
         d = protocol.defer
-        reactor.callLater(option.timeout, protocol.stopProtocol)        
+        reactor.callLater(option.timeout, protocol.stopProtocol)
+    elif method=="HTTP":
+        protocol = HTTPPingClient(option)
+        d = protocol.defer
+        reactor.callLater(option.timeout, protocol.ping)      
 
     return d
