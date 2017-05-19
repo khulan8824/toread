@@ -31,11 +31,12 @@ class HTTPPingClient():
 		if url in PROXIES:
 			cmd='curl -m 180 -w %{time_starttransfer} '+url+':3128 -o /dev/null -s --data-binary \"'+data+'\"'
                 else:
-			cmd='curl -m 180 -w %{time_starttransfer} '+url+':'+self.option.port+' -o /dev/null -s --data-binary \"'+data+'\"'
+			cmd='curl -m 180 -w %{time_starttransfer} '+url+':'+str(self.option.port)+' -o /dev/null -s --data-binary \"'+data+'\"'
                 cmd = Popen(shlex.split(cmd),stdout=PIPE, stderr=PIPE)
                 command = cmd.poll()
                 out, err = cmd.communicate()
 		out = float(out.replace(",","."))
+		#print url,'<<',out
 		return out
 	
         def ping(self):
@@ -44,6 +45,6 @@ class HTTPPingClient():
 		if self.count < self.option.num:
 			self.time = self.sendData()
 		self.option.time = self.time/self.option.num
-		print self.option.time
+		#print self.option.time
                 self.defer.callback(self.option)
 

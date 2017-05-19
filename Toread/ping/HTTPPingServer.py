@@ -1,20 +1,27 @@
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 import SocketServer
+import urlparse
+import time
 
 class HTTPPingServer(BaseHTTPRequestHandler):
-    def _set_headers(self):
-        self.send_response(200)
-        self.send_header('Content-type', 'text/html')
-        self.end_headers()
-
+    
     def do_GET(self):
-        self._set_headers()
-        self.wfile.write("<html><body><h1>hi!</h1></body></html>")
+        self.send_response(200)
+        self.send_header('Last-Modified', self.date_time_string(time.time()))
+        self.end_headers()
+        self.wfile.write('Response body\n')
+        return
 
-    def do_HEAD(self):
-        self._set_headers()
-        
     def do_POST(self):
-        self._set_headers()
-        self.wfile.write("<html><body><h1>POST!</h1></body></html>")
+        self.send_response(200)
+        self.send_header('Last-Modified', self.date_time_string(time.time()))
+        self.end_headers()
+        self.wfile.write('Response body\n')
+        return
 
+
+if __name__ == '__main__':
+    from BaseHTTPServer import HTTPServer
+    server = HTTPServer(('0.0.0.0', 11230), HTTPPingServer)
+    print 'Starting server, use <Ctrl-C> to stop'
+    server.serve_forever()

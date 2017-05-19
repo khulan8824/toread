@@ -4,14 +4,14 @@ import re, urllib2
 import sys
 
 
-MYIP = "10.228.207.208"
+MYIP = "10.139.40.74"
 VIVALDI_ROUTE_TABLE = "vivaldi_route_table"
 ME_PROXY = False
 PROXY_TTFB = "my_proxy"
 #print "myIP:",MYIP
 
-MONITORED_CLIENT = "10.228.207.208"
-MONITORED_PROXY = "10.139.40.85"
+MONITORED_CLIENT = "10.139.40.78"
+MONITORED_PROXY = "10.138.57.2"
 
 
 
@@ -19,8 +19,8 @@ MONITORED_PROXY = "10.139.40.85"
 '''bootstramp hosts, we can use ip or hostname in the following list'''
 #SERVERS = ['132.239.17.225','202.112.8.2','195.113.161.83','131.179.50.72']
 #SERVERS = ["planetlab2.ucsd.edu","pl1.pku.edu.cn","planetlab2.cesnet.cz","planetlab2.cs.ucla.edu"]
-SERVERS = ['10.1.11.27']
-PROXIES = ["10.138.57.2","10.228.0.83","10.139.40.85"]
+SERVERS = ['10.139.40.116','10.139.40.115','10.139.40.118','10.139.40.186','10.139.40.182','10.139.40.187','10.139.40.181','10.139.40.180','10.139.40.77','10.139.40.78','10.139.40.74']
+PROXIES = ['10.139.40.85','10.138.57.2','10.139.40.122']
 PROXY_MODE = True if not ME_PROXY and PROXIES else False
 PROXY_RECOVER_TIME = 40
 CHANGE_PROXY_TOTAL_THRESHOLD = 0.4
