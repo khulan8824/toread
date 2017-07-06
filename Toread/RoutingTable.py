@@ -137,9 +137,12 @@ class RoutingTable(object):
 				# No need for else, if no results check next time
 				continue
 			# If time from last known measurement higher than threshold
+			#Pinging proxy when their TTFB is 0
+			if route.getTTFB() == 0:
+				to_query.append(proxy)
 			if (current_time-route.last_ttfb_time) > (PROXY_RECOVER_TIME+route.distance*1000) and (route.distance*1000 < 20):
 				to_query.append(proxy)
-			elif (current_time-route.last_ttfb_time) > (PROXY_RECOVER_TIME+route.distance):
+			elif (current_time-route.last_ttfb_time) > (PROXY_RECOVER_TIME+route.distance*1000):
 				to_query.append(proxy)
 		cmd = None
 		proxyToQuery = None

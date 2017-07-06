@@ -81,6 +81,8 @@ class Vivaldi():
 	    	self.proxyRouteTable.addRoute(self.proxy_ip,distance)
 	    else:
 		self.proxyRouteTable.updateDistance(self.proxy_ip,distance)
+		# After finishing the ping, it updates TTFB of the current proxy
+		self.proxyRouteTable.updateTTFB(self.proxy_ip, self.proxy_rtt,0)
         return
 
     def GossipRecieved(self,gossipData):
