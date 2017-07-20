@@ -35,7 +35,7 @@ class HTTPPingClient():
                 cmd = Popen(shlex.split(cmd),stdout=PIPE, stderr=PIPE)
                 command = cmd.poll()
                 out, err = cmd.communicate()
-		out = float(out.replace(",","."))
+		out = float(out)
 		#print url,'<<',out
 		return out
 	

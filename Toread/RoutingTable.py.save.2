@@ -5,8 +5,7 @@ import os
 from time import time, sleep
 import simpleflock
 import random
-from random import randint
-import numpy as np
+
 
 FILE = "vivaldi_ttfb"
 
@@ -69,7 +68,6 @@ class RoutingTable(object):
 		self.routes = {}
 		self.proxy = None
 		self.outfile = outfile
-		self.bestproxies = []
 	
 	def getRoute(self,ip):
 		if ip in self.routes:
@@ -90,10 +88,8 @@ class RoutingTable(object):
 	def chooseAsProxy(self,ip):
 		if self.proxy is not None:
 			self.routes[self.proxy].unmakeMyProxy()
-			#self.besproxies.remove(self.proxy)
 		self.routes[ip].makeMyProxy()
 		self.proxy = ip
-		print 'CHOSEN>>', self.proxy
 		if DEBUG:
 			print "Chosen {} as proxy".format(ip)
 	
@@ -130,7 +126,7 @@ class RoutingTable(object):
 		# Choose random proxy
 		for proxy in proxies:
 			route = self.routes[proxy]
-			# If a command is pending from previous round
+			print 'CHOSEN>', proxy			# If a command is pending from previous round
 			command_pending = route.getPendingCommand()
 			if command_pending:
 				code = command_pending.poll()
@@ -141,9 +137,9 @@ class RoutingTable(object):
 				# No need for else, if no results check next time
 				continue
 			# If time from last known measurement higher than threshold
-			#Pinging proxy when their TTFB is 0
 			if route.getTTFB() == 0:
 				to_query.append(proxy)
+				#print 'COMING TO UPDT 0 time'
 			if (current_time-route.last_ttfb_time) > (PROXY_RECOVER_TIME+route.distance*1000) and (route.distance*1000 < 20):
 				to_query.append(proxy)
 			elif (current_time-route.last_ttfb_time) > (PROXY_RECOVER_TIME+route.distance*1000):
@@ -153,11 +149,12 @@ class RoutingTable(object):
 		if len(to_query) == 1:
 			proxyToQuery = to_query[0]
 			cmd = queryProxy(proxyToQuery)
+			print 'COMING>RTable: ', proxyToQuery
 		# If many nodes choose randomly
 		elif len(to_query) > 1:
 			proxyToQuery = random.sample(proxies,1)[0]
 			cmd =queryProxy(proxyToQuery)
-			print 'Random>', proxyToQuery
+			print 'COMING>RTable: ', proxyToQuery
 		else:
 			return
 		
@@ -174,13 +171,8 @@ class RoutingTable(object):
 		metric = 'total'
 		routes = self.routes.values()
 		proxy_routes = [r for r in routes if r.proxy]
-		min_route = None
 		if proxy_routes:
-			min_route = min(proxy_routes,key=operator.attrgetter('total'))
-			if len(self.bestproxies) == 0:
-				self.updateBestProxies(min_route)
-			min_index =np.random.randint(0,len(self.bestproxies))
-			min_route = self.getRoute(self.bestproxies[min_index])
+			min_route = min(proxy_routes,key=operator.attrgetter(metric))
 			if self.proxy:
 				if metric == 'total':
 				#Change proxy only if difference with current route more than 200 ms
@@ -189,29 +181,7 @@ class RoutingTable(object):
 				elif metric == 'distance':
 					if abs(min_route.distance - self.routes[self.proxy].distance) < CHANGE_PROXY_DISTANCE_THRESHOLD:
 						return
-			self.updateBestProxies(min_route)
 			self.chooseAsProxy(min_route.ip)
-
-	def updateBestProxies(self, min_route):
-		for r in sorted(self.routes.values(),key=operator.attrgetter('total')):
-			if abs(r.total - min_route.total) <= GOOD_PROXY_THRESHOLD:
-				self.makeBestProxy(r.ip)
-			else:
-				if r.ip in self.bestproxies:
-					self.unmakeBestProxy(r.ip)
-		print self.bestproxies
-
-
-	def makeBestProxy(self, ip):
-#		self.routes[ip].makeMyProxy()
-		if ip not in self.bestproxies:
-			self.bestproxies.append(ip)
-
-
-	def unmakeBestProxy(self, ip):
-#		self.routes[ip].unmakeMyProxy()
-#		if ip in self.bestproxies:
-		self.bestproxies.remove(ip)
 
 	def store(self):
 		with simpleflock.SimpleFlock("/tmp/foolock1"):

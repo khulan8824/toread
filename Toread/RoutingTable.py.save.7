@@ -177,8 +177,9 @@ class RoutingTable(object):
 		min_route = None
 		if proxy_routes:
 			min_route = min(proxy_routes,key=operator.attrgetter('total'))
-			if len(self.bestproxies) == 0:
-				self.updateBestProxies(min_route)
+			if bestproxies is None:
+				updateBestProxies(min_route)
+
 			min_index =np.random.randint(0,len(self.bestproxies))
 			min_route = self.getRoute(self.bestproxies[min_index])
 			if self.proxy:
@@ -188,22 +189,18 @@ class RoutingTable(object):
 						return
 				elif metric == 'distance':
 					if abs(min_route.distance - self.routes[self.proxy].distance) < CHANGE_PROXY_DISTANCE_THRESHOLD:
-						return
-			self.updateBestProxies(min_route)
+			self.updateBestProxies(mi			return
 			self.chooseAsProxy(min_route.ip)
 
 	def updateBestProxies(self, min_route):
 		for r in sorted(self.routes.values(),key=operator.attrgetter('total')):
-			if abs(r.total - min_route.total) <= GOOD_PROXY_THRESHOLD:
-				self.makeBestProxy(r.ip)
-			else:
-				if r.ip in self.bestproxies:
-					self.unmakeBestProxy(r.ip)
-		print self.bestproxies
-
+                                if abs(r.total - min_route.total) <= GOOD_PROXY_THRESHOLD:
+                                        self.makeBestProxy(r.ip)
+                                else:
+                                        if r.ip in self.bestproxies:
+                                                self.unmakeBestProxy(r.ip)
 
 	def makeBestProxy(self, ip):
-#		self.routes[ip].makeMyProxy()
 		if ip not in self.bestproxies:
 			self.bestproxies.append(ip)
 

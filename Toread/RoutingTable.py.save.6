@@ -5,8 +5,7 @@ import os
 from time import time, sleep
 import simpleflock
 import random
-from random import randint
-import numpy as np
+
 
 FILE = "vivaldi_ttfb"
 
@@ -90,7 +89,7 @@ class RoutingTable(object):
 	def chooseAsProxy(self,ip):
 		if self.proxy is not None:
 			self.routes[self.proxy].unmakeMyProxy()
-			#self.besproxies.remove(self.proxy)
+			self.besproxies.remove(self.proxy)
 		self.routes[ip].makeMyProxy()
 		self.proxy = ip
 		print 'CHOSEN>>', self.proxy
@@ -174,13 +173,17 @@ class RoutingTable(object):
 		metric = 'total'
 		routes = self.routes.values()
 		proxy_routes = [r for r in routes if r.proxy]
-		min_route = None
 		if proxy_routes:
-			min_route = min(proxy_routes,key=operator.attrgetter('total'))
-			if len(self.bestproxies) == 0:
-				self.updateBestProxies(min_route)
-			min_index =np.random.randint(0,len(self.bestproxies))
-			min_route = self.getRoute(self.bestproxies[min_index])
+			min_route = min(proxy_routes,key=operator.attrgetter(metric))
+			sorted_proxy_routes = sorted(proxy_routes, key=operator.attrgetter(metric))
+			for r in sorted(self.routes.values(),key=operator.attrgetter('total')):
+				print ''
+				if (min_route.total - r.total) <= GOOD_PROXY_THRESHOLD:
+					self.makeBestProxy(r.ip)
+				else:
+					self.unmakeBestProxy(r.ip)
+					print 'DELETING>>>', r.ip
+			min_route = self.getRoute(random.choice(self.bestproxies))
 			if self.proxy:
 				if metric == 'total':
 				#Change proxy only if difference with current route more than 200 ms
@@ -189,18 +192,7 @@ class RoutingTable(object):
 				elif metric == 'distance':
 					if abs(min_route.distance - self.routes[self.proxy].distance) < CHANGE_PROXY_DISTANCE_THRESHOLD:
 						return
-			self.updateBestProxies(min_route)
 			self.chooseAsProxy(min_route.ip)
-
-	def updateBestProxies(self, min_route):
-		for r in sorted(self.routes.values(),key=operator.attrgetter('total')):
-			if abs(r.total - min_route.total) <= GOOD_PROXY_THRESHOLD:
-				self.makeBestProxy(r.ip)
-			else:
-				if r.ip in self.bestproxies:
-					self.unmakeBestProxy(r.ip)
-		print self.bestproxies
-
 
 	def makeBestProxy(self, ip):
 #		self.routes[ip].makeMyProxy()
@@ -210,8 +202,8 @@ class RoutingTable(object):
 
 	def unmakeBestProxy(self, ip):
 #		self.routes[ip].unmakeMyProxy()
-#		if ip in self.bestproxies:
-		self.bestproxies.remove(ip)
+		if ip in self.bestproxies:
+			self.bestproxies.remove(ip)
 
 	def store(self):
 		with simpleflock.SimpleFlock("/tmp/foolock1"):

@@ -127,7 +127,8 @@ class Vivaldi():
 	if not ME_PROXY:
 	    # Update my proxies TTFB
 	    self.proxyRouteTable.readTTFB()
-	    self.proxyRouteTable.chooseBestProxy()
+	    if self.round > 5:
+	    	self.proxyRouteTable.chooseBestProxy()
 	    self.proxyRouteTable.store()
         return
 
