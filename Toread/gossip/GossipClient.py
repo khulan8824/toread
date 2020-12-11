@@ -58,6 +58,7 @@ def request(send="",host="127.0.0.1",port=11232,timeout=10):
     recvbuff = GossipData(send,host,port,timeout)
     factory = GossipClientFactory(recvbuff)
     reactor.connectTCP(recvbuff.host,recvbuff.port,factory,recvbuff.timeout)
+    print('Connecting', host)
     d = factory.defer
     reactor.callLater(recvbuff.timeout, factory.stopFactory)         
     return d

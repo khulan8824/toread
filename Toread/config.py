@@ -4,14 +4,14 @@ import re, urllib2
 import sys
 
 
-MYIP = "10.139.40.74"
+MYIP =  str(sys.argv[1])
 VIVALDI_ROUTE_TABLE = "vivaldi_route_table"
 ME_PROXY = False
 PROXY_TTFB = "my_proxy"
 #print "myIP:",MYIP
 
-MONITORED_CLIENT = "10.139.40.78"
-MONITORED_PROXY = "10.139.40.85"
+MONITORED_CLIENT = "10.0.0.1"
+MONITORED_PROXY = "10.0.1.1"
 
 
 
@@ -20,8 +20,12 @@ MONITORED_PROXY = "10.139.40.85"
 #SERVERS = ['132.239.17.225','202.112.8.2','195.113.161.83','131.179.50.72']
 #SERVERS = ["planetlab2.ucsd.edu","pl1.pku.edu.cn","planetlab2.cesnet.cz","planetlab2.cs.ucla.edu"]
 #SERVERS = ['10.139.40.116','10.139.40.115','10.139.40.118','10.139.40.186','10.139.40.182','10.139.40.187','10.139.40.181','10.139.40.180','10.139.40.77','10.139.40.78','10.139.40.74']
-SERVERS = ['10.139.40.74','10.139.40.77', '10.139.40.78', '10.139.40.115']
-PROXIES = ['10.139.40.85','10.138.57.2','10.139.40.122']
+SERVERS = ['10.0.0.1','10.0.0.2', '10.0.0.3','10.0.0.4', '10.0.0.5'
+           ,'10.0.0.6','10.0.0.7','10.0.0.8','10.0.0.9','10.0.0.10'
+           ,'10.0.0.11','10.0.0.12','10.0.0.13','10.0.0.14','10.0.0.15'
+           ,'10.0.0.16','10.0.0.17','10.0.0.18','10.0.0.19','10.0.0.20']
+PROXIES = ['10.0.1.1','10.0.1.2','10.0.1.3','10.0.1.4','10.0.1.5'
+           ,'10.0.1.6','10.0.1.7','10.0.1.8','10.0.1.9','10.0.1.10']
 PROXY_MODE = True if not ME_PROXY and PROXIES else False
 PROXY_RECOVER_TIME = 40
 CHANGE_PROXY_TOTAL_THRESHOLD = 0.4
@@ -65,47 +69,6 @@ PHAROS_UPDATE_STRATEGY_LOCAL = 2
 #PHAROS_USING_HEIGHT = VIVALDI_USING_HEIGHT
 #PHAROS_GLOBAL_ERROR = 1.5
 #PHAROS_GLOBAL_ERROR = 1.5
-
-'''USED IN PHAROS BOOTSTRAP
-The landmark amount should be larger than 3 in each cluster
-'''
-#PHAROS_LM = {"America":["planetlab-04.cs.princeton.edu","righthand.eecs.harvard.edu","planetlab04.cs.washington.edu","planetlab2.cs.ucla.edu","planetlab2.ucsd.edu","planetlab2.cs.duke.edu"], "Asia":["pl1.pku.edu.cn","csplanetlab2.kaist.ac.kr","planetlab-1.sjtu.edu.cn","planetlab3.ie.cuhk.edu.hk","planetlab2.netmedia.gist.ac.kr"], "Europe":["mars.planetlab.haw-hamburg.de","planetlab-3.imperial.ac.uk","planetlab1.tlm.unavarra.es","planetlab1.ceid.upatras.gr"] }  # lm and bootlist should have the same cluster ids
-#CLUSTER_BOOTLIST = {"America":["planetlab-04.cs.princeton.edu","righthand.eecs.harvard.edu","planetlab2.cs.ucla.edu","planetlab2.ucsd.edu","planetlab04.cs.washington.edu"], "Asia":["pl1.pku.edu.cn","csplanetlab2.kaist.ac.kr","planetlab-1.sjtu.edu.cn","node3.planet-lab.titech.ac.jp","planetlab2.netmedia.gist.ac.kr"], "Europe":["planetlab-3.imperial.ac.uk","planetlab1.tlm.unavarra.es","planetlab2.eurecom.fr","planetlab2.informatik.uni-goettingen.de"] }
-GLOBAL_BOOTLIST = ["planetlab2.netmedia.gist.ac.kr","pl1.pku.edu.cn","righthand.eecs.harvard.edu","pl2.planetlab.ics.tut.ac.jp","planetlab2.cs.ucla.edu","planetlab1.tlm.unavarra.es","planetlab-3.imperial.ac.uk","planetlab2.informatik.uni-goettingen.de","node3.planet-lab.titech.ac.jp"]
-
-'''We play a trick here, test 4 and more clusters...'''
-PHAROS_LM = {"westAmerica":["planetlab2.cs.ucla.edu","planetlab2.cs.ucla.edu","planetlab2.ucsd.edu","planetlab2.cs.ucla.edu","planet4.cs.ucsb.edu"], "eastAmerica":["righthand.eecs.harvard.edu","righthand.eecs.harvard.edu","planetlab2.cs.duke.edu","lefthand.eecs.harvard.edu"], "Asia":["pl1.pku.edu.cn","csplanetlab2.kaist.ac.kr","planetlab-1.sjtu.edu.cn","planetlab3.ie.cuhk.edu.hk","planetlab2.netmedia.gist.ac.kr"], "Europe":["mars.planetlab.haw-hamburg.de","planetlab-3.imperial.ac.uk","planetlab1.tlm.unavarra.es","planetlab1.ceid.upatras.gr"] }
-CLUSTER_BOOTLIST = {"westAmerica":["planetlab2.cs.ucla.edu","planetlab2.ucsd.edu"], "eastAmerica":["planetlab-04.cs.princeton.edu","righthand.eecs.harvard.edu"], "Asia":["pl1.pku.edu.cn","csplanetlab2.kaist.ac.kr","planetlab-1.sjtu.edu.cn","node3.planet-lab.titech.ac.jp","planetlab2.netmedia.gist.ac.kr"], "Europe":["planetlab-3.imperial.ac.uk","planetlab1.tlm.unavarra.es","planetlab2.eurecom.fr","planetlab2.informatik.uni-goettingen.de"] }
-#PHAROS_LM = {"westAmerica":["planetlab2.cs.ucla.edu","planetlab2.cs.ucla.edu","planetlab2.ucsd.edu","planetlab2.cs.ucla.edu","planet4.cs.ucsb.edu"], "eastAmerica":["righthand.eecs.harvard.edu","righthand.eecs.harvard.edu","planetlab2.cs.duke.edu","lefthand.eecs.harvard.edu"], "Asia":["pl1.pku.edu.cn","csplanetlab2.kaist.ac.kr","planetlab-1.sjtu.edu.cn","planetlab3.ie.cuhk.edu.hk","planetlab2.netmedia.gist.ac.kr"], "eastEurope":["plab-1.sinp.msu.ru", "plab-2.sinp.msu.ru", "planetlab-2.dis.uniroma1.it","planetlab-1.dis.uniroma1.it", "planetlab1.ceid.upatras.gr", "mercury.silicon-valley.ru"], "westEurope":["planetlab-3.imperial.ac.uk","planetlab1.tlm.unavarra.es","planetlab-3.imperial.ac.uk","planetlab1.tlm.unavarra.es","planetlab2.eurecom.fr"] }
-#CLUSTER_BOOTLIST = {"westAmerica":["planetlab2.cs.ucla.edu","planetlab2.ucsd.edu"], "eastAmerica":["planetlab-04.cs.princeton.edu","righthand.eecs.harvard.edu"], "Asia":["pl1.pku.edu.cn","csplanetlab2.kaist.ac.kr","planetlab-1.sjtu.edu.cn","node3.planet-lab.titech.ac.jp","planetlab2.netmedia.gist.ac.kr"], "eastEurope":["plab-1.sinp.msu.ru","plab-2.sinp.msu.ru", "planetlab-2.dis.uniroma1.it", "planetlab-1.dis.uniroma1.it"], "westEurope":["planetlab-3.imperial.ac.uk","planetlab1.tlm.unavarra.es","planetlab2.eurecom.fr"] }
-
-
-"""     pharos debug list nodes
-planetlab2.informatik.uni-goettingen.de
-planetlab1.aston.ac.uk
-mars.planetlab.haw-hamburg.de
-planetlab-3.imperial.ac.uk
-planetlab1.tlm.unavarra.es
-planetlab1.ceid.upatras.gr
-planetlab1.elet.polimi.it
-planet03.csc.ncsu.edu
-planetlab2.csres.utexas.edu
-planetlab1.williams.edu
-planetlab2.ucsd.edu
-righthand.eecs.harvard.edu
-planetlab04.cs.washington.edu
-planetlab2.cs.ucla.edu
-planetlab2.cs.uiuc.edu
-planetlab2.cs.duke.edu
-planetlab1.koganei.wide.ad.jp
-pl2.planetlab.ics.tut.ac.jp
-csplanetlab2.kaist.ac.kr
-plab2.cs.ust.hk
-planetlab3.ie.cuhk.edu.hk
-pl1.pku.edu.cn
-planetlab-1.sjtu.edu.cn
-"""
-
 
 
 '''USED IN PHAROS UPDATE LOOPTIME'''

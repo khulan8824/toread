@@ -7,6 +7,8 @@ from config import *
 import os
 import string
 import random
+#from Vivaldi import Vivaldi
+
 
 class HTTPPingClient():
         def __init__(self, option):
@@ -25,11 +27,11 @@ class HTTPPingClient():
 		allowed = string.ascii_letters # add any other allowed characters here
 		data = ''.join([allowed[random.randint(0, len(allowed) - 1)] for x in xrange(self.option.bytes)])
  
-		
-                url = self.option.host
+		url = self.option.host
+		#print('Pinging',url)
 		cmd =""
 		if url in PROXIES:
-			cmd='curl -m 180 -w %{time_starttransfer} '+url+':3128 -o /dev/null -s --data-binary \"'+data+'\"'
+			cmd='curl -m 180 -w %{time_starttransfer} '+url+':8080/1Mb.dat -o /dev/null'
                 else:
 			cmd='curl -m 180 -w %{time_starttransfer} '+url+':'+str(self.option.port)+' -o /dev/null -s --data-binary \"'+data+'\"'
                 cmd = Popen(shlex.split(cmd),stdout=PIPE, stderr=PIPE)

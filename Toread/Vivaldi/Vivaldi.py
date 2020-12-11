@@ -11,18 +11,33 @@ import RoutingTable as rt
 import socket
 import time
 import sys
+import random
 
 
 class Vivaldi():
-    
     myClient = VivaldiNCClient()
     myMananger = VivaldiNeighborManager()
     messegeManager = VivaldiMessegeManager()
     if PROXY_MODE:
-    	proxiesManager = VivaldiNeighborManager()
+        proxiesManager = VivaldiNeighborManager()
+    
+    def addGossipSent(self):
+        self.GOSSIPSENTCOUNT +=1
+        
+    def addGossipReceive(self):
+        self.GOSSIPRECEIVECOUNT +=1
+    
+    def addProxySent(self):
+        self.PROXYCOUNT +=1
+   
 
     def __init__(self):
-        '''init'''
+        '''init'''       
+        self.GOSSIPSENTCOUNT = 0
+        self.GOSSIPRECEIVECOUNT=0
+        self.PROXYCOUNT=0
+        random.shuffle(SERVERS)
+        random.shuffle(PROXIES)
         tmpVec = []
         for i in range(DIMENTION):
             tmpVec.append(5)
@@ -57,6 +72,7 @@ class Vivaldi():
 	with open('monitored_proxy','w') as f:
 	    f.write("round,rtt,distance,error,rerror\n")
         self.mainloop();
+        self.writeLog()
         
     def PingFinish(self,pingData):
         self.rtt = pingData.time
@@ -86,11 +102,14 @@ class Vivaldi():
         return
 
     def GossipRecieved(self,gossipData):
+        #print('Gossip received from',gossipData.recv)
         #translate from messege
-	if VIVALDI_MESSAGES:
-	   print 'Gossip Received'
+        if VIVALDI_MESSAGES:
+            print 'Gossip Received'
         gossipReply = self.messegeManager.decodeGossip(gossipData.recv)
 	# If the neighbour is using a proxy he sends me his ttfb
+        #print('+++++Gossip received+++++', gossipReply.ip)
+
 	if gossipReply['ttfb']:
 	    for (ip,ttfb,time_from_last_ttfb) in gossipReply['ttfb']:
 		if ip != MYIP:
@@ -153,9 +172,6 @@ class Vivaldi():
 	   # Prints info on neighbour updated this round
 	   print "Round:",self.round,",time:",self.elapsed,",NEIGH:",targetClient.ip,",RTT:",self.rtt*1000,",DIST:",distance,"RE:",error
         
-        #the following is the old code, which do not use any filter
-        #print "Update:",targetClient.ip,",RTT=",self.rtt*1000
-        #self.myClient.update(targetClient,self.rtt*1000) #Attention!self.rtt must be multiplied by 1000
 	self.calcMPE()
         #gossip
 	if VIVALDI_MESSAGES:
@@ -206,9 +222,10 @@ class Vivaldi():
 	proxy_mrpe = self.median(proxy_rerrors)
 	proxy_mrtt = self.median(proxy_rtts)
 	proxy_mdist = self.median(proxy_dists)
-	print("{},{},{},{},{},{},{},{},{},{}".format(self.round,self.elapsed, mrtt, mdist, mpe, mrpe, proxy_mrtt, proxy_mdist, proxy_mpe, proxy_mrpe))
-	
-	
+	#print("{},{},{},{},{},{},{},{},{},{}".format(self.round,self.elapsed, mrtt, mdist, mpe, mrpe, proxy_mrtt, proxy_mdist, proxy_mpe, proxy_mrpe))
+	print("INFO",str(self.round), str(self.PROXYCOUNT), str(self.GOSSIPSENTCOUNT), str(self.GOSSIPRECEIVECOUNT))    
+
+    
     def median(self, lst):
 	lst = sorted(lst)
 	if len(lst) < 1:
@@ -221,35 +238,39 @@ class Vivaldi():
     def mainloop(self):
         #Choose a neighbor
         self.round = self.round + 1 # used in log
-	self.elapsed = "%2.2f"%(time.time() - self.start_time)
-	if DEBUG:
-	   print 'Round ' + str(self.round) + ' - '+self.elapsed+' s : '    # write in log
-           self.myClient.printInfo()
+        self.elapsed = "%2.2f"%(time.time() - self.start_time)
+        if DEBUG:
+            print 'Round ' + str(self.round) + ' - '+self.elapsed+' s : '    # write in log
+        self.myClient.printInfo()
         ip = self.myMananger.selectIP()
-	if ip:
-           #print 'neighborIP = ' + ip  # write in log
-           self.neighborIP = ip
-           '''
-           self.neighborIP = "192.168.1.2"
-           self.myClient.coor.printCoor()
-           print self.myClient.error
-           '''
-        #ping
-           pingDefer = PingClientIF.ping(PINGMETHOD,ip,PINGPORT,PINGTIMEOUT,PINGNUM,PINGBYTES)
-        #pingDefer = PingClientIF.ping(PINGMETHOD,self.neighborIP,PINGPORT,PINGTIMEOUT,PINGNUM,PINGBYTES)
-           pingDefer.addCallback(self.PingFinish)
-	if not ME_PROXY:
-	    proxy_ip = self.proxiesManager.selectIP()
-	    if proxy_ip:
-	        self.proxyRouteTable.checkTTFBUpdate()
-	        self.proxy_ip = proxy_ip
-		proxyPingDefer = PingClientIF.ping(PINGMETHOD,proxy_ip,PINGPORT,PINGTIMEOUT,PINGNUM,PINGBYTES)
-		proxyPingDefer.addCallback(self.proxyPingFinish)
+        if ip:
+            self.neighborIP = ip
+            pingDefer = PingClientIF.ping(PINGMETHOD,ip,PINGPORT,PINGTIMEOUT,PINGNUM,PINGBYTES)
+            #print('PINGING node:', ip)
+            pingDefer.addCallback(self.PingFinish)
+            self.GOSSIPSENTCOUNT +=1
+        if not ME_PROXY:
+            proxy_ip = self.proxiesManager.selectIP()
+            if proxy_ip:
+                self.proxyRouteTable.checkTTFBUpdate()
+                self.proxy_ip = proxy_ip
+            self.PROXYCOUNT+=1
+            #print('PINGING proxy:', proxy_ip)
+            proxyPingDefer = PingClientIF.ping(PINGMETHOD,proxy_ip,PINGPORT,PINGTIMEOUT,PINGNUM,PINGBYTES)
+            proxyPingDefer.addCallback(self.proxyPingFinish)
         #Run every LOOPTIME
         reactor.callLater(LOOPTIME,self.mainloop)
-
+        
+    def writeLog(self):
+        with open('logs_'+MYIP,'a') as f:
+            f.write(str(self.round)+","+str(self.PROXYCOUNT)+","+
+                    str(self.GOSSIPSENTCOUNT)+","+str(self.GOSSIPRECEIVECOUNT)+"\n")
+        self.PROXYCOUNT = 0
+        self.GOSSIPSENTCOUNT = 0
+        self.GOSSIPRECEIVECOUNT=0
+        reactor.callLater(120, self.writeLog)
+        
 
 def start():
     global main
     main = Vivaldi()
-
