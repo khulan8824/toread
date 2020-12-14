@@ -31,7 +31,8 @@ class HTTPPingClient():
 		#print('Pinging',url)
 		cmd =""
 		if url in PROXIES:
-			cmd='curl -m 180 -w %{time_starttransfer} '+url+':8080/1Mb.dat -o /dev/null'
+			#cmd='curl -m 180 -w %{time_starttransfer} '+url+':8080/1Mb.dat -o /dev/null'
+			cmd='curl -m 180 -w %{time_starttransfer} '+url+':3128 -o /dev/null -s --data-binary \"'+data+'\"'
                 else:
 			cmd='curl -m 180 -w %{time_starttransfer} '+url+':'+str(self.option.port)+' -o /dev/null -s --data-binary \"'+data+'\"'
                 cmd = Popen(shlex.split(cmd),stdout=PIPE, stderr=PIPE)
