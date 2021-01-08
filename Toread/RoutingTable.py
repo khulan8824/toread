@@ -186,6 +186,9 @@ class RoutingTable(object):
 			with open(self.outfile,'wb') as f:
 				f.write("ip\test_rtt\tTTFB\tTotal\tproxy\tmyProxy\n")
 				for r in sorted(self.routes.values(),key=operator.attrgetter('total')):
+					f.write(r.__str__())            
+			with open(self.outfile+"_rtable",'a') as f:
+				for r in sorted(self.routes.values(),key=operator.attrgetter('total')):
 					f.write(r.__str__())
 					#print r.__str__()
 	
