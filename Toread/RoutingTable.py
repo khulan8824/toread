@@ -61,6 +61,9 @@ class Route(object):
 	def __str__(self):
 		return "{0}\t{1}\t{2}\t{3}\t{4}\t{5}\n".format(self.ip,self.distance,self.ttfb, self.total, self.proxy,self.myProxy)
 
+	def printRoute(self, rnd):
+		return "{0}\t{1}\t{2}\t{3}\t{4}\n".format(str(rnd), self.ip,self.distance,self.ttfb, self.total)
+
 
 		
 class RoutingTable(object):
@@ -186,9 +189,13 @@ class RoutingTable(object):
 			with open(self.outfile,'wb') as f:
 				f.write("ip\test_rtt\tTTFB\tTotal\tproxy\tmyProxy\n")
 				for r in sorted(self.routes.values(),key=operator.attrgetter('total')):
-					f.write(r.__str__())            
+					f.write(r.__str__())
+                    
+
+	def storeRTT(self, round):
+		with simpleflock.SimpleFlock("/tmp/foolock1"):
 			with open(self.outfile+"_rtable",'a') as f:
 				for r in sorted(self.routes.values(),key=operator.attrgetter('total')):
-					f.write(r.__str__())
+					f.write(r.printRoute())
 					#print r.__str__()
 	

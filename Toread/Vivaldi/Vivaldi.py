@@ -148,6 +148,7 @@ class Vivaldi():
 	    self.proxyRouteTable.readTTFB()
 	    self.proxyRouteTable.chooseBestProxy()
 	    self.proxyRouteTable.store()
+	    self.proxyRouteTable.storeRTT(self.round)
         return
 
     def NCRecieved(self,ncData):
@@ -178,6 +179,7 @@ class Vivaldi():
 	   print 'Gossip Request Sent to {}'.format(self.neighborIP)
         gossipDefer = GossipClient.request("Vivaldi",self.neighborIP,GOSSIPPORT,GOSSIPTIMEOUT)
         gossipDefer.addCallback(self.GossipRecieved)
+        print("Gossip sent:", self.neighborIP)
         return
 
     def calcMPE(self):
@@ -246,7 +248,7 @@ class Vivaldi():
         if ip:
             self.neighborIP = ip
             pingDefer = PingClientIF.ping(PINGMETHOD,ip,PINGPORT,PINGTIMEOUT,PINGNUM,PINGBYTES)
-            #print('PINGING node:', ip)
+            print('PINGING node:', ip)
             pingDefer.addCallback(self.PingFinish)
             self.GOSSIPSENTCOUNT +=1
         if not ME_PROXY:
